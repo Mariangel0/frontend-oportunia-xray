@@ -1,11 +1,14 @@
 package com.frontend.oportunia.data.mapper
 import com.frontend.oportunia.data.datasource.model.CompanyReviewDto
 
-class CompanyReviewMapper {
+class CompanyReviewMapper(
+    private val studentMapper: StudentMapper,
+    private val companyMapper: CompanyMapper
+) {
     fun mapToDomain(dto: CompanyReviewDto): CompanyReview = CompanyReview(
         id = dto.id,
-        studentId = dto.studentId,
-        companyId = dto.companyId,
+        studentId = studentMapper.mapToDomain(dto.studentId),
+        companyId = companyMapper.mapToDomain(dto.companyId),
         rating = dto.rating,
         comment = dto.comment,
         createdAt = dto.createdAt
@@ -13,8 +16,8 @@ class CompanyReviewMapper {
 
     fun mapToDto(domain: CompanyReview): CompanyReviewDto = CompanyReviewDto(
         id = domain.id,
-        studentId = domain.studentId,
-        companyId = domain.companyId,
+        studentId = studentMapper.mapToDto(domain.studentId),
+        companyId = companyMapper.mapToDto(domain.companyId),
         rating = domain.rating,
         comment = domain.comment,
         createdAt = domain.createdAt

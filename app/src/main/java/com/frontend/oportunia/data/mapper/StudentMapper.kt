@@ -2,9 +2,12 @@ package com.frontend.oportunia.data.mapper
 
 import com.frontend.oportunia.data.datasource.model.StudentDto
 
-class StudentMapper {
+class StudentMapper(
+    private val userMapper: UserMapper
+){
+
     fun mapToDomain(dto: StudentDto): Student = Student(
-        id = dto.id,
+        user = userMapper.mapToDomain(dto.user),
         description = dto.description,
         premium = dto.premium,
         linkedinUrl = dto.linkedinUrl,
@@ -12,7 +15,7 @@ class StudentMapper {
     )
 
     fun mapToDto(domain: Student): StudentDto = StudentDto(
-        id = domain.id,
+        user = userMapper.mapToDto(domain.user), // Mapeamos el `User` dentro de `Student`
         description = domain.description,
         premium = domain.premium,
         linkedinUrl = domain.linkedinUrl,

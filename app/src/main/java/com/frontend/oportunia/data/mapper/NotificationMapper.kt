@@ -2,10 +2,12 @@ package com.frontend.oportunia.data.mapper
 
 import com.frontend.oportunia.data.datasource.model.NotificationDto
 
-class NotificationMapper {
+class NotificationMapper(
+    private val userMapper: UserMapper
+) {
     fun mapToDomain(dto: NotificationDto): Notification = Notification(
         id = dto.id,
-        studentId = dto.studentId,
+        userId = userMapper.mapToDomain(dto.userId),
         type = dto.type,
         message = dto.message,
         readed = dto.readed,
@@ -14,7 +16,7 @@ class NotificationMapper {
 
     fun mapToDto(domain: Notification): NotificationDto = NotificationDto(
         id = domain.id,
-        studentId = domain.studentId,
+        userId = userMapper.mapToDto(domain.userId),
         type = domain.type,
         message = domain.message,
         readed = domain.readed,

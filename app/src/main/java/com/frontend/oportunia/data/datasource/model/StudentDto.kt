@@ -1,7 +1,7 @@
 package com.frontend.oportunia.data.datasource.model
 
 data class StudentDto(
-    val id: Long,
+    val id: UserDto,
     val description: String,
     val premium: Boolean,
     val linkedinUrl: String,

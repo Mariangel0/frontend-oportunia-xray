@@ -2,10 +2,12 @@ package com.frontend.oportunia.data.mapper
 
 import com.frontend.oportunia.data.datasource.model.EducationDto
 
-class EducationMapper {
+class EducationMapper(
+    private val studentMapper: StudentMapper
+) {
     fun mapToDomain(dto: EducationDto): Education = Education(
         id = dto.id,
-        studentId = dto.studentId,
+        studentId = studentMapper.mapToDomain(dto.studentId),
         name = dto.name,
         institution = dto.institution,
         year = dto.year
@@ -13,7 +15,7 @@ class EducationMapper {
 
     fun mapToDto(domain: Education): EducationDto = EducationDto(
         id = domain.id,
-        studentId = domain.studentId,
+        studentId = studentMapper.mapToDto(domain.studentId),
         name = domain.name,
         institution = domain.institution,
         year = domain.year

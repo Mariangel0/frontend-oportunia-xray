@@ -2,11 +2,13 @@ package com.frontend.oportunia.data.mapper
 
 import com.frontend.oportunia.data.datasource.model.ExperienceDto
 
-class ExperienceMapper {
+class ExperienceMapper(
+    private val studentMapper: StudentMapper
+) {
 
     fun mapToDomain(dto: ExperienceDto): Experience = Experience(
         id = dto.id,
-        studentId = dto.studentId,
+        studentId = studentMapper.mapToDomain(dto.studentId),
         company = dto.company,
         role = dto.role,
         year = dto.year

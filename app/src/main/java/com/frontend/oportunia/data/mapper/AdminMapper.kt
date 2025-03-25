@@ -2,12 +2,14 @@ package com.frontend.oportunia.data.mapper
 
 import com.frontend.oportunia.data.datasource.model.AdminDto
 
-class AdminMapper {
+class AdminMapper(
+    private val userMapper: UserMapper
+) {
     fun mapToDomain(dto: AdminDto): Admin = Admin(
-        id = dto.id
+        id = userMapper.mapToDomain(dto.id)
     )
 
     fun mapToDto(domain: Admin): AdminDto = AdminDto(
-        id = domain.id
+        id = userMapper.mapToDto(domain.id)
     )
 }

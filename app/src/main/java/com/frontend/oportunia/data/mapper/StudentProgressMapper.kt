@@ -2,11 +2,13 @@ package com.frontend.oportunia.data.mapper
 
 import com.frontend.oportunia.data.datasource.model.StudentProgressDto
 
-class StudentProgressMapper {
+class StudentProgressMapper(
+    private val studentMapper: StudentMapper
+) {
 
     fun mapToDomain(dto: StudentProgressDto): StudentProgress = StudentProgress(
         id = dto.id,
-        studentId = dto.studentId,
+        studentId = studentMapper.mapToDomain(dto.studentId),
         totalInterviews = dto.totalInterviews,
         averageScore = dto.averageScore,
         uploadedCl = dto.uploadedCl,
@@ -15,7 +17,7 @@ class StudentProgressMapper {
 
     fun mapToDto(domain: StudentProgress): StudentProgressDto = StudentProgressDto(
         id = domain.id,
-        studentId = domain.studentId,
+        studentId = studentMapper.mapToDto(domain.studentId),
         totalInterviews = domain.totalInterviews,
         averageScore = domain.averageScore,
         uploadedCl = domain.uploadedCl,
