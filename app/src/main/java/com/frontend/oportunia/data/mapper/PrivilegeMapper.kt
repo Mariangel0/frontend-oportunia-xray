@@ -1,6 +1,7 @@
 package com.frontend.oportunia.data.mapper
 
 import com.frontend.oportunia.data.datasource.model.PrivilegeDto
+import com.frontend.oportunia.domain.model.Privilege
 
 class PrivilegeMapper {
     fun mapToDomain(dto: PrivilegeDto): Privilege = Privilege(

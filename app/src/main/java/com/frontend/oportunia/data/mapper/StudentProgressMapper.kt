@@ -1,6 +1,7 @@
 package com.frontend.oportunia.data.mapper
 
 import com.frontend.oportunia.data.datasource.model.StudentProgressDto
+import com.frontend.oportunia.domain.model.StudentProgress
 
 class StudentProgressMapper(
     private val studentMapper: StudentMapper

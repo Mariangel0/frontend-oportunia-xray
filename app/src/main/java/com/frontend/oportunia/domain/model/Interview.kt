@@ -1,4 +1,8 @@
 package com.frontend.oportunia.domain.model
 
-class Interview {
-}
+data class Interview(
+    val id: Long,
+    val studentId: Student,
+    val date: String,
+    val result: String
+)

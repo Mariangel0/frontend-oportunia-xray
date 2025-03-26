@@ -1,6 +1,7 @@
 package com.frontend.oportunia.data.mapper
 
 import com.frontend.oportunia.data.datasource.model.NotificationDto
+import com.frontend.oportunia.domain.model.Notification
 
 class NotificationMapper(
     private val userMapper: UserMapper

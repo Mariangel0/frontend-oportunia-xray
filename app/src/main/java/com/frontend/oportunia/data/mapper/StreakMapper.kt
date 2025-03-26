@@ -1,6 +1,7 @@
 package com.frontend.oportunia.data.mapper
 
 import com.frontend.oportunia.data.datasource.model.StreakDto
+import com.frontend.oportunia.domain.model.Streak
 
 class StreakMapper(
     private val studentMapper: StudentMapper

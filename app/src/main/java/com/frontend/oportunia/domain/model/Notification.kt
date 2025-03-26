@@ -2,7 +2,7 @@ package com.frontend.oportunia.domain.model
 
 data class Notification(
     val id: Long,
-    val studentId: Long,
+    val userId: User,
     val type: String,
     val message: String,
     val readed: Boolean,

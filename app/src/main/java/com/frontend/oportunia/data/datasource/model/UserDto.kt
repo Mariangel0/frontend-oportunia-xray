@@ -1,7 +1,5 @@
 package com.frontend.oportunia.data.datasource.model
 
-
-
 data class UserDto(
     val id: Long,
     val createDate: String,

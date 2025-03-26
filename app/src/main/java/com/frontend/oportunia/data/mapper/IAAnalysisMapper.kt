@@ -1,6 +1,7 @@
 package com.frontend.oportunia.data.mapper
 
 import com.frontend.oportunia.data.datasource.model.IAAnalysisDto
+import com.frontend.oportunia.domain.model.IAAnalysis
 
 class IAAnalysisMapper(
     private val interviewMapper: InterviewMapper,

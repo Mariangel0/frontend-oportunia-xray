@@ -1,6 +1,7 @@
 package com.frontend.oportunia.data.mapper
 
 import com.frontend.oportunia.data.datasource.model.ExperienceDto
+import com.frontend.oportunia.domain.model.Experience
 
 class ExperienceMapper(
     private val studentMapper: StudentMapper
@@ -16,7 +17,7 @@ class ExperienceMapper(
 
     fun mapToDto(domain: Experience): ExperienceDto = ExperienceDto(
         id = domain.id,
-        studentId = domain.studentId,
+        studentId = studentMapper.mapToDto(domain.studentId),
         company = domain.company,
         role = domain.role,
         year = domain.year

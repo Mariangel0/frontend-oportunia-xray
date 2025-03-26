@@ -1,6 +1,7 @@
 package com.frontend.oportunia.data.mapper
 
 import com.frontend.oportunia.data.datasource.model.AdminDto
+import com.frontend.oportunia.domain.model.Admin
 
 class AdminMapper(
     private val userMapper: UserMapper
