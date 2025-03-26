@@ -11,7 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.frontend.oportunia.presentation.ui.screens.PantallaInicio
+import com.frontend.oportunia.presentation.ui.screens.LoginScreen
+import com.frontend.oportunia.presentation.ui.screens.MainScreen
 import com.frontend.oportunia.presentation.ui.theme.OportunIATheme
 
 class MainActivity : ComponentActivity() {
@@ -19,9 +20,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             OportunIATheme {
-                PantallaInicio()
+                Main()
             }
         }
     }
 }
 
+
+@Composable
+fun Main() {
+    Scaffold { paddingValues -> // Usamos Scaffold para envolver el contenido
+        LoginScreen(paddingValues) // Pasamos el paddingValues al LoginScreen
+    }
+}

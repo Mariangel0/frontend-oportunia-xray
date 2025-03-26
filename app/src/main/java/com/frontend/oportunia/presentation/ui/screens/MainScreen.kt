@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.example.oportunia.R
 
 @Composable
-fun PantallaInicio() {
+fun MainScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
