@@ -1,8 +1,6 @@
 package com.frontend.oportunia.data.datasource.model
 
-
-
-data class UserDto(
+open class UserDto(
     val id: Long,
     val createDate: String,
     val email: String,
