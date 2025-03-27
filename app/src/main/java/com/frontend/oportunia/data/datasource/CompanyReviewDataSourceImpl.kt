@@ -5,12 +5,11 @@ import com.frontend.oportunia.data.mapper.CompanyReviewMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class CompanyReviewDataSourceImpl()
-//    private val companyReviewMapper: CompanyReviewMapper
-//) : CompanyReviewDataSource {
+class CompanyReviewDataSourceImpl(private val companyReviewMapper: CompanyReviewMapper)
+// : CompanyReviewDataSource {
 //
 //    override suspend fun getCompanyReviews(): Flow<List<CompanyReviewDto>> = flow {
-//        val reviews = CompanyReviewProvider.findAllCompanyReviews()  // Simula la obtención de reseñas
+//        val reviews = CompanyReviewProvider.findAllCompanyReviews()
 //        emit(reviews.map { companyReviewMapper.mapToDto(it) })
 //    }
 //
