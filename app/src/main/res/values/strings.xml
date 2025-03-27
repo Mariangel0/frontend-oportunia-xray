@@ -4,17 +4,33 @@
     <string name="logo_content_description">Logo OportunIA</string>
     <string name="button_get_started">Comencemos</string>
     <string name="button_register">Registrarse</string>
+
     <string name="greeting_login">Bienvenido de vuelta!\nNos alegra verte de nuevo!</string>
     <string name="login">Inicio de sesión</string>
     <string name="user">Usuario</string>
     <string name="password">Contraseña</string>
-    <string name="user_placeholder">Ingresa tu usuario</string>
+    <string name="user_placeholder">Ingresa tu correo</string>
     <string name="password_placeholder">Ingresa tu contraseña</string>
     <string name="button_login">Inicio</string>
 
-
-
-
+    <string name="register">Crear Perfil</string>
+    <string name="name_placeholder">Ingresa tu nombre</string>
+    <string name="email_placeholder">Ingresa tu correo</string>
+    <string name="confirm_password_placeholder">Confirma tu contraseña</string>
+    <string name="birth_date_placeholder">DD/MM/YYYY</string>
+    <string name="birth_date">Fecha de nacimiento</string>
+    <string name="email">Correo</string>
+    <string name="confirm_password">Confirmar contraseña</string>
+    <string name="degree_placeholder">Agregar Título Educativo</string>
+    <string name="register_button">Guardar</string>
+    <string name="company_placeholder">Ingrese su empresa</string>
+    <string name="job_position_placeholder">Ingrese su puesto</string>
+    <string name="company">Empresa</string>
+    <string name="job_position">Puesto</string>
+    <string name="education">Educación</string>
+    <string name="name">Nombre</string>
+    <string name="have_job">¿Trabajas actualmente?</string>
+    <string name="birth_date_select">Selecciona una fecha</string>
 
 
 </resources>

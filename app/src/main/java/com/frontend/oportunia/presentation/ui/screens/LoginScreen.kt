@@ -37,7 +37,7 @@ fun LoginScreen(paddingValues: PaddingValues) {
     MainLayout( // temporal
         paddingValues = paddingValues,
         headerType = HeaderType.BACK,
-        title ="Login",
+        title = stringResource(id = R.string.login),
         onBackClick = {}
     ) {
         Column(

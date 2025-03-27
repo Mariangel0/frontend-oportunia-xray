@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.frontend.oportunia.presentation.ui.screens.LoginScreen
 import com.frontend.oportunia.presentation.ui.screens.MainScreen
+import com.frontend.oportunia.presentation.ui.screens.RegisterScreen
 import com.frontend.oportunia.presentation.ui.theme.OportunIATheme
 
 class MainActivity : ComponentActivity() {
@@ -30,6 +31,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Main() {
     Scaffold { paddingValues -> // Usamos Scaffold para envolver el contenido
-        LoginScreen(paddingValues) // Pasamos el paddingValues al LoginScreen
+        RegisterScreen(paddingValues) // Pasamos el paddingValues al LoginScreen
     }
 }
