@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.frontend.oportunia.presentation.ui.screens.MenuScreen
 import com.frontend.oportunia.presentation.ui.screens.PantallaInicio
 import com.frontend.oportunia.presentation.ui.theme.OportunIATheme
 
@@ -19,7 +20,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             OportunIATheme {
-                PantallaInicio()
+                MenuScreen()
             }
         }
     }

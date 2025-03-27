@@ -5,4 +5,9 @@
     <string name="logo_content_description">Logo OportunIA</string>
     <string name="button_get_started">Comencemos</string>
     <string name="button_register">Registrarse</string>
+    <string name="button_Start">Realizar</string>
+    <string name="daily_quiz">¡Hoy no has realizado tu quiz diario!</string>
+    <string name="streak">Racha</string>
+    <string name="learning">Aprende hoy</string>
+    <string name="companies">Empresas</string>
 </resources>
