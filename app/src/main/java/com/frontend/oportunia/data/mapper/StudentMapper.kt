@@ -8,7 +8,7 @@ class StudentMapper(
 ){
 
     fun mapToDomain(dto: StudentDto): Student = Student(
-        id = userMapper.mapToDomain(dto.id),
+        user = userMapper.mapToDomain(dto.user),
         description = dto.description,
         premium = dto.premium,
         linkedinUrl = dto.linkedinUrl,
@@ -16,7 +16,7 @@ class StudentMapper(
     )
 
     fun mapToDto(domain: Student): StudentDto = StudentDto(
-        id = userMapper.mapToDto(domain.id), // Mapeamos el `User` dentro de `Student`
+        user = userMapper.mapToDto(domain.user), // Mapeamos el `User` dentro de `Student`
         description = domain.description,
         premium = domain.premium,
         linkedinUrl = domain.linkedinUrl,
