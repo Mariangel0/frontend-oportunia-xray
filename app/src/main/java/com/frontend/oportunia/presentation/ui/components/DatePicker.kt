@@ -62,7 +62,10 @@ fun DatePickerModal(
 
 
 @Composable
-fun DatePickerFieldToModal(modifier: Modifier = Modifier) {
+fun DatePickerFieldToModal(
+    modifier: Modifier = Modifier,
+    onDateSelected: (Long?) -> Unit = {} // Callback para guardar la fecha
+) {
     var selectedDate by remember { mutableStateOf<Long?>(null) }
     var showModal by remember { mutableStateOf(false) }
 
@@ -92,7 +95,10 @@ fun DatePickerFieldToModal(modifier: Modifier = Modifier) {
 
     if (showModal) {
         DatePickerModal(
-            onDateSelected = { selectedDate = it },
+            onDateSelected = {
+                selectedDate = it
+                onDateSelected(it)
+            },
             onDismiss = { showModal = false }
         )
     }
