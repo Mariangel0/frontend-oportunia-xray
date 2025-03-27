@@ -16,8 +16,13 @@ private val LightColorScheme = lightColorScheme(
     onPrimary = Primary50,
     secondary = Primary300,
     onSecondary = Primary50,
+
     primaryContainer = Primary100,
     onPrimaryContainer = Primary900,
+    secondaryContainer = Primary100,
+    onSecondaryContainer = Primary500,
+    tertiaryContainer = Primary300,
+    onTertiaryContainer = Primary900,
 
     background = Primary50,
     onBackground = Primary900,
