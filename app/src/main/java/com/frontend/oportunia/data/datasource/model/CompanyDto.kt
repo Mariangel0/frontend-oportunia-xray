@@ -7,5 +7,7 @@ data class CompanyDto(
     val type: String,
     val ubication: String,
     val employees: Int,
-    val websiteUrl: String
+    val websiteUrl: String,
+    val rating: Float
+
 )

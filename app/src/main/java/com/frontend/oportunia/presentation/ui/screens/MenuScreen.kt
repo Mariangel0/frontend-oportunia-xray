@@ -1,6 +1,7 @@
 package com.frontend.oportunia.presentation.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.List
 import androidx.compose.material.icons.filled.ThumbUp
@@ -34,15 +36,19 @@ import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.text.AnnotatedString
+import androidx.navigation.NavController
 
 import com.frontend.oportunia.presentation.ui.components.HeaderType
 import com.frontend.oportunia.presentation.ui.layout.MainLayout
+import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
 
 
 @Composable
 fun MenuScreen(
     companyViewModel: CompanyViewModel,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    navController: NavController
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         MainLayout(
@@ -53,7 +59,7 @@ fun MenuScreen(
             DailyQuizAlert(onClick = {})// Alerta de quiz diario
             StreakCalendar() // Racha (Calendario de días)
             Learning()
-            CompaniesCarousel(companyViewModel = companyViewModel)
+            CompaniesCarousel(companyViewModel = companyViewModel, navController = navController)
         }
     }
 }
@@ -111,15 +117,19 @@ fun LearnItem(
 }
 
 @Composable
-fun CompaniesCarousel(companyViewModel: CompanyViewModel) {
+fun CompaniesCarousel(companyViewModel: CompanyViewModel, navController: NavController) {
     val companies by companyViewModel.companyList.collectAsState()
 
     LaunchedEffect(Unit) {
         companyViewModel.loadAllCompanies()
     }
 
-    CustomCardWithText(title = "Empresas") {
-        Box(modifier = Modifier.fillMaxWidth()) {
+    CustomCardWithText(
+        title = stringResource(id = R.string.companies),
+        )
+    { Box(modifier = Modifier.fillMaxWidth().clickable{
+        navController.navigate(NavRoutes.CompanyMenu.ROUTE)
+    }) {
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -132,6 +142,7 @@ fun CompaniesCarousel(companyViewModel: CompanyViewModel) {
                 }
             }
         }
+
     }
 }
 

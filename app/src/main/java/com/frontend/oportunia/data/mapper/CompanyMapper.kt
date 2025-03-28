@@ -11,7 +11,8 @@ class CompanyMapper {
         type = dto.type,
         ubication = dto.ubication,
         employees = dto.employees,
-        websiteUrl = dto.websiteUrl
+        websiteUrl = dto.websiteUrl,
+        rating = dto.rating
     )
 
     fun mapToDto(domain: Company): CompanyDto = CompanyDto(
@@ -21,6 +22,8 @@ class CompanyMapper {
         type = domain.type,
         ubication = domain.ubication,
         employees = domain.employees,
-        websiteUrl = domain.websiteUrl
+        websiteUrl = domain.websiteUrl,
+        rating = domain.rating
+
     )
 }

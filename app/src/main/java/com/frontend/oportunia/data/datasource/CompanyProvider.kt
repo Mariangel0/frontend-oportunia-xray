@@ -12,7 +12,8 @@ class CompanyProvider {
                 type = "Technology",
                 ubication = "California, USA",
                 employees = 110000,
-                websiteUrl = "https://www.intel.com"
+                websiteUrl = "https://www.intel.com",
+                rating = 4f
             ),
             Company(
                 id = 2L,
@@ -21,7 +22,8 @@ class CompanyProvider {
                 type = "Technology",
                 ubication = "New York, USA",
                 employees = 280000,
-                websiteUrl = "https://www.ibm.com"
+                websiteUrl = "https://www.ibm.com",
+                        rating = 4f
             ),
             Company(
                 id = 4L,
@@ -30,7 +32,8 @@ class CompanyProvider {
                 type = "Consumer Goods",
                 ubication = "Ohio, USA",
                 employees = 99000,
-                websiteUrl = "https://www.pg.com"
+                websiteUrl = "https://www.pg.com",
+                rating = 4f
             ),
             Company(
                 id = 3L,
@@ -39,7 +42,8 @@ class CompanyProvider {
                 type = "Technology",
                 ubication = "Redmond, USA",
                 employees = 220000,
-                websiteUrl = "https://www.microsoft.com"
+                websiteUrl = "https://www.microsoft.com",
+                        rating = 2f
             ),
             Company(
                 id = 5L,
@@ -48,7 +52,8 @@ class CompanyProvider {
                 type = "Technology",
                 ubication = "California, USA",
                 employees = 180000,
-                websiteUrl = "https://www.google.com"
+                websiteUrl = "https://www.google.com",
+                rating = 5f
             ),
             Company(
                 id = 6L,
@@ -57,7 +62,8 @@ class CompanyProvider {
                 type = "E-commerce",
                 ubication = "Seattle, USA",
                 employees = 1600000,
-                websiteUrl = "https://www.amazon.com"
+                websiteUrl = "https://www.amazon.com",
+                rating = 5f
             )
         )
 

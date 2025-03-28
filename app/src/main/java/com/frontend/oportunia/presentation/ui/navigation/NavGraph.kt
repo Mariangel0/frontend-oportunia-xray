@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import com.frontend.oportunia.presentation.ui.screens.AdviceScreen
 import com.frontend.oportunia.presentation.ui.screens.PerfilScren
 import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
+import com.frontend.oportunia.presentation.ui.screens.CompanyScreen
 
 @Composable
 fun NavGraph(
@@ -19,13 +20,16 @@ fun NavGraph(
     NavHost(navController, startDestination = NavRoutes.Menu.ROUTE){
 
         composable(NavRoutes.Menu.ROUTE) {
-            MenuScreen(companyViewModel, paddingValues)
+            MenuScreen(companyViewModel, paddingValues, navController)
         }
         composable(NavRoutes.AdviceList.ROUTE) {
             AdviceScreen(navController, paddingValues)
         }
         composable(NavRoutes.Profile.ROUTE) {
             PerfilScren(navController, paddingValues)
+        }
+        composable(NavRoutes.CompanyMenu.ROUTE) {
+            CompanyScreen(paddingValues,  companyViewModel,navController)
         }
 
     }
