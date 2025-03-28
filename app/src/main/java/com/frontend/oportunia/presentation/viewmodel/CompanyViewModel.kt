@@ -35,4 +35,11 @@ class CompanyViewModel(
                 .onFailure { Log.e("CompanyViewModel", "Error loading company with id: $id", it) }
         }
     }
+    fun loadCompanyByName(name: String) {
+        viewModelScope.launch {
+            repository.findCompanyByName(name)
+                .onSuccess { _companyList.value = it }
+                .onFailure { Log.e("CompanyViewModel", "Error searching for company with name: $name", it) }
+        }
+    }
 }

@@ -9,4 +9,5 @@ interface CompanyDataSource {
     suspend fun insertCompany(companyDto: CompanyDto)
     suspend fun updateCompany(companyDto: CompanyDto)
     suspend fun deleteCompany(companyDto: CompanyDto)
+    suspend fun getCompaniesByName(companyName: String): Flow<List<CompanyDto>>
 }

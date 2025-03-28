@@ -78,7 +78,7 @@ fun CompanyScreen( paddingValues: PaddingValues, companyViewModel: CompanyViewMo
                     ),
                     keyboardActions = KeyboardActions(
                         onSearch = {
-                            // Add search functionality here
+
                         }
                     )
                 )
@@ -87,7 +87,7 @@ fun CompanyScreen( paddingValues: PaddingValues, companyViewModel: CompanyViewMo
 
                 Button(
                     onClick = {
-                        // Add the search button functionality here
+                        companyViewModel.loadCompanyByName(searchQuery.value)
                     },
                     modifier = Modifier.height(56.dp)
                     , shape = MaterialTheme.shapes.small

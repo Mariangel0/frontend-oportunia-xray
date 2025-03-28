@@ -27,4 +27,10 @@ class CompanyDataSourceImpl(
 
     override suspend fun deleteCompany(companyDto: CompanyDto) {
     }
+
+    override suspend fun getCompaniesByName(companyName: String): Flow<List<CompanyDto>> = flow {
+        val companies = CompanyProvider.findAllCompanies()
+        val filteredCompanies = companies.filter { it.name.contains(companyName, ignoreCase = true) }
+        emit(filteredCompanies.map { companyMapper.mapToDto(it) })
+    }
 }

@@ -45,4 +45,20 @@ class CompanyRepositoryImpl(
             else -> throw DomainError.UnknownError("An unknown error occurred")
         }
     }
+
+    override suspend fun findCompanyByName(companyName: String): Result<List<Company>> = runCatching {
+        dataSource.getCompaniesByName(companyName).first().map { companyDto ->
+            companyMapper.mapToDomain(companyDto)
+        }
+    }.recoverCatching { throwable ->
+        Log.e(TAG, "Failed to search for companies with name: $companyName", throwable)
+
+        // Manejamos diferentes tipos de errores como en los otros métodos
+        when (throwable) {
+            is IOException -> throw DomainError.NetworkError("Failed to fetch companies by name")
+            is IllegalArgumentException -> throw DomainError.MappingError("Error mapping companies")
+            is DomainError -> throw throwable
+            else -> throw DomainError.UnknownError("An unknown error occurred")
+        }
+    }
 }
