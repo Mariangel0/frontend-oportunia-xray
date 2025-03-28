@@ -30,6 +30,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Main() {
+
     Scaffold { paddingValues -> // Usamos Scaffold para envolver el contenido
         RegisterScreen(paddingValues) // Pasamos el paddingValues al LoginScreen
     }

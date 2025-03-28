@@ -2,97 +2,71 @@ package com.frontend.oportunia.presentation.ui.screens
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.example.oportunia.R
 import com.frontend.oportunia.presentation.ui.components.DatePickerFieldToModal
 import com.frontend.oportunia.presentation.ui.components.HeaderType
 import com.frontend.oportunia.presentation.ui.layout.MainLayout
-import coil.compose.rememberAsyncImagePainter
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Divider
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
+import com.frontend.oportunia.presentation.viewmodel.RegisterViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun RegisterScreen(paddingValues: PaddingValues) {
-    var name by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var birthDate by remember { mutableStateOf<Long?>(null) }
-    var education by remember { mutableStateOf(listOf<String>()) }
-    var isWorking  by remember { mutableStateOf(false) }
-    var jobPosition by remember { mutableStateOf("") }
-    var company by remember { mutableStateOf("") }
-    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+fun RegisterScreen(
+    paddingValues: PaddingValues,
+    viewModel: RegisterViewModel = viewModel()
+) {
+    val name by viewModel.name.collectAsState()
+    val email by viewModel.email.collectAsState()
+    val password by viewModel.password.collectAsState()
+    val confirmPassword by viewModel.confirmPassword.collectAsState()
+    val birthDate by viewModel.birthDate.collectAsState()
+    val education by viewModel.education.collectAsState()
+    val isWorking by viewModel.isWorking.collectAsState()
+    val company by viewModel.company.collectAsState()
+    val jobPosition by viewModel.jobPosition.collectAsState()
+    val selectedImageUri by viewModel.selectedImageUri.collectAsState()
+    val error by viewModel.error.collectAsState()
+
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
-        selectedImageUri = uri
+        viewModel.onImageSelected(uri)
     }
 
-    fun addEducation() {
-        education = education + ""
+    val errorMessage = when (error) {
+        "empty_fields" -> stringResource(R.string.error_empty_fields)
+        "password_mismatch" -> stringResource(R.string.error_password_mismatch)
+        else -> null
     }
 
-
-    fun updateEducation(index: Int, value: String) {
-        education = education.toMutableList().apply {
-            this[index] = value
-        }
-    }
-    fun removeEducation(index: Int) {
-        education = education.toMutableList().apply {
-            removeAt(index)
-        }
-    }
-
-    MainLayout( // temporal
+    MainLayout(
         paddingValues = paddingValues,
         headerType = HeaderType.BACK,
-        title = "Crear Perfil",
+        title = stringResource(R.string.register),
         onBackClick = {}
     ) {
         LazyColumn(
@@ -129,194 +103,130 @@ fun RegisterScreen(paddingValues: PaddingValues) {
                         )
                     }
                 }
-                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+
+
+            item {
+                TitleSection(title = stringResource(R.string.personal_data))
             }
 
             item {
-                Text(
-                    text = stringResource(id = R.string.personal_data),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
-                )
-            }
-            item {
-                HorizontalDivider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 4.dp),
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
-                )
-            }
-            item {
-                Text(
-                    stringResource(R.string.name),
-                    fontSize = 16.sp,
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
-                )
-            }
-            item {
-                OutlinedTextField(
+                LabeledTextField(
+                    label = stringResource(R.string.name),
                     value = name,
-                    onValueChange = { name = it },
-                    placeholder = { Text(stringResource(R.string.name_placeholder)) },
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = MaterialTheme.colorScheme.primary,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.secondary
-                    )
+                    placeholder = stringResource(R.string.name_placeholder),
+                    onValueChange = { viewModel.name.value = it }
                 )
             }
+
             item {
-                Text(
-                    stringResource(R.string.email),
-                    fontSize = 16.sp,
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
-                )
-            }
-            item {
-                OutlinedTextField(
+                LabeledTextField(
+                    label = stringResource(R.string.email),
                     value = email,
-                    onValueChange = { email = it },
-                    placeholder = { Text(stringResource(R.string.email_placeholder)) },
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = MaterialTheme.colorScheme.primary,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.secondary
-                    )
+                    placeholder = stringResource(R.string.email_placeholder),
+                    onValueChange = { viewModel.email.value = it }
                 )
             }
+
             item {
-                Text(
-                    stringResource(R.string.password),
-                    fontSize = 16.sp,
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
-                )
-            }
-            item {
-                OutlinedTextField(
+                LabeledTextField(
+                    label = stringResource(R.string.password),
                     value = password,
-                    onValueChange = { password = it },
-                    placeholder = { Text(stringResource(R.string.password_placeholder)) },
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = MaterialTheme.colorScheme.primary,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.secondary
-                    )
+                    isPassword = true,
+                    placeholder = stringResource(R.string.password_placeholder),
+                    onValueChange = { viewModel.password.value = it }
                 )
             }
+
             item {
-                Text(
-                    stringResource(R.string.confirm_password),
-                    fontSize = 16.sp,
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+                LabeledTextField(
+                    label = stringResource(R.string.confirm_password),
+                    value = confirmPassword,
+                    isPassword = true,
+                    placeholder = stringResource(R.string.confirm_password_placeholder),
+                    onValueChange = { viewModel.confirmPassword.value = it }
                 )
             }
-            item {
-                OutlinedTextField(
-                    value = password,
-                    onValueChange = { password = it },
-                    placeholder = { Text(stringResource(R.string.confirm_password_placeholder)) },
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = MaterialTheme.colorScheme.primary,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.secondary
-                    )
-                )
-            }
+
             item {
                 Text(
                     stringResource(R.string.birth_date),
                     fontSize = 16.sp,
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
-                )
-            }
-            item {
-                DatePickerFieldToModal(
-                    onDateSelected = { birthDate = it },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
                 )
-                Spacer(modifier = Modifier.height(16.dp))
             }
+
             item {
-                Text(
-                    text = stringResource(id = R.string.laboral_data),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
-                )
-            }
-            item {
-                HorizontalDivider(
+                DatePickerFieldToModal(
+
+                    onDateSelected = { viewModel.birthDate.value = it },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 4.dp),
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
+                        .padding(horizontal = 16.dp)
                 )
             }
+
+            item {
+                TitleSection(title = stringResource(R.string.laboral_data))
+            }
+
             item {
                 Text(
                     stringResource(R.string.education),
                     fontSize = 16.sp,
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
                 )
             }
 
-            itemsIndexed(education) { index, title ->
+            itemsIndexed(education) { index, value ->
                 Box(modifier = Modifier.fillMaxWidth()) {
                     OutlinedTextField(
-                        value = title,
-                        onValueChange = { newTitle -> updateEducation(index, newTitle) },
+                        value = value,
+                        onValueChange = { viewModel.updateEducation(index, it) },
                         placeholder = { Text(stringResource(R.string.degree_placeholder)) },
-                        modifier = Modifier.fillMaxWidth(0.90f).padding(horizontal = 16.dp),
+                        modifier = Modifier
+                            .fillMaxWidth(0.90f)
+                            .padding(horizontal = 16.dp),
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = MaterialTheme.colorScheme.primary,
                             unfocusedBorderColor = MaterialTheme.colorScheme.secondary
                         )
                     )
                     IconButton(
-                        onClick = { removeEducation(index) },
-                        modifier = Modifier.align(Alignment.CenterEnd).padding(end = 16.dp)
+                        onClick = { viewModel.removeEducation(index) },
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd)
+                            .padding(end = 16.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Filled.Close,
                             contentDescription = "Eliminar título educativo"
                         )
-
-
                     }
                 }
-                Spacer(modifier = Modifier.height(8.dp))
             }
 
             item {
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth().padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Start
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    IconButton(
-                        onClick = { addEducation() }
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = "Agregar título educativo",
-                                tint = MaterialTheme.colorScheme.primary
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-
-                        }
+                    IconButton(onClick = { viewModel.addEducation() }) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Agregar título educativo",
+                            tint = MaterialTheme.colorScheme.primary
+                        )
                     }
                     Text(
                         text = stringResource(R.string.add_degree),
-                        style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.primary
                     )
                 }
@@ -330,95 +240,109 @@ fun RegisterScreen(paddingValues: PaddingValues) {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(
-                        stringResource(R.string.have_job),
-                        style = MaterialTheme.typography.bodyLarge
-                    )
+                    Text(stringResource(R.string.have_job))
                     Switch(
                         checked = isWorking,
-                        onCheckedChange = { isWorking = it },
+                        onCheckedChange = { viewModel.isWorking.value = it },
                         colors = SwitchDefaults.colors(
-                            checkedThumbColor = MaterialTheme.colorScheme.primary,
-                            checkedTrackColor = MaterialTheme.colorScheme.primaryContainer,
-                            uncheckedThumbColor = MaterialTheme.colorScheme.secondary,
-                            uncheckedTrackColor = MaterialTheme.colorScheme.secondaryContainer
+                            checkedThumbColor = MaterialTheme.colorScheme.primary
                         )
                     )
                 }
             }
-
 
             if (isWorking) {
                 item {
-                    Text(
-                        stringResource(R.string.company),
-                        fontSize = 16.sp,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                    )
-                }
-                item {
-                    OutlinedTextField(
+                    LabeledTextField(
+                        label = stringResource(R.string.company),
                         value = company,
-                        onValueChange = { company = it },
-                        placeholder = { Text(stringResource(R.string.company_placeholder)) },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = MaterialTheme.colorScheme.primary,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.secondary
-                        )
-                    )
-                }
-
-                item {
-                    Text(
-                        stringResource(R.string.job_position),
-                        fontSize = 16.sp,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
+                        placeholder = stringResource(R.string.company_placeholder),
+                        onValueChange = { viewModel.company.value = it }
                     )
                 }
                 item {
-                    OutlinedTextField(
+                    LabeledTextField(
+                        label = stringResource(R.string.job_position),
                         value = jobPosition,
-                        onValueChange = { jobPosition = it },
-                        placeholder = { Text(stringResource(R.string.job_position_placeholder),) },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = MaterialTheme.colorScheme.primary,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.secondary
-                        )
+                        placeholder = stringResource(R.string.job_position_placeholder),
+                        onValueChange = { viewModel.jobPosition.value = it }
                     )
                 }
             }
-
-
+            item {
+                errorMessage?.let {
+                    Text(
+                        text = it,
+                        color = MaterialTheme.colorScheme.error,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                    )
+                }
+            }
             item {
                 Button(
-                    onClick = {},
+                    onClick = { viewModel.register() },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp)
                         .padding(horizontal = 16.dp),
                     shape = MaterialTheme.shapes.small,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = MaterialTheme.colorScheme.onPrimary
+                        containerColor = MaterialTheme.colorScheme.primary
                     )
                 ) {
                     Text(
-                        text = stringResource(id = R.string.button_register),
+                        text = stringResource(R.string.button_register),
                         style = MaterialTheme.typography.labelLarge
                     )
                 }
                 Spacer(modifier = Modifier.height(24.dp))
             }
         }
+    }
+}
+
+@Composable
+private fun TitleSection(title: String) {
+    Column {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.secondary,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+        )
+        HorizontalDivider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp),
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
+        )
+    }
+}
+
+@Composable
+private fun LabeledTextField(
+    label: String,
+    value: String,
+    placeholder: String,
+    isPassword: Boolean = false,
+    onValueChange: (String) -> Unit
+) {
+    Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+        Text(text = label, fontSize = 16.sp)
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            placeholder = { Text(placeholder) },
+            visualTransformation = if (!isPassword) VisualTransformation.None else PasswordVisualTransformation(),
+            modifier = Modifier.fillMaxWidth(),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                unfocusedBorderColor = MaterialTheme.colorScheme.secondary
+            )
+        )
     }
 }

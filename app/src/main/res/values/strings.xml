@@ -12,6 +12,8 @@
     <string name="user_placeholder">Ingresa tu correo</string>
     <string name="password_placeholder">Ingresa tu contraseña</string>
     <string name="button_login">Inicio</string>
+    <string name="error_empty_fields">Por favor completa todos los campos.</string>
+    <string name="error_invalid_credentials">Credenciales incorrectas. Inténtalo de nuevo.</string>
 
     <string name="register">Crear Perfil</string>
     <string name="name_placeholder">Ingresa tu nombre</string>
@@ -34,6 +36,8 @@
     <string name="birth_date_select">Selecciona una fecha</string>
     <string name="personal_data">Información Personal</string>
     <string name="laboral_data">Información Académica y Laboral</string>
+    <string name="error_password_mismatch">Las contraseñas no coinciden.</string>
+
 
 
 </resources>
