@@ -21,6 +21,9 @@ class LoginViewModel(private val repository: StudentRepository) : ViewModel() {
     private val _loginError = MutableStateFlow<String?>(null)
     val loginError: StateFlow<String?> get() = _loginError
 
+    private val _loginSuccess = MutableStateFlow(false)
+    val loginSuccess: StateFlow<Boolean> get() = _loginSuccess
+
     fun onUsernameChange(value: String) {
         _username.value = value
     }
@@ -44,6 +47,7 @@ class LoginViewModel(private val repository: StudentRepository) : ViewModel() {
             }
 
             if (student != null) {
+                _loginSuccess.value = true
                 _loginError.value = null
                 println("Login exitoso: ${student.user.firstName} ${student.user.lastName}")
             } else {

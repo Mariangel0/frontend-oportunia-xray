@@ -33,11 +33,13 @@ import com.frontend.oportunia.presentation.ui.components.HeaderType
 import com.frontend.oportunia.presentation.ui.layout.MainLayout
 import com.frontend.oportunia.presentation.viewmodel.RegisterViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 
 @Composable
 fun RegisterScreen(
     paddingValues: PaddingValues,
-    viewModel: RegisterViewModel = viewModel()
+    viewModel: RegisterViewModel = viewModel(),
+    navController: NavController
 ) {
     val name by viewModel.name.collectAsState()
     val email by viewModel.email.collectAsState()
@@ -67,7 +69,7 @@ fun RegisterScreen(
         paddingValues = paddingValues,
         headerType = HeaderType.BACK,
         title = stringResource(R.string.register),
-        onBackClick = {}
+        onBackClick = {navController.navigateUp()}
     ) {
         LazyColumn(
             modifier = Modifier

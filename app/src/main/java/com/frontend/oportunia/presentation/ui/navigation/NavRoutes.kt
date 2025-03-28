@@ -15,5 +15,16 @@ sealed class NavRoutes {
     data object CompanyMenu : NavRoutes() {
         const val ROUTE = "companyMenu"
     }
+    data object Login : NavRoutes() {
+        const val ROUTE = "login"
+    }
+
+    data object Register : NavRoutes() {
+        const val ROUTE = "register"
+    }
+    data object MainPage : NavRoutes() {
+        const val ROUTE = "main"
+    }
+
 
 }

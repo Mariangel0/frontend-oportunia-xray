@@ -31,26 +31,40 @@ import com.frontend.oportunia.presentation.ui.components.HeaderType
 import com.frontend.oportunia.presentation.ui.layout.MainLayout
 import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.compose.runtime.LaunchedEffect
+import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
+
 @Composable
 fun LoginScreen(
     paddingValues: PaddingValues,
-    viewModel: LoginViewModel = viewModel()
+    viewModel: LoginViewModel = viewModel(),
+    navController: NavController
 ) {
     val username by viewModel.username.collectAsState()
     val password by viewModel.password.collectAsState()
     val isLoggingIn by viewModel.isLoggingIn.collectAsState()
     val loginError by viewModel.loginError.collectAsState()
-
+    val loginSuccess = viewModel.loginSuccess.collectAsState()
     val errorMessage = when (loginError) {
         "empty_fields" -> stringResource(R.string.error_empty_fields)
         "invalid_credentials" -> stringResource(R.string.error_invalid_credentials)
         else -> null
     }
+
+    LaunchedEffect(loginSuccess.value) {
+        if (loginSuccess.value) {
+            navController.navigate(NavRoutes.Menu.ROUTE) {
+                popUpTo(0) { inclusive = true }
+            }
+        }
+    }
+
     MainLayout(
         paddingValues = paddingValues,
         headerType = HeaderType.BACK,
         title = stringResource(id = R.string.login),
-        onBackClick = {}
+        onBackClick = {navController.navigateUp()}
     ) {
         Column(
             modifier = Modifier

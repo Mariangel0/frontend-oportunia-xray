@@ -20,10 +20,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.oportunia.R
+import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
 
 @Composable
-fun MainScreen() {
+fun MainScreen(navController: NavController,) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -60,7 +62,7 @@ fun MainScreen() {
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = {},
+            onClick = {navController.navigate(NavRoutes.Login.ROUTE) },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
@@ -79,7 +81,7 @@ fun MainScreen() {
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = {},
+            onClick = {navController.navigate(NavRoutes.Register.ROUTE) },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
