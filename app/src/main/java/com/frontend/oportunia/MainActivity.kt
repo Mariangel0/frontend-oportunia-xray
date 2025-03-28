@@ -16,6 +16,34 @@ import com.frontend.oportunia.presentation.ui.navigation.NavGraph
 import com.frontend.oportunia.presentation.ui.theme.OportunIATheme
 import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
 
+
+//class MainActivity : ComponentActivity() {
+//
+//    private val loginViewModel: LoginViewModel by viewModels {
+//        val userMapper = UserMapper()
+//        val studentMapper = StudentMapper(userMapper)
+//        val studentDataSource = StudentDataSourceImpl(studentMapper)
+//        val studentRepository = StudentRepositoryImpl(studentDataSource, studentMapper)
+//        LoginViewModelFactory(studentRepository)
+//    }
+//
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        setContent {
+//            OportunIATheme {
+//                Main(loginViewModel)
+//            }
+//        }
+//    }
+//}
+//
+//@Composable
+//fun Main(loginViewModel: LoginViewModel) {
+//    Scaffold { paddingValues ->
+//        LoginScreen(paddingValues = paddingValues, viewModel = loginViewModel)
+//    }
+//}
+
 class MainActivity : ComponentActivity() {
     private  val companyViewModel: CompanyViewModel by viewModels {
         val companyMapper = CompanyMapper()
