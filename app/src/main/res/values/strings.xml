@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">OportunIA</string>
-    <string name="greeting">¡Prepárate para tu futuro profesional con OportunIA!\nTe damos la bienvenida a la plataforma diseñada especialmente para estudiantes de informática recién graduados. Aquí podrás mejorar tu currículum, practicar entrevistas simuladas con inteligencia artificial, y recibir recomendaciones personalizadas para destacar en el mundo laboral.\n¡Empieza hoy tu camino hacia el empleo ideal!</string>
+    <string name="greeting">¡Prepárate para tu futuro profesional con OportunIA! \nTe damos la bienvenida a la plataforma diseñada especialmente para estudiantes de informática recién graduados. Aquí podrás mejorar tu currículum, practicar entrevistas simuladas con inteligencia artificial, y recibir recomendaciones personalizadas para destacar en el mundo laboral. \n¡Empieza hoy tu camino hacia el empleo ideal!
+    </string>
     <string name="logo_content_description">Logo OportunIA</string>
     <string name="button_get_started">Comencemos</string>
     <string name="button_register">Registrarse</string>
@@ -40,4 +41,9 @@
 
 
 
+    <string name="button_Start">Realizar</string>
+    <string name="daily_quiz">¡Hoy no has realizado tu quiz diario!</string>
+    <string name="streak">Racha</string>
+    <string name="learning">Aprende hoy</string>
+    <string name="companies">Empresas</string>
 </resources>

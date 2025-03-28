@@ -16,6 +16,7 @@ val LexendDeca = FontFamily(
     Font(R.font.lexend_deca_black, FontWeight.Black),
 )
 
+
 val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = LexendDeca,
