@@ -3,6 +3,9 @@ package com.frontend.oportunia.data.repository
 import android.util.Log
 import com.frontend.oportunia.data.datasource.CompanyDataSource
 import com.frontend.oportunia.data.mapper.CompanyMapper
+import com.frontend.oportunia.domain.error.DomainError
+import com.frontend.oportunia.domain.model.Company
+import com.frontend.oportunia.domain.repository.CompanyRepository
 import kotlinx.coroutines.flow.first
 import java.io.IOException
 
@@ -26,7 +29,7 @@ class CompanyRepositoryImpl(
             is IOException -> throw DomainError.NetworkError("Failed to fetch companies")
             is IllegalArgumentException -> throw DomainError.MappingError("Error mapping companies")
             is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError
+            else -> throw throw DomainError.UnknownError("An unknown error occurred")
         }
     }
 
@@ -39,7 +42,7 @@ class CompanyRepositoryImpl(
             is IOException -> throw DomainError.NetworkError("Failed to fetch company")
             is IllegalArgumentException -> throw DomainError.MappingError("Error mapping company")
             is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError
+            else -> throw DomainError.UnknownError("An unknown error occurred")
         }
     }
 }

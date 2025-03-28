@@ -3,6 +3,9 @@ package com.frontend.oportunia.data.repository
 import android.util.Log
 import com.frontend.oportunia.data.datasource.StudentProgressDataSource
 import com.frontend.oportunia.data.mapper.StudentProgressMapper
+import com.frontend.oportunia.domain.error.DomainError
+import com.frontend.oportunia.domain.model.StudentProgress
+import com.frontend.oportunia.domain.repository.StudentProgressRepository
 import kotlinx.coroutines.flow.first
 import java.io.IOException
 
@@ -26,7 +29,7 @@ class StudentProgressRepositoryImpl(
             is IOException -> throw DomainError.NetworkError("Failed to fetch student progress")
             is IllegalArgumentException -> throw DomainError.MappingError("Error mapping student progress")
             is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError
+            else -> throw DomainError.UnknownError("An unknown error occurred")
         }
     }
 
@@ -39,7 +42,7 @@ class StudentProgressRepositoryImpl(
             is IOException -> throw DomainError.NetworkError("Failed to fetch student progress")
             is IllegalArgumentException -> throw DomainError.MappingError("Error mapping student progress")
             is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError
+            else -> throw DomainError.UnknownError("An unknown error occurred")
         }
     }
 }

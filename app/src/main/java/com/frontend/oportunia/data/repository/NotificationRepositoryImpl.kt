@@ -3,6 +3,9 @@ package com.frontend.oportunia.data.repository
 import android.util.Log
 import com.frontend.oportunia.data.datasource.NotificationDataSource
 import com.frontend.oportunia.data.mapper.NotificationMapper
+import com.frontend.oportunia.domain.error.DomainError
+import com.frontend.oportunia.domain.model.Notification
+import com.frontend.oportunia.domain.repository.NotificationRepository
 import kotlinx.coroutines.flow.first
 import java.io.IOException
 
@@ -26,7 +29,7 @@ class NotificationRepositoryImpl(
             is IOException -> throw DomainError.NetworkError("Failed to fetch notifications")
             is IllegalArgumentException -> throw DomainError.MappingError("Error mapping notifications")
             is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError
+            else -> throw DomainError.UnknownError("An unknown error occurred")
         }
     }
 
@@ -39,7 +42,7 @@ class NotificationRepositoryImpl(
             is IOException -> throw DomainError.NetworkError("Failed to fetch notification")
             is IllegalArgumentException -> throw DomainError.MappingError("Error mapping notification")
             is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError
+            else -> throw DomainError.UnknownError("An unknown error occurred")
         }
     }
 }

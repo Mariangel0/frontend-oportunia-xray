@@ -3,6 +3,8 @@ package com.frontend.oportunia.data.repository
 import android.util.Log
 import com.frontend.oportunia.data.datasource.UserDataSource
 import com.frontend.oportunia.data.mapper.UserMapper
+import com.frontend.oportunia.domain.error.DomainError
+import com.frontend.oportunia.domain.model.User
 import com.frontend.oportunia.domain.repository.UserRepository
 import kotlinx.coroutines.flow.first
 import java.io.IOException
@@ -27,7 +29,7 @@ class UserRepositoryImpl(
             is IOException -> throw DomainError.NetworkError("Failed to fetch users")
             is IllegalArgumentException -> throw DomainError.MappingError("Error mapping users")
             is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError
+            else -> throw DomainError.UnknownError("An unknown error occurred")
         }
     }
 
@@ -40,7 +42,7 @@ class UserRepositoryImpl(
             is IOException -> throw DomainError.NetworkError("Failed to fetch user")
             is IllegalArgumentException -> throw DomainError.MappingError("Error mapping user")
             is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError
+            else -> throw DomainError.UnknownError("An unknown error occurred")
         }
     }
 }

@@ -29,7 +29,7 @@ class CurriculumRepositoryImpl(
             is IOException -> throw DomainError.NetworkError("Failed to fetch curriculums")
             is IllegalArgumentException -> throw DomainError.MappingError("Error mapping curriculums")
             is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError
+            else -> throw DomainError.UnknownError("An unknown error occurred")
         }
     }
 
@@ -42,7 +42,7 @@ class CurriculumRepositoryImpl(
             is IOException -> throw DomainError.NetworkError("Failed to fetch curriculum")
             is IllegalArgumentException -> throw DomainError.MappingError("Error mapping curriculum")
             is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError
+            else -> throw DomainError.UnknownError("An unknown error occurred")
         }
     }
 }

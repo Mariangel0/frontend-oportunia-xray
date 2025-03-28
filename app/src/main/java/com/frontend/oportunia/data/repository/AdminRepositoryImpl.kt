@@ -3,6 +3,9 @@ package com.frontend.oportunia.data.repository
 import android.util.Log
 import com.frontend.oportunia.data.datasource.AdminDataSource
 import com.frontend.oportunia.data.mapper.AdminMapper
+import com.frontend.oportunia.domain.error.DomainError
+import com.frontend.oportunia.domain.model.Admin
+import com.frontend.oportunia.domain.repository.AdminRepository
 import kotlinx.coroutines.flow.first
 import java.io.IOException
 
@@ -26,7 +29,7 @@ class AdminRepositoryImpl(
             is IOException -> throw DomainError.NetworkError("Failed to fetch admins")
             is IllegalArgumentException -> throw DomainError.MappingError("Error mapping admins")
             is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError
+            else -> throw DomainError.UnknownError("An unknown error occurred")
         }
     }
 
@@ -39,7 +42,7 @@ class AdminRepositoryImpl(
             is IOException -> throw DomainError.NetworkError("Failed to fetch admin")
             is IllegalArgumentException -> throw DomainError.MappingError("Error mapping admin")
             is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError
+            else -> throw DomainError.UnknownError("An unknown error occurred")
         }
     }
 }

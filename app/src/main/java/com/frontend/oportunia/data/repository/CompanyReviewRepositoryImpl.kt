@@ -3,6 +3,9 @@ package com.frontend.oportunia.data.repository
 import android.util.Log
 import com.frontend.oportunia.data.datasource.CompanyReviewDataSource
 import com.frontend.oportunia.data.mapper.CompanyReviewMapper
+import com.frontend.oportunia.domain.error.DomainError
+import com.frontend.oportunia.domain.model.CompanyReview
+import com.frontend.oportunia.domain.repository.CompanyReviewRepository
 import kotlinx.coroutines.flow.first
 import java.io.IOException
 
@@ -26,7 +29,7 @@ class CompanyReviewRepositoryImpl(
             is IOException -> throw DomainError.NetworkError("Failed to fetch company reviews")
             is IllegalArgumentException -> throw DomainError.MappingError("Error mapping company reviews")
             is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError
+            else -> throw DomainError.UnknownError("An unknown error occurred")
         }
     }
 
@@ -39,7 +42,7 @@ class CompanyReviewRepositoryImpl(
             is IOException -> throw DomainError.NetworkError("Failed to fetch company review")
             is IllegalArgumentException -> throw DomainError.MappingError("Error mapping company review")
             is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError
+            else -> throw DomainError.UnknownError("An unknown error occurred")
         }
     }
 }

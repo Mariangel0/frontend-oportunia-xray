@@ -3,6 +3,9 @@ package com.frontend.oportunia.data.repository
 import android.util.Log
 import com.frontend.oportunia.data.datasource.EducationDataSource
 import com.frontend.oportunia.data.mapper.EducationMapper
+import com.frontend.oportunia.domain.error.DomainError
+import com.frontend.oportunia.domain.model.Education
+import com.frontend.oportunia.domain.repository.EducationRepository
 import kotlinx.coroutines.flow.first
 import java.io.IOException
 
@@ -26,7 +29,7 @@ class EducationRepositoryImpl(
             is IOException -> throw DomainError.NetworkError("Failed to fetch educations")
             is IllegalArgumentException -> throw DomainError.MappingError("Error mapping educations")
             is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError
+            else -> throw DomainError.UnknownError("An unknown error occurred")
         }
     }
 
@@ -39,7 +42,7 @@ class EducationRepositoryImpl(
             is IOException -> throw DomainError.NetworkError("Failed to fetch education")
             is IllegalArgumentException -> throw DomainError.MappingError("Error mapping education")
             is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError
+            else -> throw DomainError.UnknownError("An unknown error occurred")
         }
     }
 }

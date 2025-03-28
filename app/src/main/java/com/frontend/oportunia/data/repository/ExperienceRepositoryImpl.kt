@@ -5,6 +5,9 @@ import com.frontend.oportunia.data.datasource.ExperienceDataSource
 import com.frontend.oportunia.data.mapper.ExperienceMapper
 import kotlinx.coroutines.flow.first
 import java.io.IOException
+import com.frontend.oportunia.domain.repository.ExperienceRepository
+import com.frontend.oportunia.domain.model.Experience
+import com.frontend.oportunia.domain.error.DomainError
 
 class ExperienceRepositoryImpl(
     private val dataSource: ExperienceDataSource,
@@ -26,7 +29,7 @@ class ExperienceRepositoryImpl(
             is IOException -> throw DomainError.NetworkError("Failed to fetch experiences")
             is IllegalArgumentException -> throw DomainError.MappingError("Error mapping experiences")
             is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError
+            else -> throw DomainError.UnknownError("An unknown error occurred")
         }
     }
 
@@ -39,7 +42,7 @@ class ExperienceRepositoryImpl(
             is IOException -> throw DomainError.NetworkError("Failed to fetch experience")
             is IllegalArgumentException -> throw DomainError.MappingError("Error mapping experience")
             is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError
+            else -> throw DomainError.UnknownError("An unknown error occurred")
         }
     }
 }

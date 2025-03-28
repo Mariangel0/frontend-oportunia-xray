@@ -3,6 +3,9 @@ package com.frontend.oportunia.data.repository
 import android.util.Log
 import com.frontend.oportunia.data.datasource.InterviewDataSource
 import com.frontend.oportunia.data.mapper.InterviewMapper
+import com.frontend.oportunia.domain.error.DomainError
+import com.frontend.oportunia.domain.model.Interview
+import com.frontend.oportunia.domain.repository.InterviewRepository
 import kotlinx.coroutines.flow.first
 import java.io.IOException
 
@@ -26,7 +29,7 @@ class InterviewRepositoryImpl(
             is IOException -> throw DomainError.NetworkError("Failed to fetch interviews")
             is IllegalArgumentException -> throw DomainError.MappingError("Error mapping interviews")
             is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError
+            else -> throw DomainError.UnknownError("An unknown error occurred")
         }
     }
 
@@ -39,7 +42,7 @@ class InterviewRepositoryImpl(
             is IOException -> throw DomainError.NetworkError("Failed to fetch interview")
             is IllegalArgumentException -> throw DomainError.MappingError("Error mapping interview")
             is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError
+            else -> throw DomainError.UnknownError("An unknown error occurred")
         }
     }
 }
