@@ -11,18 +11,17 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -125,16 +124,16 @@ fun LinkedInAndGitHubIcons(linkedinUrl: String, githubUrl: String) {
     Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
         IconButton(onClick = { openUrl(context, linkedinUrl) }) {
             Icon(
-                imageVector = Icons.Filled.AccountBox,
+                painter = painterResource(id = R.drawable.icon_linkedin),
                 contentDescription = "LinkedIn",
-                tint = Color(0xFF0A66C2)
+                tint = MaterialTheme.colorScheme.primary
             )
         }
         IconButton(onClick = { openUrl(context, githubUrl) }) {
             Icon(
-                imageVector = Icons.Filled.Edit,
+                painter = painterResource(id = R.drawable.icon_github),
                 contentDescription = "GitHub",
-                tint = Color.Black
+                tint = MaterialTheme.colorScheme.primary
             )
         }
     }
