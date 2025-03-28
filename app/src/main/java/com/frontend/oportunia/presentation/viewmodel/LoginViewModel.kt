@@ -1,11 +1,13 @@
 package com.frontend.oportunia.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.frontend.oportunia.domain.repository.StudentRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import androidx.lifecycle.viewModelScope
 
-
-class LoginViewModel () : ViewModel() {
+class LoginViewModel(private val repository: StudentRepository) : ViewModel() {
 
     private val _username = MutableStateFlow("")
     val username: StateFlow<String> get() = _username
@@ -27,23 +29,28 @@ class LoginViewModel () : ViewModel() {
         _password.value = value
     }
 
-    fun login() { // Prueba de login
+    fun login() {
         _isLoggingIn.value = true
         _loginError.value = null
 
         val user = _username.value.trim()
         val pass = _password.value
 
-        _loginError.value = when {
-            user.isEmpty() || pass.isEmpty() -> "empty_fields"
-            user == "estudiante" && pass == "1234" -> {
-                println("Login exitoso")
-                null
+        viewModelScope.launch {
+            val result = repository.findAllStudents()
+
+            val student = result.getOrNull()?.find {
+                it.user.email == user && it.user.password == pass
             }
-            else -> "invalid_credentials"
+
+            if (student != null) {
+                _loginError.value = null
+                println("Login exitoso: ${student.user.firstName} ${student.user.lastName}")
+            } else {
+                _loginError.value = "invalid_credentials"
+            }
+
+            _isLoggingIn.value = false
         }
-
-        _isLoggingIn.value = false
     }
-
 }
