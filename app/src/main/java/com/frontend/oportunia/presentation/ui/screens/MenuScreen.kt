@@ -48,10 +48,10 @@ fun MenuScreen(
         MainLayout(
             paddingValues = paddingValues,
             headerType = HeaderType.WELCOME,
-            username = "Juan",
+            username = "Alex",
         ) {
-            DailyQuizAlert(onClick = {})// Alerta de quiz diario
-            StreakCalendar() // Racha (Calendario de días)
+            DailyQuizAlert(onClick = {})
+            StreakCalendar()
             Learning()
             CompaniesCarousel(companyViewModel = companyViewModel)
         }
@@ -152,7 +152,7 @@ fun CompanyIcon(
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = name.toString(), // muestra la inicial
+            text = name.toString(),
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.primary
         )

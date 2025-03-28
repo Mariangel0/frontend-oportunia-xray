@@ -7,7 +7,7 @@ import androidx.navigation.NavHostController
 import com.frontend.oportunia.presentation.ui.screens.MenuScreen
 import androidx.navigation.compose.composable
 import com.frontend.oportunia.presentation.ui.screens.AdviceScreen
-import com.frontend.oportunia.presentation.ui.screens.PerfilScren
+import com.frontend.oportunia.presentation.ui.screens.PerfilScreen
 import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
 
 @Composable
@@ -25,7 +25,7 @@ fun NavGraph(
             AdviceScreen(navController, paddingValues)
         }
         composable(NavRoutes.Profile.ROUTE) {
-            PerfilScren(navController, paddingValues)
+            PerfilScreen(navController, paddingValues)
         }
 
     }
