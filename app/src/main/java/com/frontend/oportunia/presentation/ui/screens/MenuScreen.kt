@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,14 +35,26 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 
+import com.frontend.oportunia.presentation.ui.components.HeaderType
+import com.frontend.oportunia.presentation.ui.layout.MainLayout
+
 
 @Composable
-fun MenuScreen(companyViewModel: CompanyViewModel) {
+fun MenuScreen(
+    companyViewModel: CompanyViewModel,
+    paddingValues: PaddingValues
+) {
     Column(modifier = Modifier.fillMaxSize()) {
-        DailyQuizAlert(onClick = {})// Alerta de quiz diario
-        StreakCalendar() // Racha (Calendario de días)
-        Learning()
-        CompaniesCarousel(companyViewModel = companyViewModel)
+        MainLayout(
+            paddingValues = paddingValues,
+            headerType = HeaderType.WELCOME,
+            username = "Juan",
+        ) {
+            DailyQuizAlert(onClick = {})// Alerta de quiz diario
+            StreakCalendar() // Racha (Calendario de días)
+            Learning()
+            CompaniesCarousel(companyViewModel = companyViewModel)
+        }
     }
 }
 

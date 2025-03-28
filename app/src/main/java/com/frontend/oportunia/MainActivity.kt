@@ -3,25 +3,31 @@ package com.frontend.oportunia
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.activity.viewModels
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.frontend.oportunia.presentation.ui.screens.LoginScreen
-import com.frontend.oportunia.presentation.ui.screens.MainScreen
-import com.frontend.oportunia.presentation.ui.screens.RegisterScreen
+import androidx.navigation.compose.rememberNavController
+import com.frontend.oportunia.data.datasource.CompanyDataSourceImpl
+import com.frontend.oportunia.data.mapper.CompanyMapper
+import com.frontend.oportunia.data.repository.CompanyRepositoryImpl
+import com.frontend.oportunia.presentation.factory.CompanyViewModelFactory
+import com.frontend.oportunia.presentation.ui.components.BottomNavigationBar
+import com.frontend.oportunia.presentation.ui.navigation.NavGraph
 import com.frontend.oportunia.presentation.ui.theme.OportunIATheme
+import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
 
 class MainActivity : ComponentActivity() {
+    private  val companyViewModel: CompanyViewModel by viewModels {
+        val companyMapper = CompanyMapper()
+        val companyDataSource = CompanyDataSourceImpl(companyMapper)
+        val companyRepository = CompanyRepositoryImpl(companyDataSource, companyMapper)
+        CompanyViewModelFactory(companyRepository)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             OportunIATheme {
-                Main()
+                Main(companyViewModel)
             }
         }
     }
@@ -29,9 +35,19 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun Main() {
-
-    Scaffold { paddingValues -> // Usamos Scaffold para envolver el contenido
-        RegisterScreen(paddingValues) // Pasamos el paddingValues al LoginScreen
+fun Main(companyViewModel: CompanyViewModel) {
+    val navController = rememberNavController()
+    Scaffold(
+        bottomBar = {
+            BottomNavigationBar(
+                navController = navController,
+            )
+        }
+    ) { paddingValues ->
+        NavGraph(
+            navController = navController,
+            paddingValues = paddingValues,
+            companyViewModel = companyViewModel
+        )
     }
 }
