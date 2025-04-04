@@ -1,6 +1,6 @@
 package com.frontend.oportunia.data.datasource
 
-import com.frontend.oportunia.data.datasource.model.EducationDto
+import com.frontend.oportunia.data.remote.dto.EducationDto
 import com.frontend.oportunia.data.mapper.EducationMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

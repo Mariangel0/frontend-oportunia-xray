@@ -1,6 +1,6 @@
 package com.frontend.oportunia.data.datasource
 
-import com.frontend.oportunia.data.datasource.model.StreakDto
+import com.frontend.oportunia.data.remote.dto.StreakDto
 import kotlinx.coroutines.flow.Flow
 
 interface StreakDataSource {

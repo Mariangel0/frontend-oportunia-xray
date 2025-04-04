@@ -1,6 +1,6 @@
 package com.frontend.oportunia.data.datasource
 
-import com.frontend.oportunia.data.datasource.model.CompanyReviewDto
+import com.frontend.oportunia.data.remote.dto.CompanyReviewDto
 import kotlinx.coroutines.flow.Flow
 
 interface CompanyReviewDataSource {

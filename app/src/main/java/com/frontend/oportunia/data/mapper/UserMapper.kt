@@ -1,6 +1,6 @@
 package com.frontend.oportunia.data.mapper
 
-import com.frontend.oportunia.data.datasource.model.UserDto
+import com.frontend.oportunia.data.remote.dto.UserDto
 import com.frontend.oportunia.domain.model.User
 
 class UserMapper {

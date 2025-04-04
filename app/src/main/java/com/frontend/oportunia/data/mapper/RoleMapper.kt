@@ -1,6 +1,6 @@
 package com.frontend.oportunia.data.mapper
 
-import com.frontend.oportunia.data.datasource.model.RoleDto
+import com.frontend.oportunia.data.remote.dto.RoleDto
 import com.frontend.oportunia.domain.model.Role
 
 class RoleMapper {

@@ -1,4 +1,4 @@
-package com.frontend.oportunia.data.datasource.model
+package com.frontend.oportunia.data.remote.dto
 
 data class CurriculumDto(
     val id: Long,

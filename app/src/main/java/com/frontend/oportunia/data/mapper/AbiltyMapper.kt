@@ -1,6 +1,6 @@
 package com.frontend.oportunia.data.mapper
 
-import com.frontend.oportunia.data.datasource.model.AbilityDto
+import com.frontend.oportunia.data.remote.dto.AbilityDto
 import com.frontend.oportunia.domain.model.Ability
 
 

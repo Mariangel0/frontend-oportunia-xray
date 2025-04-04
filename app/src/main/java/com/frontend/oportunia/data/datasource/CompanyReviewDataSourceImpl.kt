@@ -1,9 +1,6 @@
 package com.frontend.oportunia.data.datasource
 
-import com.frontend.oportunia.data.datasource.model.CompanyReviewDto
 import com.frontend.oportunia.data.mapper.CompanyReviewMapper
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
 class CompanyReviewDataSourceImpl(private val companyReviewMapper: CompanyReviewMapper)
 // : CompanyReviewDataSource {

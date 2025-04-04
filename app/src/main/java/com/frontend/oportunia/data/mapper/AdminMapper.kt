@@ -1,6 +1,6 @@
 package com.frontend.oportunia.data.mapper
 
-import com.frontend.oportunia.data.datasource.model.AdminDto
+import com.frontend.oportunia.data.remote.dto.AdminDto
 import com.frontend.oportunia.domain.model.Admin
 
 class AdminMapper(

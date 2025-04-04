@@ -1,10 +1,9 @@
 package com.frontend.oportunia.data.datasource
 
-import com.frontend.oportunia.data.datasource.model.CompanyDto
+import com.frontend.oportunia.data.remote.dto.CompanyDto
 import com.frontend.oportunia.data.mapper.CompanyMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 
 class CompanyDataSourceImpl(
     private val companyMapper: CompanyMapper

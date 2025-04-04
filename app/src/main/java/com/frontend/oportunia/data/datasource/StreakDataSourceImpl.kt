@@ -1,10 +1,5 @@
 package com.frontend.oportunia.data.datasource
 
-import com.frontend.oportunia.data.datasource.model.StreakDto
-import com.frontend.oportunia.data.mapper.StreakMapper
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-
 class StreakDataSourceImpl()
 //    private val streakMapper: StreakMapper
 //) : StreakDataSource {

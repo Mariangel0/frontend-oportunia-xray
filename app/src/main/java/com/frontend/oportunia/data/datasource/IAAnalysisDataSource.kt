@@ -1,6 +1,6 @@
 package com.frontend.oportunia.data.datasource
 
-import com.frontend.oportunia.data.datasource.model.IAAnalysisDto
+import com.frontend.oportunia.data.remote.dto.IAAnalysisDto
 import kotlinx.coroutines.flow.Flow
 
 interface IAAnalysisDataSource {

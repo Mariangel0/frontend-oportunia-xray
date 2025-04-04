@@ -1,6 +1,6 @@
 package com.frontend.oportunia.data.mapper
 
-import com.frontend.oportunia.data.datasource.model.CompanyDto
+import com.frontend.oportunia.data.remote.dto.CompanyDto
 import com.frontend.oportunia.domain.model.Company
 
 class CompanyMapper {

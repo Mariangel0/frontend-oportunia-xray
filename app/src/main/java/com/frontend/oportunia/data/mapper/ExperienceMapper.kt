@@ -1,6 +1,6 @@
 package com.frontend.oportunia.data.mapper
 
-import com.frontend.oportunia.data.datasource.model.ExperienceDto
+import com.frontend.oportunia.data.remote.dto.ExperienceDto
 import com.frontend.oportunia.domain.model.Experience
 
 class ExperienceMapper(

@@ -1,6 +1,6 @@
 package com.frontend.oportunia.data.mapper
 
-import com.frontend.oportunia.data.datasource.model.EducationDto
+import com.frontend.oportunia.data.remote.dto.EducationDto
 import com.frontend.oportunia.domain.model.Education
 
 class EducationMapper(
