@@ -5,11 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.frontend.oportunia.domain.model.Company
 import com.frontend.oportunia.domain.repository.CompanyRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-
-class CompanyViewModel(
+import javax.inject.Inject
+@HiltViewModel
+class CompanyViewModel @Inject constructor(
     private val repository: CompanyRepository
 ) : ViewModel() {
 
@@ -42,4 +44,5 @@ class CompanyViewModel(
                 .onFailure { Log.e("CompanyViewModel", "Error searching for company with name: $name", it) }
         }
     }
+
 }

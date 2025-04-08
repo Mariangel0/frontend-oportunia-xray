@@ -4,45 +4,35 @@ import android.util.Log
 import com.frontend.oportunia.data.datasource.StudentDataSource
 import com.frontend.oportunia.data.mapper.StudentMapper
 import com.frontend.oportunia.domain.error.DomainError
+import com.frontend.oportunia.domain.model.Company
 import com.frontend.oportunia.domain.model.Student
+import com.frontend.oportunia.domain.model.User
 import com.frontend.oportunia.domain.repository.StudentRepository
 import kotlinx.coroutines.flow.first
 import java.io.IOException
+import java.net.UnknownHostException
+import javax.inject.Inject
 
-class StudentRepositoryImpl(
+class StudentRepositoryImpl @Inject constructor(
     private val dataSource: StudentDataSource,
     private val studentMapper: StudentMapper
 ) : StudentRepository {
 
-    companion object {
-        private const val TAG = "StudentRepository"
-    }
 
-    override suspend fun findAllStudents(): Result<List<Student>> = runCatching {
-        dataSource.getStudents().first().map { studentDto ->
-            studentMapper.mapToDomain(studentDto)
-        }
-    }.recoverCatching { throwable ->
-        Log.e(TAG, "Failed to fetch students", throwable)
-
-        when (throwable) {
-            is IOException -> throw DomainError.NetworkError("Failed to fetch students")
-            is IllegalArgumentException -> throw DomainError.MappingError("Error mapping students")
-            is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError("An unknown error occurred")
+    override suspend fun findAllStudents(): Result<List<Student>> {
+        return try {
+            dataSource.getAllStudents().map { studentDtos ->
+                studentMapper.mapToDomainList(studentDtos)
+            }
+        } catch (e: UnknownHostException) {
+            Result.failure(Exception("Network error: Cannot connect to server. Please check your internet connection."))
+        } catch (e: Exception) {
+            Result.failure(Exception("Error fetching tasks: ${e.message}"))
         }
     }
 
-    override suspend fun findStudentById(studentId: Long): Result<Student> = runCatching {
-        val studentDto = dataSource.getStudentById(studentId) ?: throw DomainError.StudentError("Student not found")
-        studentMapper.mapToDomain(studentDto)
-    }.recoverCatching { throwable ->
-        Log.e(TAG, "Failed to fetch student with ID: $studentId", throwable)
-        when (throwable) {
-            is IOException -> throw DomainError.NetworkError("Failed to fetch student")
-            is IllegalArgumentException -> throw DomainError.MappingError("Error mapping student")
-            is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError("An unknown error occurred")
+    override suspend fun findStudentById(companyId: Long): Result<Student> =
+        dataSource.getStudentById(companyId).map { companyDto ->
+            studentMapper.mapToDomain(companyDto)
         }
-    }
 }

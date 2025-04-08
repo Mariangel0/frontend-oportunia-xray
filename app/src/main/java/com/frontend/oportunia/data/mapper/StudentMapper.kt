@@ -2,24 +2,38 @@ package com.frontend.oportunia.data.mapper
 
 import com.frontend.oportunia.data.remote.dto.StudentDto
 import com.frontend.oportunia.domain.model.Student
+import javax.inject.Inject
 
-class StudentMapper(
+class StudentMapper @Inject constructor(
     private val userMapper: UserMapper
 ){
 
-    fun mapToDomain(dto: StudentDto): Student = Student(
-        user = userMapper.mapToDomain(dto.user),
-        description = dto.description,
-        premium = dto.premium,
-        linkedinUrl = dto.linkedinUrl,
-        githubUrl = dto.githubUrl
-    )
+    fun mapToDomain(dto: StudentDto): Student {
+        return Student(
+            user = userMapper.mapToDomain(dto.user),
+            description = dto.description,
+            premium = dto.premium,
+            linkedinUrl = dto.linkedinUrl,
+            githubUrl = dto.githubUrl
+        )
+    }
 
-    fun mapToDto(domain: Student): StudentDto = StudentDto(
-        user = userMapper.mapToDto(domain.user), // Mapeamos el `User` dentro de `Student`
-        description = domain.description,
-        premium = domain.premium,
-        linkedinUrl = domain.linkedinUrl,
-        githubUrl = domain.githubUrl
-    )
+    fun mapToDomainList(studentDto: List<StudentDto>): List<Student> {
+        return studentDto.map { mapToDomain(it) }
+    }
+
+    fun mapToDto(domain: Student): StudentDto {
+        return StudentDto(
+            user = userMapper.mapToDto(domain.user),
+            description = domain.description,
+            premium = domain.premium,
+            linkedinUrl = domain.linkedinUrl,
+            githubUrl = domain.githubUrl
+        )
+    }
+
+    fun mapToDtoList(students: List<Student>): List<StudentDto> {
+        return students.map { mapToDto(it) }
+    }
+
 }

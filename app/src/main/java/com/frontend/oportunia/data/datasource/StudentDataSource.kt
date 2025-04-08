@@ -1,12 +1,43 @@
 package com.frontend.oportunia.data.datasource
 
+import com.frontend.oportunia.data.remote.api.StudentService
 import com.frontend.oportunia.data.remote.dto.StudentDto
-import kotlinx.coroutines.flow.Flow
+import retrofit2.Response
+import javax.inject.Inject
 
-interface StudentDataSource {
-    suspend fun getStudents(): Flow<List<StudentDto>>
-    suspend fun getStudentById(id: Long): StudentDto?
-    suspend fun insertStudent(studentDto: StudentDto)
-    suspend fun updateStudent(studentDto: StudentDto)
-    suspend fun deleteStudent(studentDto: StudentDto)
+class StudentDataSource @Inject constructor(
+    private val studentService: StudentService
+) {
+    suspend fun getAllStudents(): Result<List<StudentDto>> = safeApiCall {
+        studentService.getAllStudents()
+    }
+    suspend fun getStudentById(id: Long): Result<StudentDto>  = safeApiCall {
+        studentService.geStudentById(id)
+    }
+    suspend fun createStudent(studentDto: StudentDto): Response<StudentDto> {
+        return studentService.createStudent(studentDto)
+    }
+
+    suspend fun updateStudent(id: Long, studentDto: StudentDto): Response<StudentDto> {
+        return studentService.updateStudent(id, studentDto)
+    }
+
+    suspend fun deleteStudent(id: Long): Response<Unit> {
+        return studentService.deleteStudent(id)
+    }
+
+
+    private suspend fun <T> safeApiCall(apiCall: suspend () -> Response<T>): Result<T> = try {
+        val response = apiCall()
+        if (response.isSuccessful) {
+            response.body()?.let {
+                Result.success(it)
+            } ?: Result.failure(Exception("Response body was null"))
+        } else {
+            val errorBody = response.errorBody()?.string()
+            Result.failure(Exception("API error ${response.code()}: $errorBody"))
+        }
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
 }

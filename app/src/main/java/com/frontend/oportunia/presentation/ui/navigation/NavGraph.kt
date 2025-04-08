@@ -39,7 +39,7 @@ fun NavGraph(
         }
 
         composable(NavRoutes.Menu.ROUTE) {
-            MenuScreen(companyViewModel, paddingValues, navController)
+            MenuScreen( companyViewModel, paddingValues, navController)
         }
 
         composable(NavRoutes.CompanyMenu.ROUTE) {

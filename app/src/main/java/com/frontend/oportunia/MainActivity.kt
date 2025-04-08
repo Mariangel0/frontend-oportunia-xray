@@ -8,8 +8,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.frontend.oportunia.data.datasource.CompanyDataSourceImpl
-import com.frontend.oportunia.data.datasource.StudentDataSourceImpl
+
+//import com.frontend.oportunia.data.datasource.StudentDataSourceImpl
 import com.frontend.oportunia.data.mapper.CompanyMapper
 import com.frontend.oportunia.data.mapper.StudentMapper
 import com.frontend.oportunia.data.mapper.UserMapper
@@ -23,6 +23,7 @@ import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
 import com.frontend.oportunia.presentation.ui.theme.OportunIATheme
 import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
 import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 
 //class MainActivity : ComponentActivity() {
@@ -52,21 +53,14 @@ import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
 //    }
 //}
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private  val companyViewModel: CompanyViewModel by viewModels {
-        val companyMapper = CompanyMapper()
-        val companyDataSource = CompanyDataSourceImpl(companyMapper)
-        val companyRepository = CompanyRepositoryImpl(companyDataSource, companyMapper)
-        CompanyViewModelFactory(companyRepository)
-    }
-    private val loginViewModel: LoginViewModel by viewModels {
-                val userMapper = UserMapper()
-        val studentMapper = StudentMapper(userMapper)
-        val studentDataSource = StudentDataSourceImpl(studentMapper)
-        val studentRepository = StudentRepositoryImpl(studentDataSource, studentMapper)
-        LoginViewModelFactory(studentRepository)
-    }
+    private  val companyViewModel: CompanyViewModel by viewModels ()
+
+    private val loginViewModel: LoginViewModel by viewModels ()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
