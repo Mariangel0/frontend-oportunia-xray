@@ -42,19 +42,25 @@ import androidx.navigation.NavController
 import com.frontend.oportunia.presentation.ui.components.HeaderType
 import com.frontend.oportunia.presentation.ui.layout.MainLayout
 import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
+import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
 
 
 @Composable
 fun MenuScreen(
     companyViewModel: CompanyViewModel,
     paddingValues: PaddingValues,
-    navController: NavController
+    navController: NavController,
+    loginViewModel: LoginViewModel
 ) {
+
+    val student by loginViewModel.loggedStudent.collectAsState()
+    val username = student?.user?.firstName ?: "Estudiante"
+
     Column(modifier = Modifier.fillMaxSize()) {
         MainLayout(
             paddingValues = paddingValues,
             headerType = HeaderType.WELCOME,
-            username = "Alex",
+            username = username,
         ) {
             DailyQuizAlert(onClick = {})
             StreakCalendar()
@@ -63,6 +69,9 @@ fun MenuScreen(
         }
     }
 }
+
+
+
 
 @Composable
 fun Learning() {
