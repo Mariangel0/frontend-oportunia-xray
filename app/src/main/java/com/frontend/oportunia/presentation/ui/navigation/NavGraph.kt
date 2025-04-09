@@ -5,9 +5,12 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import com.frontend.oportunia.presentation.ui.screens.MenuScreen
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.frontend.oportunia.presentation.ui.screens.AdviceScreen
+import com.frontend.oportunia.presentation.ui.screens.CompanyDetailScreen
 import com.frontend.oportunia.presentation.ui.screens.PerfilScreen
 import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
 import com.frontend.oportunia.presentation.ui.screens.CompanyScreen
@@ -50,9 +53,23 @@ fun NavGraph(
             AdviceScreen(navController, paddingValues)
         }
 
-
         composable(NavRoutes.Profile.ROUTE) {
             PerfilScreen(navController, paddingValues)
+        }
+
+        composable(
+            route = NavRoutes.CompanyDetail.ROUTE,
+            arguments = listOf(navArgument(NavRoutes.CompanyDetail.ARG_COMP_ID) {
+                type = NavType.LongType
+            })
+        ) { backStackEntry ->
+            val compId = backStackEntry.arguments?.getLong(NavRoutes.CompanyDetail.ARG_COMP_ID) ?: 0L
+            CompanyDetailScreen(
+                companyId = compId,
+                companyViewModel = companyViewModel,
+                navController = navController,
+                paddingValues = paddingValues
+            )
         }
     }
 }

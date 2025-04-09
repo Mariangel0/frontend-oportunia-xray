@@ -15,7 +15,7 @@ import com.frontend.oportunia.data.mapper.StudentMapper
 import com.frontend.oportunia.data.mapper.UserMapper
 import com.frontend.oportunia.data.repository.CompanyRepositoryImpl
 import com.frontend.oportunia.data.repository.StudentRepositoryImpl
-import com.frontend.oportunia.presentation.factory.CompanyViewModelFactory
+//import com.frontend.oportunia.presentation.factory.CompanyViewModelFactory
 import com.frontend.oportunia.presentation.factory.LoginViewModelFactory
 import com.frontend.oportunia.presentation.ui.components.BottomNavigationBar
 import com.frontend.oportunia.presentation.ui.navigation.NavGraph

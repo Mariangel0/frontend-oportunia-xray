@@ -1,6 +1,7 @@
 package com.frontend.oportunia.data.di
 
 
+import com.frontend.oportunia.data.remote.api.CompanyReviewService
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -21,7 +22,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    private const val BASE_URL = "http://10.0.2.2:3001/"
+    private const val BASE_URL = "http://192.168.0.105:3001/"
     private const val DATE_FORMAT = "yyyy-MM-dd"
 
     @Provides
@@ -73,4 +74,9 @@ object NetworkModule {
     @Singleton
     fun provideStudentService(retrofit: Retrofit): StudentService =
         retrofit.create(StudentService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideCompanyReviewService(retrofit: Retrofit): CompanyReviewService =
+        retrofit.create(CompanyReviewService::class.java)
 }

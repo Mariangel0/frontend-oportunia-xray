@@ -1,5 +1,6 @@
 package com.frontend.oportunia.presentation.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -32,6 +33,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -41,6 +43,7 @@ import com.example.oportunia.R
 import com.frontend.oportunia.domain.model.Company
 import com.frontend.oportunia.presentation.ui.components.HeaderType
 import com.frontend.oportunia.presentation.ui.layout.MainLayout
+import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
 import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
 
 @Composable
@@ -71,8 +74,8 @@ fun CompanyScreen( paddingValues: PaddingValues, companyViewModel: CompanyViewMo
                 OutlinedTextField(
                     value = searchQuery.value,
                     onValueChange = { searchQuery.value = it },
-                    label = { Text("Buscar empresas") },
-                    modifier = Modifier.weight(1f), // Makes the input take available space
+                    label = { Text(text = stringResource(id = R.string.search_placeholder)) },
+                    modifier = Modifier.weight(1f),
                     keyboardOptions = KeyboardOptions.Default.copy(
                         imeAction = ImeAction.Search
                     ),
@@ -83,7 +86,7 @@ fun CompanyScreen( paddingValues: PaddingValues, companyViewModel: CompanyViewMo
                     )
                 )
 
-                Spacer(modifier = Modifier.width(8.dp)) // Adds space between the input and button
+                Spacer(modifier = Modifier.width(8.dp))
 
                 Button(
                     onClick = {
@@ -92,7 +95,7 @@ fun CompanyScreen( paddingValues: PaddingValues, companyViewModel: CompanyViewMo
                     modifier = Modifier.height(56.dp)
                     , shape = MaterialTheme.shapes.small
                 ) {
-                    Text("Buscar")
+                    Text(text = stringResource(id = R.string.search))
                 }
             }
 
@@ -100,7 +103,9 @@ fun CompanyScreen( paddingValues: PaddingValues, companyViewModel: CompanyViewMo
 
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(companyList) { company ->
-                    CompanyItem(company)
+                    CompanyItem(company){
+                        navController.navigate(NavRoutes.CompanyDetail.createRoute(company.id))
+                    }
                 }
             }
         }
@@ -108,17 +113,18 @@ fun CompanyScreen( paddingValues: PaddingValues, companyViewModel: CompanyViewMo
 }
 
 @Composable
-fun CompanyItem(company: Company) {
+fun CompanyItem(company: Company, onClick: () -> Unit) {
     val starFilled = painterResource(id = R.drawable.icon_star_full)
     val starBorder = painterResource(id = R.drawable.icon_star)
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(vertical = 8.dp)
+            .clickable { onClick() },
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer // You can replace this with your custom color
+            containerColor = MaterialTheme.colorScheme.primaryContainer
         )
 
     ) {
@@ -143,3 +149,5 @@ fun CompanyItem(company: Company) {
         }
     }
 }
+
+
