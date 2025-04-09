@@ -13,7 +13,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,20 +27,23 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.frontend.oportunia.presentation.ui.components.HeaderType
 import com.frontend.oportunia.presentation.ui.layout.MainLayout
+import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
 import com.example.oportunia.R
 
 @Composable
 fun PerfilScreen(
     navController: NavController,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    loginViewModel: LoginViewModel
 ) {
-    //Simulate dates waiting for setup logged user
-    var firstName by remember { mutableStateOf("Alex") }
-    var lastName by remember { mutableStateOf("Marin") }
-    var description by remember { mutableStateOf("Software Engineering Student") }
-    var premium by remember { mutableStateOf(true) }
-    var linkedinUrl by remember { mutableStateOf("https://linkedin.com/in/student1") }
-    var githubUrl by remember { mutableStateOf("https://github.com/student1") }
+    val student by loginViewModel.loggedStudent.collectAsState()
+
+    val firstName = student?.user?.firstName ?: ""
+    val lastName = student?.user?.lastName ?: ""
+    val description = student?.description ?: ""
+    val premium = student?.premium ?: false
+    val linkedinUrl = student?.linkedinUrl ?: ""
+    val githubUrl = student?.githubUrl ?: ""
     var profileImageUri by remember { mutableStateOf<Uri?>(null) }
 
     MainLayout(

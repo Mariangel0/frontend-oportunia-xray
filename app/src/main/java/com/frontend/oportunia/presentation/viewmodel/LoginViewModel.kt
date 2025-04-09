@@ -1,6 +1,7 @@
 package com.frontend.oportunia.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.frontend.oportunia.domain.model.Student
 import com.frontend.oportunia.domain.repository.StudentRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,6 +30,9 @@ class LoginViewModel @Inject constructor(
     private val _loginSuccess = MutableStateFlow(false)
     val loginSuccess: StateFlow<Boolean> get() = _loginSuccess
 
+    private val _loggedStudent = MutableStateFlow<Student?>(null)
+    val loggedStudent: StateFlow<Student?> get() = _loggedStudent
+
     fun onUsernameChange(value: String) {
         _username.value = value
     }
@@ -42,10 +46,9 @@ class LoginViewModel @Inject constructor(
         _loginError.value = null
 
         val user = _username.value.trim()
-        val pass = _password.value
+        val pass = _password.value.trim()
 
         viewModelScope.launch {
-            // Agregamos un log para ver si estamos obteniendo correctamente los estudiantes
             val result = repository.findAllStudents()
             if (result.isSuccess) {
                 println("Estudiantes obtenidos correctamente")
@@ -56,6 +59,7 @@ class LoginViewModel @Inject constructor(
 
                 if (student != null) {
                     _loginSuccess.value = true
+                    _loggedStudent.value = student // ✅ Guardar en sesión global
                     _loginError.value = null
                     println("Login exitoso: ${student.user.firstName} ${student.user.lastName}")
                 } else {
@@ -69,6 +73,10 @@ class LoginViewModel @Inject constructor(
 
             _isLoggingIn.value = false
         }
+    }
+
+    fun setLoggedStudent(student: Student) {
+        _loggedStudent.value = student
     }
 
 }
