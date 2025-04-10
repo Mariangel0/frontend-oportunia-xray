@@ -1,6 +1,7 @@
 package com.frontend.oportunia.presentation.ui.screens
 
 import android.R.attr.thickness
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -52,7 +53,8 @@ fun CompanyDetailScreen (
 
     val selectedCompany by companyViewModel.selectedCompany.collectAsState()
     val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    val reviews by companyViewModel.companyReviewsList.collectAsState()
+    val reviews by companyViewModel.companyReviewsList.collectAsState() // ver porque solo manda una aunque haya mas en el response
+    Log.d("DEBUG", "Reviews count: ${reviews.size}")
     val averageRating = if (reviews.isNotEmpty()) reviews.map { it.rating }.average().toFloat() else 0f
 
     MainLayout(
@@ -61,6 +63,7 @@ fun CompanyDetailScreen (
         title = selectedCompany?.name ?: stringResource(id = R.string.reviews),
         onBackClick = {navController.navigateUp()}
     ) {
+
         Column(
             modifier = Modifier
             .padding(24.dp),
@@ -102,16 +105,18 @@ fun CompanyDetailScreen (
         Spacer(modifier = Modifier.height(16.dp))
 
 
-        reviews.forEach { review ->
-            ReviewCard(review)
-            Modifier.padding(vertical = 8.dp)
-            HorizontalDivider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
-            )
-        }
+            reviews.forEach { review ->
+                Column(modifier = Modifier.padding(vertical = 8.dp)) {
+                    ReviewCard(review)
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
+                    )
+                }
+            }
+
         }
 
     }
@@ -153,7 +158,7 @@ fun ReviewCard(review: CompanyReview) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "Lorem ipsum", fontWeight = FontWeight.Bold) // nombre de la persona
+                Text(review.studentId.user.firstName) // nombre de la persona
                // Text(text = "Hace ${daysAgo(review.createdAt)} días", style = MaterialTheme.typography.bodySmall)
             }
 

@@ -11,7 +11,9 @@ import dagger.hilt.components.SingletonComponent
 import com.frontend.oportunia.data.remote.api.CompanyService
 import com.frontend.oportunia.data.remote.api.StudentService
 import com.frontend.oportunia.data.remote.api.UserService
+import com.frontend.oportunia.data.remote.dto.CompanyReviewDto
 import com.frontend.oportunia.data.remote.interceptor.ResponseInterceptor
+import com.frontend.oportunia.data.remote.serializer.CompanyReviewDeserializer
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -45,7 +47,9 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideGson(): Gson = GsonBuilder() // aqui irian los deserializadores
+    fun provideGson(): Gson = GsonBuilder()
+        // aqui irian los deserializadores
+        .registerTypeAdapter(CompanyReviewDto::class.java, CompanyReviewDeserializer())
         .setDateFormat(DATE_FORMAT)
         .create()
 

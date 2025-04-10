@@ -17,8 +17,8 @@ class CompanyReviewDeserializer : JsonDeserializer<CompanyReviewDto> {
         val jsonObject = json.asJsonObject
 
         val id = jsonObject.get("id").asLong
-        val studentId = jsonObject.get("studentId").asLong
-        val companyId = jsonObject.get("companyId").asLong
+        val studentId = context.deserialize<StudentDto>(jsonObject.get("studentId"), StudentDto::class.java)
+        val companyId = context.deserialize<CompanyDto>(jsonObject.get("companyId"), CompanyDto::class.java)
 
         val rating = jsonObject.get("rating").asFloat
         val comment = jsonObject.get("comment").asString
