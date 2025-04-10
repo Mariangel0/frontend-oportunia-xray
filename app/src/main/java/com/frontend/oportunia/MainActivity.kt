@@ -10,7 +10,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.frontend.oportunia.data.datasource.CompanyDataSourceImpl
 import com.frontend.oportunia.data.datasource.StudentDataSourceImpl
+import com.frontend.oportunia.data.mapper.AbilityMapper
 import com.frontend.oportunia.data.mapper.CompanyMapper
+import com.frontend.oportunia.data.mapper.ExperienceMapper
 import com.frontend.oportunia.data.mapper.StudentMapper
 import com.frontend.oportunia.data.mapper.UserMapper
 import com.frontend.oportunia.data.repository.CompanyRepositoryImpl
@@ -63,8 +65,10 @@ class MainActivity : ComponentActivity() {
     private val loginViewModel: LoginViewModel by viewModels {
                 val userMapper = UserMapper()
         val studentMapper = StudentMapper(userMapper)
+        val abilityMapper = AbilityMapper(studentMapper)
+        val experienceMapper = ExperienceMapper(studentMapper)
         val studentDataSource = StudentDataSourceImpl(studentMapper)
-        val studentRepository = StudentRepositoryImpl(studentDataSource, studentMapper)
+        val studentRepository = StudentRepositoryImpl(studentDataSource, studentMapper, abilityMapper, experienceMapper)
         LoginViewModelFactory(studentRepository)
     }
     override fun onCreate(savedInstanceState: Bundle?) {

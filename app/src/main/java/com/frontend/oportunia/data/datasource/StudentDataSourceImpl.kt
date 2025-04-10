@@ -1,5 +1,7 @@
 package com.frontend.oportunia.data.datasource
 
+import com.frontend.oportunia.data.datasource.model.AbilityDto
+import com.frontend.oportunia.data.datasource.model.ExperienceDto
 import com.frontend.oportunia.data.datasource.model.StudentDto
 import com.frontend.oportunia.data.mapper.StudentMapper
 import kotlinx.coroutines.flow.Flow
@@ -25,5 +27,13 @@ class StudentDataSourceImpl(
     }
 
     override suspend fun deleteStudent(studentDto: StudentDto) {
+    }
+
+    override suspend fun getAbilitiesForStudent(studentId: Long): List<AbilityDto> {
+        return StudentProvider.findAbilitiesByStudentId(studentId)
+    }
+
+    override suspend fun getExperiencesForStudent(studentId: Long): List<ExperienceDto> {
+        return StudentProvider.findExperiencesByStudentId(studentId)
     }
 }

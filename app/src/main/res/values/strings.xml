@@ -49,8 +49,21 @@
 
 
     <string name="profile">Perfil</string>
+    <string name="student">Estudiante</string>
+    <string name="adminastror">Administrador</string>
 
     <string name="advice">Consejos</string>
     <string name="menu">Menu</string>
 
+    <string name="advice_title">Prepárate antes de enviar tu solicitud</string>
+    <string name="advice_subtitle">Lorem ipsum dolor sit amet consectetur. Turpis curabitur eget sapien onaean. Nunc ultricies semper et mauris.</string>
+    <string name="advice_question_1">¿Por qué es importante investigar la empresa antes de aplicar?</string>
+    <string name="advice_question_2">¿Cómo hacer que tu CV destaque entre los demás?</string>
+
+    <string name="skills">Habilidades</string>
+    <string name="soft_skills">Habilidades blandas</string>
+    <string name="no_skills">No se han registrado habilidades.</string>
+
+    <string name="experience_title">Experiencia Laboral</string>
+    <string name="no_experience">No se han registrado experiencias</string>
 </resources>

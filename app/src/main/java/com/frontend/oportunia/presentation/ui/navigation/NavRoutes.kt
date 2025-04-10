@@ -26,5 +26,10 @@ sealed class NavRoutes {
         const val ROUTE = "main"
     }
 
+    data object SkillScreen : NavRoutes() {
+        const val ROUTE = "skills"
+    }
+
+
 
 }

@@ -1,11 +1,14 @@
 package com.frontend.oportunia.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.frontend.oportunia.domain.model.Ability
+import com.frontend.oportunia.domain.model.Experience
+import com.frontend.oportunia.domain.model.Student
 import com.frontend.oportunia.domain.repository.StudentRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import androidx.lifecycle.viewModelScope
 
 class LoginViewModel(private val repository: StudentRepository) : ViewModel() {
 
@@ -23,6 +26,15 @@ class LoginViewModel(private val repository: StudentRepository) : ViewModel() {
 
     private val _loginSuccess = MutableStateFlow(false)
     val loginSuccess: StateFlow<Boolean> get() = _loginSuccess
+
+    private val _currentStudent = MutableStateFlow<Student?>(null)
+    val currentStudent: StateFlow<Student?> get() = _currentStudent
+
+    private val _abilities = MutableStateFlow<List<Ability>>(emptyList())
+    val abilities: StateFlow<List<Ability>> get() = _abilities
+
+    private val _experiences = MutableStateFlow<List<Experience>>(emptyList())
+    val experiences: StateFlow<List<Experience>> get() = _experiences
 
     fun onUsernameChange(value: String) {
         _username.value = value
@@ -47,14 +59,26 @@ class LoginViewModel(private val repository: StudentRepository) : ViewModel() {
             }
 
             if (student != null) {
+                _currentStudent.value = student
                 _loginSuccess.value = true
                 _loginError.value = null
+
+                // Cargar habilidades y experiencias del estudiante
+                loadStudentDetails(student.user.id)
+
                 println("Login exitoso: ${student.user.firstName} ${student.user.lastName}")
             } else {
                 _loginError.value = "invalid_credentials"
             }
 
             _isLoggingIn.value = false
+        }
+    }
+
+    fun loadStudentDetails(studentId: Long) {
+        viewModelScope.launch {
+            _abilities.value = repository.getAbilitiesForStudent(studentId)
+            _experiences.value = repository.getExperiencesForStudent(studentId)
         }
     }
 }

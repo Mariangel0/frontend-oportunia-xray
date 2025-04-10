@@ -4,7 +4,7 @@ import com.frontend.oportunia.data.datasource.model.AbilityDto
 import com.frontend.oportunia.domain.model.Ability
 
 
-class AbiltyMapper(
+class AbilityMapper(
     private val studentMapper: StudentMapper
 ) {
 

@@ -1,5 +1,9 @@
 package com.frontend.oportunia.data.datasource
 
+import com.frontend.oportunia.data.datasource.model.AbilityDto
+import com.frontend.oportunia.data.datasource.model.ExperienceDto
+import com.frontend.oportunia.data.mapper.StudentMapper
+import com.frontend.oportunia.data.mapper.UserMapper
 import com.frontend.oportunia.domain.model.Student
 import com.frontend.oportunia.domain.model.User
 
@@ -62,6 +66,32 @@ class StudentProvider {
 
         fun findAllStudents(): List<Student> {
             return studentList
+        }
+
+        private val userMapper = UserMapper()
+        private val studentMapper = StudentMapper(userMapper)
+        private val studentDtoList = studentList.map { studentMapper.mapToDto(it) }
+
+        private val abilities = listOf(
+            AbilityDto(id = 1, studentId = studentDtoList[0], name = "Liderazgo"),
+            AbilityDto(id = 2, studentId = studentDtoList[0], name = "Trabajo en equipo"),
+            AbilityDto(id = 3, studentId = studentDtoList[0], name = "Comunicación"),
+            AbilityDto(id = 4, studentId = studentDtoList[0], name = "Pensamiento crítico"),
+        )
+
+        private val experiences = listOf(
+            ExperienceDto(id = 1, studentId = studentDtoList[0], company = 1001, role = "Desarrollador Android", year = 2024),
+            ExperienceDto(id = 2, studentId = studentDtoList[0], company = 1002, role = "Backend Intern", year = 2023),
+            ExperienceDto(id = 3, studentId = studentDtoList[0], company = 1003, role = "Data Analyst Intern", year = 2023),
+            ExperienceDto(id = 4, studentId = studentDtoList[0], company = 1004, role = "Investigadora de IA", year = 2025),
+        )
+
+        fun findAbilitiesByStudentId(studentId: Long): List<AbilityDto> {
+            return abilities.filter { it.studentId.user.id == studentId }
+        }
+
+        fun findExperiencesByStudentId(studentId: Long): List<ExperienceDto> {
+            return experiences.filter { it.studentId.user.id == studentId }
         }
     }
 }

@@ -2,8 +2,15 @@ package com.frontend.oportunia.data.repository
 
 import android.util.Log
 import com.frontend.oportunia.data.datasource.StudentDataSource
+import com.frontend.oportunia.data.datasource.model.AbilityDto
+import com.frontend.oportunia.data.datasource.model.ExperienceDto
+import com.frontend.oportunia.data.mapper.AbilityMapper
+import com.frontend.oportunia.data.mapper.ExperienceMapper
 import com.frontend.oportunia.data.mapper.StudentMapper
+import com.frontend.oportunia.data.repository.StreakRepositoryImpl.Companion
 import com.frontend.oportunia.domain.error.DomainError
+import com.frontend.oportunia.domain.model.Ability
+import com.frontend.oportunia.domain.model.Experience
 import com.frontend.oportunia.domain.model.Student
 import com.frontend.oportunia.domain.repository.StudentRepository
 import kotlinx.coroutines.flow.first
@@ -11,7 +18,9 @@ import java.io.IOException
 
 class StudentRepositoryImpl(
     private val dataSource: StudentDataSource,
-    private val studentMapper: StudentMapper
+    private val studentMapper: StudentMapper,
+    private val abilityMapper: AbilityMapper,
+    private val experienceMapper: ExperienceMapper
 ) : StudentRepository {
 
     companion object {
@@ -44,5 +53,18 @@ class StudentRepositoryImpl(
             is DomainError -> throw throwable
             else -> throw DomainError.UnknownError("An unknown error occurred")
         }
+    }
+    override suspend fun getAbilitiesForStudent(studentId: Long): List<Ability> = runCatching {
+        dataSource.getAbilitiesForStudent(studentId).map { abilityMapper.mapToDomain(it) }
+    }.getOrElse {
+        Log.e(TAG, "Error fetching abilities", it)
+        emptyList()
+    }
+
+    override suspend fun getExperiencesForStudent(studentId: Long): List<Experience> = runCatching {
+        dataSource.getExperiencesForStudent(studentId).map { experienceMapper.mapToDomain(it) }
+    }.getOrElse {
+        Log.e(TAG, "Error fetching experiences", it)
+        emptyList()
     }
 }

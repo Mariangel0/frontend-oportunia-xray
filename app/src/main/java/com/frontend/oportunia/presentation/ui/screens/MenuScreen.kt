@@ -58,14 +58,14 @@ fun MenuScreen(
         ) {
             DailyQuizAlert(onClick = {})
             StreakCalendar()
-            Learning()
+            Learning(navController = navController)
             CompaniesCarousel(companyViewModel = companyViewModel, navController = navController)
         }
     }
 }
 
 @Composable
-fun Learning() {
+fun Learning(navController: NavController) {
     // Usar el composable reutilizable
     CustomCardWithText(
         title = stringResource(id = R.string.learning)
@@ -78,15 +78,18 @@ fun Learning() {
         ) {
             LearnItem(
                 icon = Icons.Outlined.AccountBox,
-                text = "Entrevistas"
+                text = "Entrevistas",
+                onClick = { /* Navegar si se quiere */ }
             )
             LearnItem(
                 icon = Icons.AutoMirrored.Outlined.List,
-                text = "Curriculum"
+                text = "Curriculum",
+                onClick = { /* Navegar si se quiere */ }
             )
             LearnItem(
                 icon = Icons.Outlined.Build,
-                text = "Habilidades"
+                text = "Habilidades",
+                onClick = { navController.navigate(NavRoutes.SkillScreen.ROUTE)}
             )
 
         }
@@ -96,11 +99,13 @@ fun Learning() {
 @Composable
 fun LearnItem(
     icon: ImageVector,
-    text: String
+    text: String,
+    onClick: () -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.clickable(onClick = onClick)
     ) {
         Icon(
             imageVector = icon,
