@@ -1,10 +1,5 @@
 package com.frontend.oportunia.data.datasource
 
-import com.frontend.oportunia.data.datasource.model.InterviewDto
-import com.frontend.oportunia.data.mapper.InterviewMapper
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-
 class InterviewDataSourceImpl()
 //    private val interviewMapper: InterviewMapper
 //) : InterviewDataSource {

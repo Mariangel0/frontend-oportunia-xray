@@ -1,16 +1,21 @@
 package com.frontend.oportunia.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.frontend.oportunia.domain.model.Student
 import androidx.lifecycle.viewModelScope
 import com.frontend.oportunia.domain.model.Ability
 import com.frontend.oportunia.domain.model.Experience
-import com.frontend.oportunia.domain.model.Student
 import com.frontend.oportunia.domain.repository.StudentRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class LoginViewModel(private val repository: StudentRepository) : ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val repository: StudentRepository
+) : ViewModel() {
 
     private val _username = MutableStateFlow("")
     val username: StateFlow<String> get() = _username
@@ -26,6 +31,9 @@ class LoginViewModel(private val repository: StudentRepository) : ViewModel() {
 
     private val _loginSuccess = MutableStateFlow(false)
     val loginSuccess: StateFlow<Boolean> get() = _loginSuccess
+
+    private val _loggedStudent = MutableStateFlow<Student?>(null)
+    val loggedStudent: StateFlow<Student?> get() = _loggedStudent
 
     private val _currentStudent = MutableStateFlow<Student?>(null)
     val currentStudent: StateFlow<Student?> get() = _currentStudent
@@ -49,36 +57,45 @@ class LoginViewModel(private val repository: StudentRepository) : ViewModel() {
         _loginError.value = null
 
         val user = _username.value.trim()
-        val pass = _password.value
+        val pass = _password.value.trim()
 
         viewModelScope.launch {
             val result = repository.findAllStudents()
+            if (result.isSuccess) {
+                println("Estudiantes obtenidos correctamente")
 
-            val student = result.getOrNull()?.find {
-                it.user.email == user && it.user.password == pass
-            }
+                val student = result.getOrNull()?.find {
+                    it.user.email == user && it.user.password == pass
+                }
 
-            if (student != null) {
-                _currentStudent.value = student
-                _loginSuccess.value = true
-                _loginError.value = null
-
-                // Cargar habilidades y experiencias del estudiante
-                loadStudentDetails(student.user.id)
-
-                println("Login exitoso: ${student.user.firstName} ${student.user.lastName}")
+                if (student != null) {
+                    _loginSuccess.value = true
+                    _loggedStudent.value = student // ✅ Guardar en sesión global
+                    _loginError.value = null
+                    //loadStudentDetails(student.user.id)
+                    println("Login exitoso: ${student.user.firstName} ${student.user.lastName}")
+                } else {
+                    _loginError.value = "invalid_credentials"
+                    println("Credenciales incorrectas")
+                }
             } else {
-                _loginError.value = "invalid_credentials"
+                _loginError.value = "network_error"
+                println("Error al obtener estudiantes")
             }
 
             _isLoggingIn.value = false
         }
     }
 
-    fun loadStudentDetails(studentId: Long) {
-        viewModelScope.launch {
-            _abilities.value = repository.getAbilitiesForStudent(studentId)
-            _experiences.value = repository.getExperiencesForStudent(studentId)
-        }
+//    fun loadStudentDetails(studentId: Long) {
+//        viewModelScope.launch {
+//            _abilities.value = repository.getAbilitiesForStudent(studentId)
+//            _experiences.value = repository.getExperiencesForStudent(studentId)
+//        }
+//    }
+
+    fun setLoggedStudent(student: Student) {
+        _loggedStudent.value = student
     }
+
 }

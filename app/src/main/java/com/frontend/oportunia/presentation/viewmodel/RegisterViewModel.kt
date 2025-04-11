@@ -2,13 +2,27 @@ package com.frontend.oportunia.presentation.viewmodel
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.frontend.oportunia.data.remote.dto.StudentDto
+import com.frontend.oportunia.data.remote.dto.UserDto
+import com.frontend.oportunia.domain.model.Student
+import com.frontend.oportunia.domain.model.User
+import com.frontend.oportunia.domain.repository.StudentRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import javax.inject.Inject
 
-class RegisterViewModel : ViewModel() {
+@HiltViewModel
+class RegisterViewModel @Inject constructor (
+    private val repository: StudentRepository
+) : ViewModel() {
 
     // Datos personales
     val name = MutableStateFlow("")
+    val lastName = MutableStateFlow("")
     val email = MutableStateFlow("")
     val password = MutableStateFlow("")
     val confirmPassword = MutableStateFlow("")
@@ -44,8 +58,21 @@ class RegisterViewModel : ViewModel() {
         selectedImageUri.value = uri
     }
 
-    fun register() { // Pruebas
-        if (name.value.isBlank() || email.value.isBlank() || password.value.isBlank() || confirmPassword.value.isBlank() || birthDate.value == null || education.value.isEmpty() || company.value.isBlank() || jobPosition.value.isBlank() ) {
+    fun clearError() {
+        _error.value = null
+    }
+
+    private val _showErrorDialog = MutableStateFlow(false)
+    val showErrorDialog: StateFlow<Boolean> get() = _showErrorDialog
+
+    private fun isValidEmail(email: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+
+
+    fun registerStudent(onSuccess: () -> Unit) {
+        if (name.value.isBlank() || lastName.value.isBlank() || email.value.isBlank() || password.value.isBlank() || confirmPassword.value.isBlank()  ) {
             _error.value = "empty_fields"
             return
         }
@@ -55,12 +82,49 @@ class RegisterViewModel : ViewModel() {
             return
         }
 
-        // Simulación de registro
-        println("Registro exitoso con nombre: ${name.value}")
-        _error.value = null
+        if (!isValidEmail(email.value)) {
+            _error.value = "invalid_email"
+            _showErrorDialog.value = true
+            return
+        }
+
+
+        val user = User(
+            id = 0,
+            createDate = LocalDateTime.now().toString(),
+            email = email.value,
+            enabled = true,
+            firstName = name.value,
+            lastName = lastName.value,
+            password = password.value,
+            tokenExpired = false
+        )
+
+        val student = Student(
+            user = user,
+            description = "Nuevo estudiante",
+            premium = false,
+            linkedinUrl = "",
+            githubUrl = "" ,
+            bornDate = "",
+            location = ""
+        )
+
+        viewModelScope.launch {
+            try {
+                val result = repository.createStudent(student)
+                if (result.isSuccess) {
+                    _error.value = null
+                    onSuccess()
+                } else {
+                    _error.value = "register_failed"
+                }
+            } catch (e: Exception) {
+                _error.value = "network_error"
+            }
+        }
     }
 
-    fun clearError() {
-        _error.value = null
-    }
+
+
 }

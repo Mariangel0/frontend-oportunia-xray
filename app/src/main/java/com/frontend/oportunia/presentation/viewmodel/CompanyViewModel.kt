@@ -1,16 +1,25 @@
 package com.frontend.oportunia.presentation.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.frontend.oportunia.data.repository.UserRepositoryImpl
 import com.frontend.oportunia.domain.model.Company
+import com.frontend.oportunia.domain.model.CompanyReview
 import com.frontend.oportunia.domain.repository.CompanyRepository
+import com.frontend.oportunia.domain.repository.CompanyReviewRepository
+import com.frontend.oportunia.domain.repository.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-
-class CompanyViewModel(
-    private val repository: CompanyRepository
+import javax.inject.Inject
+@HiltViewModel
+class CompanyViewModel @Inject constructor(
+    private val repository: CompanyRepository,
+    private val reviewRepository: CompanyReviewRepository
 ) : ViewModel() {
 
 
@@ -19,6 +28,13 @@ class CompanyViewModel(
 
     private val _selectedCompany = MutableStateFlow<Company?>(null)
     val selectedCompany: StateFlow<Company?> = _selectedCompany
+
+    private val _companyReviewsList = MutableStateFlow<List<CompanyReview>>(emptyList())
+    val companyReviewsList: StateFlow<List<CompanyReview>> = _companyReviewsList
+
+
+    private val _userName = MutableLiveData<String?>()
+    val userName: LiveData<String?> = _userName
 
     fun loadAllCompanies() {
         viewModelScope.launch {
@@ -42,4 +58,18 @@ class CompanyViewModel(
                 .onFailure { Log.e("CompanyViewModel", "Error searching for company with name: $name", it) }
         }
     }
+
+    fun getReviewsForCompany(companyId: Long) {
+        viewModelScope.launch {
+            reviewRepository.findCompanyReviewsByCompanyId(companyId)
+                .onSuccess { _companyReviewsList.value = it }
+                .onFailure { Log.e("CompanyViewModel", "Error searching for company with name: $companyId", it) }
+        }
+    }
+
+
+
+
+
+
 }

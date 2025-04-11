@@ -1,6 +1,6 @@
 package com.frontend.oportunia.data.mapper
 
-import com.frontend.oportunia.data.datasource.model.InterviewDto
+import com.frontend.oportunia.data.remote.dto.InterviewDto
 import com.frontend.oportunia.domain.model.Interview
 
 class InterviewMapper(

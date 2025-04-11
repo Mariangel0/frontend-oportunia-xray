@@ -1,6 +1,6 @@
 package com.frontend.oportunia.data.datasource
 
-import com.frontend.oportunia.data.datasource.model.InterviewDto
+import com.frontend.oportunia.data.remote.dto.InterviewDto
 import kotlinx.coroutines.flow.Flow
 
 interface InterviewDataSource {

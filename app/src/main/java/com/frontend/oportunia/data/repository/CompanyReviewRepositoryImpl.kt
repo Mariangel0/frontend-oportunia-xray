@@ -1,48 +1,48 @@
 package com.frontend.oportunia.data.repository
 
-import android.util.Log
 import com.frontend.oportunia.data.datasource.CompanyReviewDataSource
 import com.frontend.oportunia.data.mapper.CompanyReviewMapper
-import com.frontend.oportunia.domain.error.DomainError
 import com.frontend.oportunia.domain.model.CompanyReview
 import com.frontend.oportunia.domain.repository.CompanyReviewRepository
-import kotlinx.coroutines.flow.first
-import java.io.IOException
+import java.net.UnknownHostException
+import javax.inject.Inject
 
-class CompanyReviewRepositoryImpl(
+class CompanyReviewRepositoryImpl @Inject constructor(
     private val dataSource: CompanyReviewDataSource,
     private val companyReviewMapper: CompanyReviewMapper
 ) : CompanyReviewRepository {
 
-    companion object {
-        private const val TAG = "CompanyReviewRepository"
-    }
-
-    override suspend fun findAllCompanyReviews(): Result<List<CompanyReview>> = runCatching {
-        dataSource.getCompanyReviews().first().map { companyReviewDto ->
-            companyReviewMapper.mapToDomain(companyReviewDto)
-        }
-    }.recoverCatching { throwable ->
-        Log.e(TAG, "Failed to fetch company reviews", throwable)
-
-        when (throwable) {
-            is IOException -> throw DomainError.NetworkError("Failed to fetch company reviews")
-            is IllegalArgumentException -> throw DomainError.MappingError("Error mapping company reviews")
-            is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError("An unknown error occurred")
+    override suspend fun findAllCompanyReviews(): Result<List<CompanyReview>> {
+        return try {
+            dataSource.getAllReviews().map { reviewDtos ->
+                companyReviewMapper.mapToDomainList(reviewDtos)
+            }
+        } catch (e: UnknownHostException) {
+            Result.failure(Exception("Network error: Cannot connect to server. Please check your internet connection."))
+        } catch (e: Exception) {
+            Result.failure(Exception("Error fetching tasks: ${e.message}"))
         }
     }
 
-    override suspend fun findCompanyReviewById(companyReviewId: Long): Result<CompanyReview> = runCatching {
-        val companyReviewDto = dataSource.getCompanyReviewById(companyReviewId) ?: throw DomainError.CompanyReviewError("Company review not found")
-        companyReviewMapper.mapToDomain(companyReviewDto)
-    }.recoverCatching { throwable ->
-        Log.e(TAG, "Failed to fetch company review with ID: $companyReviewId", throwable)
-        when (throwable) {
-            is IOException -> throw DomainError.NetworkError("Failed to fetch company review")
-            is IllegalArgumentException -> throw DomainError.MappingError("Error mapping company review")
-            is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError("An unknown error occurred")
+    override suspend fun findCompanyReviewById(companyReviewId: Long): Result<CompanyReview> =
+        dataSource.getReviewById(companyReviewId).map { reviewDto ->
+            companyReviewMapper.mapToDomain(reviewDto)
+        }
+
+    override suspend fun findCompanyReviewsByCompanyId(companyId: Long): Result<List<CompanyReview>> {
+        val response = dataSource.getReviewsByCompanyId(companyId)
+        println("RESPONSE TYPE = ${response::class.qualifiedName}")
+
+        return try {
+            dataSource.getReviewsByCompanyId(companyId).map { reviewDtos ->
+                companyReviewMapper.mapToDomainList(reviewDtos)
+            }
+        } catch (e: UnknownHostException) {
+            Result.failure(Exception("Network error: Cannot connect to server. Please check your internet connection."))
+        } catch (e: Exception) {
+            Result.failure(Exception("Error fetching tasks: ${e.message}"))
         }
     }
+
+
 }

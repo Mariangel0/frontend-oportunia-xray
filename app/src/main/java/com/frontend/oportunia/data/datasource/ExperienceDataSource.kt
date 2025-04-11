@@ -1,6 +1,6 @@
 package com.frontend.oportunia.data.datasource
 
-import com.frontend.oportunia.data.datasource.model.ExperienceDto
+import com.frontend.oportunia.data.remote.dto.ExperienceDto
 import kotlinx.coroutines.flow.Flow
 
 interface ExperienceDataSource {
