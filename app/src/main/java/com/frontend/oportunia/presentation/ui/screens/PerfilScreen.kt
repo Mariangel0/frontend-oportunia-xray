@@ -11,6 +11,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -29,6 +30,9 @@ import com.frontend.oportunia.presentation.ui.components.HeaderType
 import com.frontend.oportunia.presentation.ui.layout.MainLayout
 import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
 import com.example.oportunia.R
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun PerfilScreen(
@@ -44,6 +48,8 @@ fun PerfilScreen(
     val premium = student?.premium ?: false
     val linkedinUrl = student?.linkedinUrl ?: ""
     val githubUrl = student?.githubUrl ?: ""
+    val age = ageCal(student?.bornDate ?: "")
+    val location = student?.location ?: ""
     var profileImageUri by remember { mutableStateOf<Uri?>(null) }
 
     MainLayout(
@@ -88,19 +94,71 @@ fun PerfilScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                text = "About",
+                text = "Sobre mi",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            if (age != null || location.isNotBlank()) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (age != null) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.icon_birth),
+                                contentDescription = "Edad",
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = "$age",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                        }
+                    }
+
+                    if (location.isNotBlank()) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.icon_location),
+                                contentDescription = "Ubicación",
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = location,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+
             LinkedInAndGitHubIcons(
                 linkedinUrl = linkedinUrl,
                 githubUrl = githubUrl
             )
-
-            Spacer(modifier = Modifier.weight(1f))
 
             Button(
                 onClick = {},
@@ -123,26 +181,40 @@ fun PerfilScreen(
 @Composable
 fun LinkedInAndGitHubIcons(linkedinUrl: String, githubUrl: String) {
     val context = LocalContext.current
-    Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-        IconButton(onClick = { openUrl(context, linkedinUrl) }) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+        IconButton(
+            onClick = { openUrl(context, linkedinUrl) },
+            modifier = Modifier.weight(1f)
+        ) {
             Icon(
                 painter = painterResource(id = R.drawable.icon_linkedin),
                 contentDescription = "LinkedIn",
-                tint = MaterialTheme.colorScheme.primary
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(28.dp)
             )
         }
-        IconButton(onClick = { openUrl(context, githubUrl) }) {
+
+        IconButton(
+            onClick = { openUrl(context, githubUrl) },
+            modifier = Modifier.weight(1f)
+        ) {
             Icon(
                 painter = painterResource(id = R.drawable.icon_github),
                 contentDescription = "GitHub",
-                tint = MaterialTheme.colorScheme.primary
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(28.dp)
             )
         }
     }
 }
 
 @Composable
-fun ProfileImageSection(imageUri: Uri?, onImageSelected: (Uri?) -> Unit = {}) {
+fun ProfileImageSection(imageUri: Uri?, onImageSelected: (Uri?) -> Unit) {
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? -> onImageSelected(uri) }
@@ -177,4 +249,15 @@ fun ProfileImageSection(imageUri: Uri?, onImageSelected: (Uri?) -> Unit = {}) {
 fun openUrl(context: Context, url: String) {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
     context.startActivity(intent)
+}
+
+fun ageCal(bornDate: String): Int? {
+    return try {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val fechaNacimiento = LocalDate.parse(bornDate.trim(), formatter)
+        val hoy = LocalDate.now()
+        Period.between(fechaNacimiento, hoy).years
+    } catch (e: Exception) {
+        null
+    }
 }

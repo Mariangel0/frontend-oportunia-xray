@@ -20,7 +20,9 @@ class StudentProvider {
                 description = "Software Engineering Student",
                 premium = true,
                 linkedinUrl = "https://linkedin.com/in/student1",
-                githubUrl = "https://github.com/student1"
+                githubUrl = "https://github.com/student1",
+                bornDate = "2002-04-06",
+                location = "Heredia"
             ),
             Student(
                 user = User(
@@ -36,7 +38,9 @@ class StudentProvider {
                 description = "Data Science Student",
                 premium = false,
                 linkedinUrl = "https://linkedin.com/in/student2",
-                githubUrl = "https://github.com/student2"
+                githubUrl = "https://github.com/student2",
+                bornDate = "2003-03-27",
+                location = "Heredia"
             ),
             Student(
                 user = User(
@@ -52,7 +56,9 @@ class StudentProvider {
                 description = "AI Researcher",
                 premium = true,
                 linkedinUrl = "https://linkedin.com/in/student3",
-                githubUrl = "https://github.com/student3"
+                githubUrl = "https://github.com/student3",
+                bornDate = "2003-03-27",
+                location = "Heredia"
             )
         )
 

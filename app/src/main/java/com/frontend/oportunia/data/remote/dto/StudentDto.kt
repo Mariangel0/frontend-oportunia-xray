@@ -5,5 +5,7 @@ data class StudentDto(
     val description: String,
     val premium: Boolean,
     val linkedinUrl: String,
-    val githubUrl: String
+    val githubUrl: String,
+    val bornDate: String,
+    val location: String
 )

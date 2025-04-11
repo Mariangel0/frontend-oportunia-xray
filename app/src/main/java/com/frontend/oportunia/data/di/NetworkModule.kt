@@ -24,7 +24,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    private const val BASE_URL = "http://192.168.0.105:3001/"
+    private const val BASE_URL = "http://192.168.100.17:3001/"
     private const val DATE_FORMAT = "yyyy-MM-dd"
 
     @Provides

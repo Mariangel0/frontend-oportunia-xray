@@ -14,7 +14,9 @@ class StudentMapper @Inject constructor(
             description = dto.description,
             premium = dto.premium,
             linkedinUrl = dto.linkedinUrl,
-            githubUrl = dto.githubUrl
+            githubUrl = dto.githubUrl,
+            bornDate = dto.bornDate,
+            location = dto.location
         )
     }
 
@@ -28,7 +30,9 @@ class StudentMapper @Inject constructor(
             description = domain.description,
             premium = domain.premium,
             linkedinUrl = domain.linkedinUrl,
-            githubUrl = domain.githubUrl
+            githubUrl = domain.githubUrl,
+            bornDate = domain.bornDate,
+            location = domain.location
         )
     }
 

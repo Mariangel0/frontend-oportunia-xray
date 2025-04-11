@@ -105,7 +105,9 @@ class RegisterViewModel @Inject constructor (
             description = "Nuevo estudiante",
             premium = false,
             linkedinUrl = "",
-            githubUrl = ""
+            githubUrl = "" ,
+            bornDate = "",
+            location = ""
         )
 
         viewModelScope.launch {
