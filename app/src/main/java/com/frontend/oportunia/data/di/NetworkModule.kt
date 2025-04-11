@@ -83,4 +83,5 @@ object NetworkModule {
     @Singleton
     fun provideCompanyReviewService(retrofit: Retrofit): CompanyReviewService =
         retrofit.create(CompanyReviewService::class.java)
+
 }

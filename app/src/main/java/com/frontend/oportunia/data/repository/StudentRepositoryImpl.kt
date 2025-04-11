@@ -35,4 +35,19 @@ class StudentRepositoryImpl @Inject constructor(
         dataSource.getStudentById(studentId).map { studentDto ->
             studentMapper.mapToDomain(studentDto)
         }
+
+    override suspend fun createStudent(student: Student): Result<Student> {
+        val studentDto = studentMapper.mapToDto(student)
+        return try {
+            val response = dataSource.createStudent(studentDto)
+            if (response.isSuccessful && response.body() != null) {
+                Result.success(studentMapper.mapToDomain(response.body()!!))
+            } else {
+                Result.failure(Exception("Error en la creación del estudiante: ${response.code()} ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
 }

@@ -1,7 +1,5 @@
 package com.frontend.oportunia.presentation.ui.screens
 
-import android.R.attr.thickness
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,16 +10,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
@@ -36,57 +35,77 @@ import com.frontend.oportunia.domain.model.CompanyReview
 import com.frontend.oportunia.presentation.ui.components.HeaderType
 import com.frontend.oportunia.presentation.ui.layout.MainLayout
 import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
-import java.text.SimpleDateFormat
-import java.util.Locale
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.setValue
+
 
 @Composable
-fun CompanyDetailScreen (
+fun CompanyTabsScreen(
     companyId: Long,
     companyViewModel: CompanyViewModel,
     navController: NavController,
     paddingValues: PaddingValues
-){
+) {
+    val tabTitles = listOf("Reseñas", "Información")
+    var selectedTabIndex by remember { mutableIntStateOf(0) }
+
     LaunchedEffect(companyId) {
         companyViewModel.loadCompanyById(companyId)
         companyViewModel.getReviewsForCompany(companyId)
     }
 
     val selectedCompany by companyViewModel.selectedCompany.collectAsState()
-    val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    val reviews by companyViewModel.companyReviewsList.collectAsState() // ver porque solo manda una aunque haya mas en el response
-    Log.d("DEBUG", "Reviews count: ${reviews.size}")
-    val averageRating = if (reviews.isNotEmpty()) reviews.map { it.rating }.average().toFloat() else 0f
 
     MainLayout(
         paddingValues = paddingValues,
         headerType = HeaderType.BACK,
         title = selectedCompany?.name ?: stringResource(id = R.string.reviews),
-        onBackClick = {navController.navigateUp()}
+        onBackClick = { navController.navigateUp() }
     ) {
+        Column(modifier = Modifier.padding(24.dp)) {
+            // Tabs
+            TabRow(selectedTabIndex = selectedTabIndex) {
+                tabTitles.forEachIndexed { index, title ->
+                    Tab(
+                        selected = selectedTabIndex == index,
+                        onClick = { selectedTabIndex = index },
+                        text = { Text(title) }
+                    )
+                }
+            }
 
-        Column(
-            modifier = Modifier
-            .padding(24.dp),
-        ){
+            Spacer(modifier = Modifier.height(16.dp))
+
+            when (selectedTabIndex) {
+                0 -> CompanyReviewsSection(companyViewModel)
+                1 -> CompanyInformationSection(companyViewModel)
+            }
+        }
+    }
+}
+
+
+@Composable
+fun CompanyReviewsSection(companyViewModel: CompanyViewModel) {
+    val reviews by companyViewModel.companyReviewsList.collectAsState()
+    val averageRating = if (reviews.isNotEmpty()) reviews.map { it.rating }.average().toFloat() else 0f
+
+    Column {
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Column(
-                modifier = Modifier
-                .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(text = "%.1f".format(averageRating), style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary)
-                Spacer(modifier = Modifier.width(8.dp))
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    text = "${reviews.size} ${stringResource(id = R.string.reviews)}" ,
-                    style = MaterialTheme.typography.bodyLarge,
+                    text = "%.1f".format(averageRating),
+                    style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.primary
                 )
-
+                Text(
+                    text = "${reviews.size} reseñas",
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
             RatingStars(
                 rating = averageRating,
@@ -95,32 +114,46 @@ fun CompanyDetailScreen (
                 starHalf = painterResource(id = R.drawable.icon_star_half)
             )
         }
-        HorizontalDivider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
-        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-
-            reviews.forEach { review ->
-                Column(modifier = Modifier.padding(vertical = 8.dp)) {
-                    ReviewCard(review)
-                    HorizontalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
-                    )
-                }
+        reviews.forEach { review ->
+            Column(modifier = Modifier.padding(vertical = 8.dp)) {
+                ReviewCard(review)
+                HorizontalDivider(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
+                )
             }
-
         }
-
     }
 }
+
+@Composable
+fun CompanyInformationSection(companyViewModel: CompanyViewModel) {
+    val company by companyViewModel.selectedCompany.collectAsState()
+
+    company?.let {
+        Column {
+            SectionTitle("Información")
+            InfoRow(label = "Tipo:", value = it.type)
+            InfoRow(label = "Cantidad de empleados:", value = it.employees.toString())
+            InfoRow(label = "Ubicación:", value = it.ubication)
+            InfoRow(label = "Sitio web:", value = it.websiteUrl)
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            SectionTitle("Valores")
+//            Text(text = it.values ?: "Sin información")
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            SectionTitle("Misión")
+//            Text(text = it.mission ?: "Sin información")
+        }
+    } ?: Text("Cargando información...")
+}
+
 
 @Composable
 fun RatingStars( // hacerlo componente ahorita
@@ -158,7 +191,7 @@ fun ReviewCard(review: CompanyReview) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(review.studentId.user.firstName) // nombre de la persona
+                Text(review.studentId.user.firstName, style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSecondaryContainer) // nombre de la persona
                // Text(text = "Hace ${daysAgo(review.createdAt)} días", style = MaterialTheme.typography.bodySmall)
             }
 
@@ -175,13 +208,37 @@ fun ReviewCard(review: CompanyReview) {
                 text = review.comment,
                 style = MaterialTheme.typography.bodyMedium,
                 maxLines = 3,
+                color =  MaterialTheme.colorScheme.onPrimaryContainer   ,
                 overflow = TextOverflow.Ellipsis
             )
         }
     }
 }
 
-fun daysAgo(date: Long): Int {
-    val diff = System.currentTimeMillis() - date
-    return (diff / (1000 * 60 * 60 * 24)).toInt()
+
+@Composable
+fun InfoRow(label: String, value: String) {
+    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+            modifier = Modifier.width(170.dp)
+        )
+        Text(
+            text = value,
+            style = MaterialTheme.typography.bodyMedium,
+            color =  MaterialTheme.colorScheme.onPrimaryContainer   ,
+        )
+    }
 }
+
+@Composable
+fun SectionTitle(title: String) {
+    Text(
+        text = title,
+        style = MaterialTheme.typography.titleMedium,
+        modifier = Modifier.padding(bottom = 8.dp),
+        color =  MaterialTheme.colorScheme.onSecondaryContainer
+    )
+}
+

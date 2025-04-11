@@ -28,12 +28,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.example.oportunia.R
-import com.frontend.oportunia.presentation.ui.components.DatePickerFieldToModal
 import com.frontend.oportunia.presentation.ui.components.HeaderType
 import com.frontend.oportunia.presentation.ui.layout.MainLayout
 import com.frontend.oportunia.presentation.viewmodel.RegisterViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
 
 @Composable
 fun RegisterScreen(
@@ -42,16 +42,18 @@ fun RegisterScreen(
     navController: NavController
 ) {
     val name by viewModel.name.collectAsState()
+    val lastName by viewModel.lastName.collectAsState()
     val email by viewModel.email.collectAsState()
     val password by viewModel.password.collectAsState()
     val confirmPassword by viewModel.confirmPassword.collectAsState()
-    val birthDate by viewModel.birthDate.collectAsState()
     val education by viewModel.education.collectAsState()
     val isWorking by viewModel.isWorking.collectAsState()
     val company by viewModel.company.collectAsState()
     val jobPosition by viewModel.jobPosition.collectAsState()
     val selectedImageUri by viewModel.selectedImageUri.collectAsState()
     val error by viewModel.error.collectAsState()
+    val showDialog by viewModel.showErrorDialog.collectAsState()
+
 
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -113,6 +115,7 @@ fun RegisterScreen(
                 TitleSection(title = stringResource(R.string.personal_data))
             }
 
+
             item {
                 LabeledTextField(
                     label = stringResource(R.string.name),
@@ -121,7 +124,14 @@ fun RegisterScreen(
                     onValueChange = { viewModel.name.value = it }
                 )
             }
-
+            item {
+                LabeledTextField(
+                    label = stringResource(R.string.lastname),
+                    value = lastName,
+                    placeholder = stringResource(R.string.lastname_placeholder),
+                    onValueChange = { viewModel.lastName.value = it }
+                )
+            }
             item {
                 LabeledTextField(
                     label = stringResource(R.string.email),
@@ -161,15 +171,15 @@ fun RegisterScreen(
                 )
             }
 
-            item {
-                DatePickerFieldToModal(
-
-                    onDateSelected = { viewModel.birthDate.value = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                )
-            }
+//            item {
+//                DatePickerFieldToModal(
+//
+//                    onDateSelected = { viewModel.birthDate.value = it },
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(horizontal = 16.dp)
+//                )
+//            }
 
             item {
                 TitleSection(title = stringResource(R.string.laboral_data))
@@ -284,7 +294,13 @@ fun RegisterScreen(
             }
             item {
                 Button(
-                    onClick = { viewModel.register() },
+                    onClick = {
+                        viewModel.registerStudent(
+                            onSuccess = {
+                                navController.navigate(NavRoutes.Login.ROUTE)
+                            }
+                        )
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp)
@@ -302,6 +318,7 @@ fun RegisterScreen(
                 Spacer(modifier = Modifier.height(24.dp))
             }
         }
+
     }
 }
 

@@ -21,6 +21,8 @@
     <!--  RegisterScreen  -->
     <string name="register">Crear Perfil</string>
     <string name="name_placeholder">Ingresa tu nombre</string>
+    <string name="lastname_placeholder">Ingresa tu apellido</string>
+    <string name="lastname">Primer Apellido</string>
     <string name="email_placeholder">Ingresa tu correo</string>
     <string name="confirm_password_placeholder">Confirma tu contraseña</string>
     <string name="birth_date_placeholder">DD/MM/YYYY</string>
