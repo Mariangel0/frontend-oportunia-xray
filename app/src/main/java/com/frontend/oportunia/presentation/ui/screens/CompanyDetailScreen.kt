@@ -218,7 +218,9 @@ fun ReviewCard(review: CompanyReview) {
 
 @Composable
 fun InfoRow(label: String, value: String) {
-    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .padding(vertical = 4.dp)) {
         Text(
             text = label,
             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),

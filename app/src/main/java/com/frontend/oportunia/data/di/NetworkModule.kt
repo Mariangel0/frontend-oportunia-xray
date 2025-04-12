@@ -14,9 +14,11 @@ import com.frontend.oportunia.data.remote.api.StudentService
 import com.frontend.oportunia.data.remote.api.UserService
 import com.frontend.oportunia.data.remote.dto.AbilityDto
 import com.frontend.oportunia.data.remote.dto.CompanyReviewDto
+import com.frontend.oportunia.data.remote.dto.StudentDto
 import com.frontend.oportunia.data.remote.interceptor.ResponseInterceptor
 import com.frontend.oportunia.data.remote.serializer.AbilityDeserializer
 import com.frontend.oportunia.data.remote.serializer.CompanyReviewDeserializer
+import com.frontend.oportunia.data.remote.serializer.StudentDeserializer
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -54,6 +56,7 @@ object NetworkModule {
         // aqui irian los deserializadores
         .registerTypeAdapter(CompanyReviewDto::class.java, CompanyReviewDeserializer())
         .registerTypeAdapter(AbilityDto::class.java, AbilityDeserializer())
+        .registerTypeAdapter(StudentDto::class.java, StudentDeserializer())
         .setDateFormat(DATE_FORMAT)
         .create()
 

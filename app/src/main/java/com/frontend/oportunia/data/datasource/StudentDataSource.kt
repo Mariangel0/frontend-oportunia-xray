@@ -17,6 +17,9 @@ class StudentDataSource @Inject constructor(
     suspend fun createStudent(studentDto: StudentDto): Response<StudentDto> {
         return studentService.createStudent(studentDto)
     }
+    suspend fun getStudentByUserId(userId: Long): Result<StudentDto> = safeApiCall {
+        studentService.getStudentByUserId(userId)
+    }
 
     suspend fun updateStudent(id: Long, studentDto: StudentDto): Response<StudentDto> {
         return studentService.updateStudent(id, studentDto)

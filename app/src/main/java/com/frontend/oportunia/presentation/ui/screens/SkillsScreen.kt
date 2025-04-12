@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -33,16 +34,23 @@ import com.frontend.oportunia.domain.model.Experience
 import com.frontend.oportunia.presentation.ui.components.HeaderType
 import com.frontend.oportunia.presentation.ui.layout.MainLayout
 import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
+import com.frontend.oportunia.presentation.viewmodel.SkillsViewModel
 
 @Composable
 fun SkillsScreen(
+    studentId : Long,
     navController: NavController,
     paddingValues: PaddingValues,
-    loginViewModel: LoginViewModel
+    skillsViewModel: SkillsViewModel,
 ) {
-    val student by loginViewModel.currentStudent.collectAsState()
-    val abilities by loginViewModel.abilities.collectAsState()
-    val experiences by loginViewModel.experiences.collectAsState()
+    LaunchedEffect(studentId) {
+        skillsViewModel.getAbilitiesForStudent(studentId )
+        skillsViewModel.getStudentById(studentId)
+    }
+
+    val student by skillsViewModel.loggedStudent.collectAsState()
+    val abilities by skillsViewModel.abilityList.collectAsState()
+   // val experiences by loginViewModel.experiences.collectAsState()
     val role = if (student != null) stringResource(R.string.student) else stringResource(R.string.adminastror)
 
     MainLayout(
@@ -106,43 +114,43 @@ fun SkillsScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
 
-            Column(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    text = stringResource(R.string.experience_title),
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
-
-                if (experiences.isEmpty()) {
-                    Text(
-                        text = stringResource(R.string.no_experience),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Gray
-                    )
-                } else {
-                    val groupedExperiences = experiences
-                        .sortedByDescending { it.year }
-                        .groupBy { it.year }
-
-                    val companyNames = mapOf(
-                        1001L to "Google",
-                        1002L to "Microsoft",
-                        1003L to "Apple",
-                        1004L to "Amazon"
-                    )
-
-                    groupedExperiences.forEach { (_, exps) ->
-                        exps.forEach { experience ->
-                            ExperienceCard(
-                                experience = experience,
-                                companyName = companyNames[experience.company] ?: "${experience.company}"
-                            )
-                            Spacer(modifier = Modifier.height(12.dp))
-                        }
-                    }
-                }
-            }
+//            Column(modifier = Modifier.fillMaxWidth()) {
+//                Text(
+//                    text = stringResource(R.string.experience_title),
+//                    style = MaterialTheme.typography.titleLarge,
+//                    fontWeight = FontWeight.Bold,
+//                    modifier = Modifier.padding(bottom = 16.dp)
+//                )
+//
+//                if (experiences.isEmpty()) {
+//                    Text(
+//                        text = stringResource(R.string.no_experience),
+//                        style = MaterialTheme.typography.bodyMedium,
+//                        color = Color.Gray
+//                    )
+//                } else {
+//                    val groupedExperiences = experiences
+//                        .sortedByDescending { it.year }
+//                        .groupBy { it.year }
+//
+//                    val companyNames = mapOf(
+//                        1001L to "Google",
+//                        1002L to "Microsoft",
+//                        1003L to "Apple",
+//                        1004L to "Amazon"
+//                    )
+//
+//                    groupedExperiences.forEach { (_, exps) ->
+//                        exps.forEach { experience ->
+//                            ExperienceCard(
+//                                experience = experience,
+//                                companyName = companyNames[experience.company] ?: "${experience.company}"
+//                            )
+//                            Spacer(modifier = Modifier.height(12.dp))
+//                        }
+//                    }
+//                }
+//            }
 
             Spacer(modifier = Modifier.height(36.dp))
         }

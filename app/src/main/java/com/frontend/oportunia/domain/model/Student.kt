@@ -6,6 +6,6 @@ data class Student(
     val premium: Boolean,
     val linkedinUrl: String,
     val githubUrl: String,
-    val bornDate: String,
+    val bornDate: String ,
     val location: String
 )

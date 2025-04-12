@@ -64,7 +64,7 @@ fun MenuScreen(
         ) {
             DailyQuizAlert(onClick = {})
             StreakCalendar()
-            Learning(navController = navController)
+            Learning(navController = navController, studentId = student?.user?.id ?: -1L)
             CompaniesCarousel(companyViewModel = companyViewModel, navController = navController)
         }
     }
@@ -74,7 +74,7 @@ fun MenuScreen(
 
 
 @Composable
-fun Learning(navController: NavController) {
+fun Learning(navController: NavController, studentId: Long) {
     // Usar el composable reutilizable
     CustomCardWithText(
         title = stringResource(id = R.string.learning)
@@ -98,7 +98,7 @@ fun Learning(navController: NavController) {
             LearnItem(
                 icon = Icons.Outlined.Build,
                 text = "Habilidades",
-                onClick = { navController.navigate(NavRoutes.SkillScreen.ROUTE)}
+                onClick = { navController.navigate(NavRoutes.SkillScreen.createRoute(studentId))}
             )
 
         }

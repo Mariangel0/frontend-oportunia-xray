@@ -28,6 +28,7 @@ import com.frontend.oportunia.presentation.ui.theme.OportunIATheme
 import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
 import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
 import com.frontend.oportunia.presentation.viewmodel.RegisterViewModel
+import com.frontend.oportunia.presentation.viewmodel.SkillsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -67,12 +68,14 @@ class MainActivity : ComponentActivity() {
 
     private val registerViewModel: RegisterViewModel by viewModels ()
 
+    private val skillViewModel: SkillsViewModel by viewModels ()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             OportunIATheme {
-                Main(companyViewModel, loginViewModel, registerViewModel)
+                Main(companyViewModel, loginViewModel, registerViewModel, skillViewModel)
             }
         }
     }
@@ -80,7 +83,7 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, registerViewModel: RegisterViewModel) {
+fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, registerViewModel: RegisterViewModel, skillViewModel: SkillsViewModel) {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
@@ -101,7 +104,8 @@ fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, reg
             paddingValues = paddingValues,
             companyViewModel = companyViewModel,
             loginViewModel = loginViewModel,
-            registerViewModel = registerViewModel
+            registerViewModel = registerViewModel,
+            skillsViewModel = skillViewModel
         )
     }
 }

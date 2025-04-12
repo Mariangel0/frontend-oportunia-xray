@@ -30,9 +30,6 @@ class CompanyReviewRepositoryImpl @Inject constructor(
         }
 
     override suspend fun findCompanyReviewsByCompanyId(companyId: Long): Result<List<CompanyReview>> {
-        val response = dataSource.getReviewsByCompanyId(companyId)
-        println("RESPONSE TYPE = ${response::class.qualifiedName}")
-
         return try {
             dataSource.getReviewsByCompanyId(companyId).map { reviewDtos ->
                 companyReviewMapper.mapToDomainList(reviewDtos)

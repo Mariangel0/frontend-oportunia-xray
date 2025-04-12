@@ -1,5 +1,6 @@
 package com.frontend.oportunia.data.remote.api
 
+import com.frontend.oportunia.data.remote.dto.AbilityDto
 import com.frontend.oportunia.data.remote.dto.StudentDto
 import retrofit2.Response
 import retrofit2.http.Body
@@ -8,6 +9,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface StudentService {
 
@@ -16,6 +18,9 @@ interface StudentService {
 
     @GET("students/{id}")
     suspend fun geStudentById(@Path("id") id: Long): Response<StudentDto>
+
+    @GET("students")
+    suspend fun getStudentByUserId(@Query("user.id") userId: Long): Response<StudentDto>
 
     @POST("students")
     suspend fun createStudent(@Body student: StudentDto): Response<StudentDto>

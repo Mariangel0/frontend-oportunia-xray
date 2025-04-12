@@ -50,4 +50,11 @@ class StudentRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun findStudentByUserId(userId: Long): Result<Student> =
+        dataSource.getStudentByUserId(userId).map { studentDto ->
+            studentMapper.mapToDomain(studentDto)
+        }
+
+
+
 }

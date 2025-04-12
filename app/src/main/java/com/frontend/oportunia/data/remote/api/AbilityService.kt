@@ -1,6 +1,7 @@
 package com.frontend.oportunia.data.remote.api;
 
 import com.frontend.oportunia.data.remote.dto.AbilityDto;
+import com.frontend.oportunia.data.remote.dto.CompanyReviewDto
 
 import retrofit2.Response
 import retrofit2.http.Body
@@ -23,7 +24,7 @@ public interface AbilityService {
     suspend fun createAbility(@Body ability: AbilityDto): Response<AbilityDto>
 
     @GET("abilities")
-    suspend fun getAbilitiesByStudentId(@Query("studentId") studentId: Long): Response<List<AbilityDto>>
+    suspend fun getAbilitiesByStudentId(@Query("studentId.id") studentId: Long): Response<List<AbilityDto>>
 
     @PUT("abilities/{id}")
     suspend fun updateAbility(

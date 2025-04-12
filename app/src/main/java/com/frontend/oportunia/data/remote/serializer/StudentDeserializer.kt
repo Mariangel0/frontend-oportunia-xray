@@ -8,13 +8,24 @@ import java.lang.reflect.Type
 import java.util.Date
 
 
+
+
 class StudentDeserializer : JsonDeserializer<StudentDto> {
     override fun deserialize(
         json: JsonElement,
         typeOfT: Type,
         context: JsonDeserializationContext
     ): StudentDto {
-        val jsonObject = json.asJsonObject
+        // Manejo de JSON: si es un array, tomamos el primer objeto
+        val jsonObject = when {
+            json.isJsonObject -> json.asJsonObject
+            json.isJsonArray -> {
+                val array = json.asJsonArray
+                if (array.size() > 0) array[0].asJsonObject
+                else throw IllegalStateException("Se esperaba al menos un estudiante en el array")
+            }
+            else -> throw IllegalStateException("Respuesta inesperada del servidor: $json")
+        }
 
         val user = context.deserialize<UserDto>(jsonObject.get("user"), UserDto::class.java)
         val description = jsonObject.get("description")?.asString ?: ""
@@ -35,5 +46,5 @@ class StudentDeserializer : JsonDeserializer<StudentDto> {
             bornDate = bornDate.toString(),
             location = location
         )
-        }
     }
+}

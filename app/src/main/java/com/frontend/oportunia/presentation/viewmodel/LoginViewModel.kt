@@ -38,11 +38,7 @@ class LoginViewModel @Inject constructor(
     private val _currentStudent = MutableStateFlow<Student?>(null)
     val currentStudent: StateFlow<Student?> get() = _currentStudent
 
-    private val _abilities = MutableStateFlow<List<Ability>>(emptyList())
-    val abilities: StateFlow<List<Ability>> get() = _abilities
 
-    private val _experiences = MutableStateFlow<List<Experience>>(emptyList())
-    val experiences: StateFlow<List<Experience>> get() = _experiences
 
     fun onUsernameChange(value: String) {
         _username.value = value

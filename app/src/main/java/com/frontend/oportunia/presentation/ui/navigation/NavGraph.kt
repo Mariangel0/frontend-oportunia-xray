@@ -21,6 +21,7 @@ import com.frontend.oportunia.presentation.ui.screens.RegisterScreen
 import com.frontend.oportunia.presentation.ui.screens.SkillsScreen
 import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
 import com.frontend.oportunia.presentation.viewmodel.RegisterViewModel
+import com.frontend.oportunia.presentation.viewmodel.SkillsViewModel
 
 @Composable
 fun NavGraph(
@@ -28,7 +29,8 @@ fun NavGraph(
     paddingValues: PaddingValues,
     companyViewModel: CompanyViewModel,
     loginViewModel: LoginViewModel,
-    registerViewModel: RegisterViewModel
+    registerViewModel: RegisterViewModel,
+    skillsViewModel: SkillsViewModel
 ) {
     NavHost(navController, startDestination = NavRoutes.MainPage.ROUTE) {
 
@@ -75,8 +77,20 @@ fun NavGraph(
             )
         }
 
-        composable(NavRoutes.SkillScreen.ROUTE) {
-            SkillsScreen(navController, paddingValues, loginViewModel)
+
+        composable(
+            route = NavRoutes.SkillScreen.ROUTE,
+            arguments = listOf(navArgument(NavRoutes.SkillScreen.ARG_STD_ID) {
+                type = NavType.LongType
+            })
+        ) { backStackEntry ->
+            val stdId = backStackEntry.arguments?.getLong(NavRoutes.SkillScreen.ARG_STD_ID) ?: 0L
+            SkillsScreen(
+                studentId = stdId,
+                skillsViewModel = skillsViewModel,
+                navController = navController,
+                paddingValues = paddingValues
+            )
         }
     }
 }
