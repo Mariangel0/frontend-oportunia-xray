@@ -10,14 +10,17 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import com.frontend.oportunia.data.remote.api.CompanyService
+import com.frontend.oportunia.data.remote.api.ExperienceService
 import com.frontend.oportunia.data.remote.api.StudentService
 import com.frontend.oportunia.data.remote.api.UserService
 import com.frontend.oportunia.data.remote.dto.AbilityDto
 import com.frontend.oportunia.data.remote.dto.CompanyReviewDto
+import com.frontend.oportunia.data.remote.dto.ExperienceDto
 import com.frontend.oportunia.data.remote.dto.StudentDto
 import com.frontend.oportunia.data.remote.interceptor.ResponseInterceptor
 import com.frontend.oportunia.data.remote.serializer.AbilityDeserializer
 import com.frontend.oportunia.data.remote.serializer.CompanyReviewDeserializer
+import com.frontend.oportunia.data.remote.serializer.ExperienceDeserializer
 import com.frontend.oportunia.data.remote.serializer.StudentDeserializer
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -29,7 +32,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    private const val BASE_URL = "http://192.168.0.23:3001/"
+    private const val BASE_URL = "http://192.168.0.106:3001/"
     private const val DATE_FORMAT = "yyyy-MM-dd"
 
     @Provides
@@ -57,6 +60,7 @@ object NetworkModule {
         .registerTypeAdapter(CompanyReviewDto::class.java, CompanyReviewDeserializer())
         .registerTypeAdapter(AbilityDto::class.java, AbilityDeserializer())
         .registerTypeAdapter(StudentDto::class.java, StudentDeserializer())
+        .registerTypeAdapter(ExperienceDto::class.java, ExperienceDeserializer())
         .setDateFormat(DATE_FORMAT)
         .create()
 
@@ -95,6 +99,11 @@ object NetworkModule {
     @Singleton
     fun provideAbilityService(retrofit: Retrofit): AbilityService =
         retrofit.create(AbilityService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideExperienceService(retrofit: Retrofit): ExperienceService =
+        retrofit.create(ExperienceService::class.java)
 
 
 }

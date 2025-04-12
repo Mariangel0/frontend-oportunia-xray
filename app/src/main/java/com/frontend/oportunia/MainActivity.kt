@@ -8,19 +8,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-
-//import com.frontend.oportunia.data.datasource.StudentDataSourceImpl
-//import com.frontend.oportunia.data.datasource.CompanyDataSourceImpl
-//import com.frontend.oportunia.data.datasource.StudentDataSourceImpl
-import com.frontend.oportunia.data.mapper.AbilityMapper
-import com.frontend.oportunia.data.mapper.CompanyMapper
-import com.frontend.oportunia.data.mapper.ExperienceMapper
-import com.frontend.oportunia.data.mapper.StudentMapper
-import com.frontend.oportunia.data.mapper.UserMapper
-import com.frontend.oportunia.data.repository.CompanyRepositoryImpl
-import com.frontend.oportunia.data.repository.StudentRepositoryImpl
-//import com.frontend.oportunia.presentation.factory.CompanyViewModelFactory
-import com.frontend.oportunia.presentation.factory.LoginViewModelFactory
 import com.frontend.oportunia.presentation.ui.components.BottomNavigationBar
 import com.frontend.oportunia.presentation.ui.navigation.NavGraph
 import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
@@ -30,34 +17,6 @@ import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
 import com.frontend.oportunia.presentation.viewmodel.RegisterViewModel
 import com.frontend.oportunia.presentation.viewmodel.SkillsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-
-
-//class MainActivity : ComponentActivity() {
-//
-//    private val loginViewModel: LoginViewModel by viewModels {
-//        val userMapper = UserMapper()
-//        val studentMapper = StudentMapper(userMapper)
-//        val studentDataSource = StudentDataSourceImpl(studentMapper)
-//        val studentRepository = StudentRepositoryImpl(studentDataSource, studentMapper)
-//        LoginViewModelFactory(studentRepository)
-//    }
-//
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setContent {
-//            OportunIATheme {
-//                Main(loginViewModel)
-//            }
-//        }
-//    }
-//}
-//
-//@Composable
-//fun Main(loginViewModel: LoginViewModel) {
-//    Scaffold { paddingValues ->
-//        LoginScreen(paddingValues = paddingValues, viewModel = loginViewModel)
-//    }
-//}
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

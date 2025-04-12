@@ -3,11 +3,13 @@ package com.frontend.oportunia.data.di
 import com.frontend.oportunia.data.repository.AbilityRepositoryImpl
 import com.frontend.oportunia.data.repository.CompanyRepositoryImpl
 import com.frontend.oportunia.data.repository.CompanyReviewRepositoryImpl
+import com.frontend.oportunia.data.repository.ExperienceRepositoryImpl
 import com.frontend.oportunia.data.repository.StudentRepositoryImpl
 import com.frontend.oportunia.data.repository.UserRepositoryImpl
 import com.frontend.oportunia.domain.repository.AbilityRepository
 import com.frontend.oportunia.domain.repository.CompanyRepository
 import com.frontend.oportunia.domain.repository.CompanyReviewRepository
+import com.frontend.oportunia.domain.repository.ExperienceRepository
 import com.frontend.oportunia.domain.repository.StudentRepository
 import com.frontend.oportunia.domain.repository.UserRepository
 import dagger.Binds
@@ -52,7 +54,11 @@ abstract class RepositoryModule {
         abilityRepositoryImpl: AbilityRepositoryImpl
     ): AbilityRepository
 
-
+    @Binds
+    @Singleton
+    abstract fun bindExperienceRepository(
+        experienceRepositoryImpl: ExperienceRepositoryImpl
+    ): ExperienceRepository
 
 
 }

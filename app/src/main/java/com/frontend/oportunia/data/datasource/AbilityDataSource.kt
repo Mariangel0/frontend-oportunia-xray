@@ -3,7 +3,6 @@ package com.frontend.oportunia.data.datasource
 
 import com.frontend.oportunia.data.remote.api.AbilityService
 import com.frontend.oportunia.data.remote.dto.AbilityDto
-import com.frontend.oportunia.data.remote.dto.CompanyReviewDto
 import retrofit2.Response
 import javax.inject.Inject
 
