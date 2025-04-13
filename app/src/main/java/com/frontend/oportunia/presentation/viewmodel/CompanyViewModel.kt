@@ -51,6 +51,7 @@ class CompanyViewModel @Inject constructor(
                 .onFailure { Log.e("CompanyViewModel", "Error loading company with id: $id", it) }
         }
     }
+
     fun loadCompanyByName(name: String) {
         viewModelScope.launch {
             repository.findCompanyByName(name)

@@ -12,6 +12,7 @@ import com.frontend.oportunia.presentation.ui.components.BottomNavigationBar
 import com.frontend.oportunia.presentation.ui.navigation.NavGraph
 import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
 import com.frontend.oportunia.presentation.ui.theme.OportunIATheme
+import com.frontend.oportunia.presentation.viewmodel.AdviceViewModel
 import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
 import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
 import com.frontend.oportunia.presentation.viewmodel.RegisterViewModel
@@ -29,12 +30,13 @@ class MainActivity : ComponentActivity() {
 
     private val skillViewModel: SkillsViewModel by viewModels ()
 
+    private val adviceViewModel: AdviceViewModel by viewModels ()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             OportunIATheme {
-                Main(companyViewModel, loginViewModel, registerViewModel, skillViewModel)
+                Main(companyViewModel, loginViewModel, registerViewModel, skillViewModel, adviceViewModel)
             }
         }
     }
@@ -42,7 +44,7 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, registerViewModel: RegisterViewModel, skillViewModel: SkillsViewModel) {
+fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, registerViewModel: RegisterViewModel, skillViewModel: SkillsViewModel, adviceViewModel: AdviceViewModel) {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
@@ -64,7 +66,8 @@ fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, reg
             companyViewModel = companyViewModel,
             loginViewModel = loginViewModel,
             registerViewModel = registerViewModel,
-            skillsViewModel = skillViewModel
+            skillsViewModel = skillViewModel,
+            adviceViewModel = adviceViewModel
         )
     }
 }

@@ -16,6 +16,7 @@ import com.frontend.oportunia.presentation.ui.screens.MenuScreen
 import com.frontend.oportunia.presentation.ui.screens.PerfilScreen
 import com.frontend.oportunia.presentation.ui.screens.RegisterScreen
 import com.frontend.oportunia.presentation.ui.screens.SkillsScreen
+import com.frontend.oportunia.presentation.viewmodel.AdviceViewModel
 import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
 import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
 import com.frontend.oportunia.presentation.viewmodel.RegisterViewModel
@@ -28,7 +29,8 @@ fun NavGraph(
     companyViewModel: CompanyViewModel,
     loginViewModel: LoginViewModel,
     registerViewModel: RegisterViewModel,
-    skillsViewModel: SkillsViewModel
+    skillsViewModel: SkillsViewModel,
+    adviceViewModel: AdviceViewModel
 ) {
     NavHost(navController, startDestination = NavRoutes.MainPage.ROUTE) {
 
@@ -53,7 +55,7 @@ fun NavGraph(
         }
 
         composable(NavRoutes.AdviceList.ROUTE) {
-            AdviceScreen(navController, paddingValues)
+            AdviceScreen(navController, paddingValues, adviceViewModel)
         }
 
         composable(NavRoutes.Profile.ROUTE) {

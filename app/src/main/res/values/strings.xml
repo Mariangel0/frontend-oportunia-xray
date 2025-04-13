@@ -69,9 +69,10 @@
 
 
     <string name="advice_title">Prepárate antes de enviar tu solicitud</string>
-    <string name="advice_subtitle">Lorem ipsum dolor sit amet consectetur. Turpis curabitur eget sapien onaean. Nunc ultricies semper et mauris.</string>
+    <string name="advice_subtitle">Encuentra recomendaciones prácticas para mejorar tu perfil profesional y tener éxito en tus entrevistas.</string>
     <string name="advice_question_1">¿Por qué es importante investigar la empresa antes de aplicar?</string>
     <string name="advice_question_2">¿Cómo hacer que tu CV destaque entre los demás?</string>
+    <string name="no_data">No hay consejos disponibles en este momento.</string>
 
     <string name="skills">Habilidades</string>
     <string name="soft_skills">Habilidades blandas</string>

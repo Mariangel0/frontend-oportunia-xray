@@ -2,6 +2,7 @@ package com.frontend.oportunia.data.di
 
 
 import com.frontend.oportunia.data.remote.api.AbilityService
+import com.frontend.oportunia.data.remote.api.AdviceService
 import com.frontend.oportunia.data.remote.api.CompanyReviewService
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -104,6 +105,11 @@ object NetworkModule {
     @Singleton
     fun provideExperienceService(retrofit: Retrofit): ExperienceService =
         retrofit.create(ExperienceService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideAdviceService(retrofit: Retrofit): AdviceService =
+        retrofit.create(AdviceService::class.java)
 
 
 }
