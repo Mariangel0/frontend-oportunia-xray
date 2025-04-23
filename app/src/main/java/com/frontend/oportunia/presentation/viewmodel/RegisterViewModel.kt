@@ -12,7 +12,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -72,7 +75,7 @@ class RegisterViewModel @Inject constructor (
 
 
     fun registerStudent(onSuccess: () -> Unit) {
-        if (name.value.isBlank() || lastName.value.isBlank() || email.value.isBlank() || password.value.isBlank() || confirmPassword.value.isBlank()  ) {
+        if (name.value.isBlank() || lastName.value.isBlank() || email.value.isBlank() || password.value.isBlank() || confirmPassword.value.isBlank() || birthDate.value == null  ) {
             _error.value = "empty_fields"
             return
         }
@@ -90,7 +93,7 @@ class RegisterViewModel @Inject constructor (
 
 
         val user = User(
-            id = 0,
+            id = (1..9999).random().toLong(),
             createDate = LocalDateTime.now().toString(),
             email = email.value,
             enabled = true,
@@ -99,14 +102,14 @@ class RegisterViewModel @Inject constructor (
             password = password.value,
             tokenExpired = false
         )
-
+        val formattedDate = birthDate.value?.let { convertMillisToDate(it) } ?: ""
         val student = Student(
             user = user,
             description = "Nuevo estudiante",
             premium = false,
             linkedinUrl = "",
             githubUrl = "" ,
-            bornDate = "",
+            bornDate = formattedDate,
             location = ""
         )
 
@@ -127,4 +130,9 @@ class RegisterViewModel @Inject constructor (
 
 
 
+}
+
+fun convertMillisToDate(millis: Long): String {
+    val formatter = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+    return formatter.format(Date(millis))
 }

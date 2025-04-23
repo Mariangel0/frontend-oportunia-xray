@@ -33,6 +33,7 @@ import com.frontend.oportunia.presentation.ui.layout.MainLayout
 import com.frontend.oportunia.presentation.viewmodel.RegisterViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.frontend.oportunia.presentation.ui.components.DatePickerFieldToModal
 import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
 
 @Composable
@@ -171,15 +172,15 @@ fun RegisterScreen(
                 )
             }
 
-//            item {
-//                DatePickerFieldToModal(
-//
-//                    onDateSelected = { viewModel.birthDate.value = it },
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(horizontal = 16.dp)
-//                )
-//            }
+            item {
+                DatePickerFieldToModal(
+
+                    onDateSelected = { viewModel.birthDate.value = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                )
+            }
 
             item {
                 TitleSection(title = stringResource(R.string.laboral_data))
