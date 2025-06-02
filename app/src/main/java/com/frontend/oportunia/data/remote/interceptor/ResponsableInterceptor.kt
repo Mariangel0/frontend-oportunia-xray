@@ -6,7 +6,9 @@ import okhttp3.ResponseBody.Companion.toResponseBody
 import java.io.IOException
 import javax.inject.Inject
 
-class ResponseInterceptor @Inject constructor() : Interceptor {
+class ResponseInterceptor @Inject constructor(
+
+) : Interceptor {
 
     /**
      * Intercepts the HTTP response to log and optionally modify it.
