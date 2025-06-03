@@ -1,5 +1,6 @@
 package com.frontend.oportunia.presentation.ui.navigation
 
+
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -22,6 +23,7 @@ import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
 import com.frontend.oportunia.presentation.viewmodel.RegisterViewModel
 import com.frontend.oportunia.presentation.viewmodel.SkillsViewModel
 
+
 @Composable
 fun NavGraph(
     navController: NavHostController,
@@ -34,33 +36,48 @@ fun NavGraph(
 ) {
     NavHost(navController, startDestination = NavRoutes.MainPage.ROUTE) {
 
+
         composable(NavRoutes.MainPage.ROUTE) {
             MainScreen(navController)
         }
 
+
         composable(NavRoutes.Login.ROUTE) {
-            LoginScreen(paddingValues, loginViewModel, navController)
+            LoginScreen(paddingValues, loginViewModel, navController,
+                onLoginSuccess = {
+                    navController.navigate(NavRoutes.Menu.ROUTE) {
+                        // Clear back stack so user can't navigate back to login screen
+                        popUpTo(NavRoutes.Login.ROUTE) { inclusive = true }
+                    }
+                }
+            )
         }
+
 
         composable(NavRoutes.Register.ROUTE) {
             RegisterScreen(paddingValues, registerViewModel, navController)
         }
 
+
         composable(NavRoutes.Menu.ROUTE) {
             MenuScreen( companyViewModel, paddingValues, navController, loginViewModel)
         }
+
 
         composable(NavRoutes.CompanyMenu.ROUTE) {
             CompanyScreen(paddingValues, companyViewModel, navController)
         }
 
+
         composable(NavRoutes.AdviceList.ROUTE) {
             AdviceScreen(navController, paddingValues, adviceViewModel)
         }
 
+
         composable(NavRoutes.Profile.ROUTE) {
             PerfilScreen(navController, paddingValues,loginViewModel)
         }
+
 
         composable(
             route = NavRoutes.CompanyDetail.ROUTE,
@@ -76,6 +93,8 @@ fun NavGraph(
                 paddingValues = paddingValues
             )
         }
+
+
 
 
         composable(
@@ -94,6 +113,5 @@ fun NavGraph(
         }
     }
 }
-
 
 

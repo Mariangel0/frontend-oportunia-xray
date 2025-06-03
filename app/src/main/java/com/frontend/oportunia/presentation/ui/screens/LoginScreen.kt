@@ -1,5 +1,6 @@
 package com.frontend.oportunia.presentation.ui.screens
 
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,38 +34,48 @@ import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
+import com.frontend.oportunia.presentation.viewmodel.LoginState
+
 
 @Composable
 fun LoginScreen(
     paddingValues: PaddingValues,
-    viewModel: LoginViewModel = viewModel(),
-    navController: NavController
+    viewModel: LoginViewModel,
+    navController: NavController,
+    onLoginSuccess: () -> Unit
 ) {
-    val username by viewModel.username.collectAsState()
-    val password by viewModel.password.collectAsState()
-    val isLoggingIn by viewModel.isLoggingIn.collectAsState()
-    val loginError by viewModel.loginError.collectAsState()
-    val loginSuccess = viewModel.loginSuccess.collectAsState()
-    val errorMessage = when (loginError) {
-        "empty_fields" -> stringResource(R.string.error_empty_fields)
-        "invalid_credentials" -> stringResource(R.string.error_invalid_credentials)
+    val loginState by viewModel.loginState.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+
+
+    var username = remember { mutableStateOf("") }
+    var password = remember { mutableStateOf("") }
+
+
+    val errorMessage = when (loginState) {
+        is LoginState.Error -> (loginState as LoginState.Error).message
         else -> null
     }
 
-    LaunchedEffect(loginSuccess.value) {
-        if (loginSuccess.value) {
+
+    LaunchedEffect(loginState) {
+        if (loginState is LoginState.Success) {
             navController.navigate(NavRoutes.Menu.ROUTE) {
                 popUpTo(0) { inclusive = true }
             }
+            onLoginSuccess()
         }
     }
+
 
     MainLayout(
         paddingValues = paddingValues,
         headerType = HeaderType.BACK,
         title = stringResource(id = R.string.login),
-        onBackClick = {navController.navigateUp()}
+        onBackClick = { navController.navigateUp() }
     ) {
         Column(
             modifier = Modifier
@@ -79,7 +90,9 @@ fun LoginScreen(
                 modifier = Modifier.size(150.dp)
             )
 
+
             Spacer(modifier = Modifier.height(48.dp))
+
 
             Text(
                 text = stringResource(id = R.string.login),
@@ -90,7 +103,9 @@ fun LoginScreen(
                     .padding(horizontal = 16.dp)
             )
 
+
             Spacer(modifier = Modifier.height(8.dp))
+
 
             Text(
                 text = stringResource(id = R.string.greeting_login),
@@ -101,11 +116,13 @@ fun LoginScreen(
                     .padding(horizontal = 16.dp)
             )
 
+
             Spacer(modifier = Modifier.height(48.dp))
 
+
             OutlinedTextField(
-                value = username,
-                onValueChange = viewModel::onUsernameChange,
+                value = username.value,
+                onValueChange = { username.value = it },
                 label = { Text(stringResource(R.string.user)) },
                 placeholder = { Text(stringResource(R.string.user_placeholder)) },
                 modifier = Modifier
@@ -117,11 +134,13 @@ fun LoginScreen(
                 )
             )
 
+
             Spacer(modifier = Modifier.height(24.dp))
 
+
             OutlinedTextField(
-                value = password,
-                onValueChange = viewModel::onPasswordChange,
+                value = password.value,
+                onValueChange = { password.value = it },
                 label = { Text(stringResource(R.string.password)) },
                 placeholder = { Text(stringResource(R.string.password_placeholder)) },
                 visualTransformation = PasswordVisualTransformation(),
@@ -133,7 +152,11 @@ fun LoginScreen(
                     unfocusedBorderColor = MaterialTheme.colorScheme.secondary
                 )
             )
+
+
             Spacer(modifier = Modifier.height(8.dp))
+
+
             errorMessage?.let {
                 Text(
                     text = it,
@@ -143,22 +166,27 @@ fun LoginScreen(
                         .padding(horizontal = 16.dp)
                 )
             }
+
+
             Spacer(modifier = Modifier.height(48.dp))
 
+
             Button(
-                onClick = { viewModel.login() },
+                onClick = {
+                    viewModel.login(username.value.trim(), password.value.trim())
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp)
                     .padding(horizontal = 16.dp),
-                enabled = !isLoggingIn,
+                enabled = !isLoading,
                 shape = MaterialTheme.shapes.small,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 )
             ) {
-                if (isLoggingIn) {
+                if (isLoading) {
                     CircularProgressIndicator(
                         color = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.size(24.dp),
@@ -171,8 +199,6 @@ fun LoginScreen(
                     )
                 }
             }
-
-
         }
     }
 }
