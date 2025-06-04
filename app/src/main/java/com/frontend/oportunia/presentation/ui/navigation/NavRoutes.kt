@@ -40,6 +40,12 @@ sealed class NavRoutes {
         fun createRoute(studentId: Long) = "skills/$studentId"
     }
 
+    data object CurriculumScreen : NavRoutes() {
+        const val ROUTE = "curriculum"
+        const val ARG_STD_ID = "studentId"
+
+        fun createRoute(studentId: Long) = "curriculum/$studentId"
+    }
 
 
 

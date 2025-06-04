@@ -93,7 +93,7 @@ fun Learning(navController: NavController, studentId: Long) {
             LearnItem(
                 icon = Icons.AutoMirrored.Outlined.List,
                 text = "Curriculum",
-                onClick = { /* Navegar si se quiere */ }
+                onClick = { navController.navigate(NavRoutes.CurriculumScreen.ROUTE) }
             )
             LearnItem(
                 icon = Icons.Outlined.Build,

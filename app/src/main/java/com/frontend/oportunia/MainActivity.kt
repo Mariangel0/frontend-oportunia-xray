@@ -1,6 +1,7 @@
 package com.frontend.oportunia
 
 
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,6 +22,7 @@ import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
 import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
 import com.frontend.oportunia.presentation.viewmodel.RegisterViewModel
 import com.frontend.oportunia.presentation.viewmodel.SkillsViewModel
+import com.frontend.oportunia.presentation.viewmodel.CurriculumViewModel
 
 
 @AndroidEntryPoint
@@ -41,12 +43,14 @@ class MainActivity : ComponentActivity() {
 
     private val adviceViewModel: AdviceViewModel by viewModels ()
 
+    private val curriculumViewModel: CurriculumViewModel by viewModels ()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             OportunIATheme {
-                Main(companyViewModel, loginViewModel, registerViewModel, skillViewModel, adviceViewModel)
+                Main(companyViewModel, loginViewModel, registerViewModel, skillViewModel, adviceViewModel, curriculumViewModel)
             }
         }
     }
@@ -56,7 +60,7 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, registerViewModel: RegisterViewModel, skillViewModel: SkillsViewModel, adviceViewModel: AdviceViewModel) {
+fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, registerViewModel: RegisterViewModel, skillViewModel: SkillsViewModel, adviceViewModel: AdviceViewModel, curriculumViewModel: CurriculumViewModel)  {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
@@ -80,7 +84,8 @@ fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, reg
             loginViewModel = loginViewModel,
             registerViewModel = registerViewModel,
             skillsViewModel = skillViewModel,
-            adviceViewModel = adviceViewModel
+            adviceViewModel = adviceViewModel,
+            curriculumViewModel = curriculumViewModel
         )
     }
 }

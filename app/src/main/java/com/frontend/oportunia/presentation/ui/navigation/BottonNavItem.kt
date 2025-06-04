@@ -24,6 +24,12 @@ sealed class BottomNavItem(
         R.string.profile,
         R.drawable.icon_perfil
     )
+    data object CurriculumScreen : BottomNavItem(
+        NavRoutes.CurriculumScreen.ROUTE,
+        R.string.curriculum,
+        R.drawable.icon_perfil
+    )
+
 
     companion object {
         /**

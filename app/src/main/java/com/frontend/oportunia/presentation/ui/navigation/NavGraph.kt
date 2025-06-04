@@ -1,6 +1,7 @@
 package com.frontend.oportunia.presentation.ui.navigation
 
 
+import com.frontend.oportunia.presentation.viewmodel.CurriculumViewModel
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -14,6 +15,7 @@ import com.frontend.oportunia.presentation.ui.screens.CompanyTabsScreen
 import com.frontend.oportunia.presentation.ui.screens.LoginScreen
 import com.frontend.oportunia.presentation.ui.screens.MainScreen
 import com.frontend.oportunia.presentation.ui.screens.MenuScreen
+import com.frontend.oportunia.presentation.ui.screens.CurriculumScreen
 import com.frontend.oportunia.presentation.ui.screens.PerfilScreen
 import com.frontend.oportunia.presentation.ui.screens.RegisterScreen
 import com.frontend.oportunia.presentation.ui.screens.SkillsScreen
@@ -32,7 +34,9 @@ fun NavGraph(
     loginViewModel: LoginViewModel,
     registerViewModel: RegisterViewModel,
     skillsViewModel: SkillsViewModel,
-    adviceViewModel: AdviceViewModel
+    adviceViewModel: AdviceViewModel,
+    curriculumViewModel: CurriculumViewModel
+
 ) {
     NavHost(navController, startDestination = NavRoutes.MainPage.ROUTE) {
 
@@ -111,6 +115,16 @@ fun NavGraph(
                 paddingValues = paddingValues
             )
         }
+
+
+        composable(NavRoutes.CurriculumScreen.ROUTE) {
+            CurriculumScreen(
+                navController = navController,
+                paddingValues = paddingValues,
+                curriculumViewModel = curriculumViewModel
+            )
+        }
+
     }
 }
 
