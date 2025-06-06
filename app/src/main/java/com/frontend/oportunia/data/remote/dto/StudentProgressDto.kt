@@ -6,5 +6,5 @@ data class StudentProgressDto(
     val totalInterviews: Int,
     val averageScore: Float,
     val uploadedCl: Int,
-    val lastActivity: String
+    val lastActivity: String,
 )

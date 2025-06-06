@@ -17,8 +17,8 @@ class UserDeserializer : JsonDeserializer<UserDto> {
 
         val id = jsonObject.get("id").asLong
 
-        val createDate = jsonObject.get("createDate")?.let {
-            context.deserialize<Date>(it, Date::class.java)
+        val createDate: Date = jsonObject.get("createDate")?.let {
+            context.deserialize(it, Date::class.java)
         } ?: Date()
 
         val email = jsonObject.get("email").asString
@@ -28,6 +28,8 @@ class UserDeserializer : JsonDeserializer<UserDto> {
         val password = jsonObject.get("password").asString
         val tokenExpired = jsonObject.get("tokenExpired").asBoolean
 
-        return UserDto(id, createDate.toString(), email, enabled, firstName, lastName, password, tokenExpired)
+
+
+        return UserDto(id, createDate, email, enabled, firstName, lastName, password, tokenExpired)
     }
 }

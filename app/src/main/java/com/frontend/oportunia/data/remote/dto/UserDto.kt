@@ -1,8 +1,10 @@
 package com.frontend.oportunia.data.remote.dto
 
+import java.util.Date
+
 open class UserDto(
     val id: Long,
-    val createDate: String,
+    val createDate: Date,
     val email: String,
     val enabled: Boolean,
     val firstName: String,

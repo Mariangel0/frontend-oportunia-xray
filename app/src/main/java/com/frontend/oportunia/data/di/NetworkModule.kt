@@ -21,12 +21,14 @@ import com.frontend.oportunia.data.remote.dto.AbilityDto
 import com.frontend.oportunia.data.remote.dto.CompanyReviewDto
 import com.frontend.oportunia.data.remote.dto.ExperienceDto
 import com.frontend.oportunia.data.remote.dto.StudentDto
+import com.frontend.oportunia.data.remote.dto.UserDto
 import com.frontend.oportunia.data.remote.interceptor.AuthInterceptor
 import com.frontend.oportunia.data.remote.interceptor.ResponseInterceptor
 import com.frontend.oportunia.data.remote.serializer.AbilityDeserializer
 import com.frontend.oportunia.data.remote.serializer.CompanyReviewDeserializer
 import com.frontend.oportunia.data.remote.serializer.ExperienceDeserializer
 import com.frontend.oportunia.data.remote.serializer.StudentDeserializer
+import com.frontend.oportunia.data.remote.serializer.UserDeserializer
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -71,6 +73,8 @@ object NetworkModule {
         .registerTypeAdapter(CompanyReviewDto::class.java, CompanyReviewDeserializer())
         .registerTypeAdapter(AbilityDto::class.java, AbilityDeserializer())
         .registerTypeAdapter(StudentDto::class.java, StudentDeserializer())
+        .registerTypeAdapter(ExperienceDto::class.java, ExperienceDeserializer())
+        .registerTypeAdapter(UserDto::class.java, UserDeserializer())
         .registerTypeAdapter(ExperienceDto::class.java, ExperienceDeserializer())
         .setDateFormat(DATE_FORMAT)
         .create()

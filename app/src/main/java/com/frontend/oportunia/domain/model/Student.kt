@@ -1,7 +1,7 @@
 package com.frontend.oportunia.domain.model
 
 data class Student(
-    val user: User,
+    //val user: User,
     val description: String,
     val premium: Boolean,
     val linkedinUrl: String,

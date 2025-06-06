@@ -19,8 +19,8 @@ interface StudentService {
     @GET("students/{id}")
     suspend fun geStudentById(@Path("id") id: Long): Response<StudentDto>
 
-    @GET("students")
-    suspend fun getStudentByUserId(@Query("user.id") userId: Long): Response<StudentDto>
+    @GET("students/{id}")
+    suspend fun getStudentByUserId(@Path("id") id: Long): Response<StudentDto>
 
     @POST("students")
     suspend fun createStudent(@Body student: StudentDto): Response<StudentDto>
