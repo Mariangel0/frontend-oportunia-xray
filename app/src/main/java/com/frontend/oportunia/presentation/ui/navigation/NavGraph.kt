@@ -11,6 +11,8 @@ import androidx.navigation.navArgument
 import com.frontend.oportunia.presentation.ui.screens.AdviceScreen
 import com.frontend.oportunia.presentation.ui.screens.CompanyScreen
 import com.frontend.oportunia.presentation.ui.screens.CompanyTabsScreen
+import com.frontend.oportunia.presentation.ui.screens.InterviewChatScreen
+import com.frontend.oportunia.presentation.ui.screens.InterviewMenuScreen
 import com.frontend.oportunia.presentation.ui.screens.LoginScreen
 import com.frontend.oportunia.presentation.ui.screens.MainScreen
 import com.frontend.oportunia.presentation.ui.screens.MenuScreen
@@ -94,9 +96,6 @@ fun NavGraph(
             )
         }
 
-
-
-
         composable(
             route = NavRoutes.SkillScreen.ROUTE,
             arguments = listOf(navArgument(NavRoutes.SkillScreen.ARG_STD_ID) {
@@ -109,6 +108,45 @@ fun NavGraph(
                 skillsViewModel = skillsViewModel,
                 navController = navController,
                 paddingValues = paddingValues
+            )
+        }
+
+        composable(
+            route = NavRoutes.InterviewScreen.ROUTE,
+            arguments = listOf(navArgument(NavRoutes.InterviewScreen.ARG_INT_ID) {
+                type = NavType.LongType
+            })
+        ) { backStackEntry ->
+            val stdId = backStackEntry.arguments?.getLong(NavRoutes.InterviewScreen.ARG_INT_ID) ?: 0L
+            InterviewMenuScreen(
+                companyViewModel = companyViewModel,
+                navController = navController,
+                paddingValues = paddingValues
+            )
+        }
+
+        composable(
+            route = NavRoutes.InterviewChat.ROUTE,
+            arguments = listOf(
+                navArgument(NavRoutes.InterviewChat.ARG_JOB_POSITION) { type = NavType.StringType },
+                navArgument(NavRoutes.InterviewChat.ARG_COMPANY_NAME) { type = NavType.StringType },
+                navArgument(NavRoutes.InterviewChat.ARG_INTERVIEW_TYPE) { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val jobPosition =
+                backStackEntry.arguments?.getString(NavRoutes.InterviewChat.ARG_JOB_POSITION) ?: ""
+            val companyName =
+                backStackEntry.arguments?.getString(NavRoutes.InterviewChat.ARG_COMPANY_NAME) ?: ""
+            val interviewType =
+                backStackEntry.arguments?.getString(NavRoutes.InterviewChat.ARG_INTERVIEW_TYPE)
+                    ?: ""
+
+            InterviewChatScreen(
+                navController = navController,
+                paddingValues = paddingValues,
+                jobPosition = jobPosition,
+                companyName = companyName,
+                interviewType = interviewType
             )
         }
     }

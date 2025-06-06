@@ -88,7 +88,7 @@ fun Learning(navController: NavController, studentId: Long) {
             LearnItem(
                 icon = Icons.Outlined.AccountBox,
                 text = "Entrevistas",
-                onClick = { /* Navegar si se quiere */ }
+                onClick = { navController.navigate(NavRoutes.InterviewScreen.createRoute(studentId)) }
             )
             LearnItem(
                 icon = Icons.AutoMirrored.Outlined.List,

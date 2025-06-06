@@ -108,7 +108,20 @@
     <string name="upload_logo">Cargar logo</string>
     <string name="company_logo">Logo de la empresa</string>
 
-
-
+    <!--  Interview Screen  -->
+    <string name="interview_menu">Iniciar Entrevista</string>
+    <string name="interview_with_oportunia">Entrevista con OportunIA</string>
+    <string name="job_position_to_apply">Puesto a aplicar</string>
+    <string name="enter_job_position">Ingrese el puesto</string>
+    <string name="company_to_apply">Empresa a aplicar</string>
+    <string name="select_company">Seleccione una empresa</string>
+    <string name="interview_type">Tipo de entrevista</string>
+    <string name="technical_interview">Técnica</string>
+    <string name="general_interview">General</string>
+    <string name="behavioral_interview">Conductual</string>
+    <string name="start_interview">Empezar</string>
+    <string name="interview_chat">Entrevista Chat</string>
+    <string name="type_your_message">Escribe tu mensaje</string>
+    <string name="send">Enviar</string>
 
 </resources>
