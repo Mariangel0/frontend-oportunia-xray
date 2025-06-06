@@ -13,9 +13,9 @@ class ExperienceMapper @Inject constructor (
         return Experience(
             id = dto.id,
             studentId = studentMapper . mapToDomain (dto.studentId),
-            company = companyMapper.mapToDomain(dto.company),
+            company = dto.company,
             role = dto.role,
-            year = dto.year
+            timeline = dto.timeline
         )
     }
 
@@ -28,9 +28,9 @@ class ExperienceMapper @Inject constructor (
         return ExperienceDto(
             id = domain.id,
             studentId = studentMapper.mapToDto(domain.studentId),
-            company = companyMapper.mapToDto(domain.company),
+            company = domain.company,
             role = domain.role,
-            year = domain.year
+            timeline = domain.timeline
         )
     }
 

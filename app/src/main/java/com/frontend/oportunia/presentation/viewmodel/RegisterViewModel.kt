@@ -94,7 +94,7 @@ class RegisterViewModel @Inject constructor (
 
         val user = User(
             id = (1..9999).random().toLong(),
-            createDate = LocalDateTime.now().toString(),
+            createDate = Date(),
             email = email.value,
             enabled = true,
             firstName = name.value,
@@ -104,7 +104,7 @@ class RegisterViewModel @Inject constructor (
         )
         val formattedDate = birthDate.value?.let { convertMillisToDate(it) } ?: ""
         val student = Student(
-            user = user,
+           // user = user,
             description = "Nuevo estudiante",
             premium = false,
             linkedinUrl = "",

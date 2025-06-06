@@ -23,8 +23,8 @@ public interface AbilityService {
     @POST("abilities")
     suspend fun createAbility(@Body ability: AbilityDto): Response<AbilityDto>
 
-    @GET("abilities")
-    suspend fun getAbilitiesByStudentId(@Query("studentId.id") studentId: Long): Response<List<AbilityDto>>
+    @GET("abilities/student/{id}")
+    suspend fun getAbilitiesByStudentId(@Path("id") studentId: Long): Response<List<AbilityDto>>
 
     @PUT("abilities/{id}")
     suspend fun updateAbility(

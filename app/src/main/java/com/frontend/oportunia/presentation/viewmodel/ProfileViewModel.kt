@@ -14,7 +14,7 @@ class ProfileViewModel @Inject constructor(
     private val loginViewModel: LoginViewModel
 ) : ViewModel() {
 
-    val student: StateFlow<Student?> = loginViewModel.loggedStudent
+   // val student: StateFlow<Student?> = loginViewModel.loggedStudent
 
     private val _profileImageUri = MutableStateFlow<Uri?>(null)
     val profileImageUri: StateFlow<Uri?> get() = _profileImageUri

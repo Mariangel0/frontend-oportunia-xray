@@ -40,17 +40,17 @@ fun PerfilScreen(
     paddingValues: PaddingValues,
     loginViewModel: LoginViewModel
 ) {
-    val student by loginViewModel.loggedStudent.collectAsState()
-
-    val firstName = student?.user?.firstName ?: ""
-    val lastName = student?.user?.lastName ?: ""
-    val description = student?.description ?: ""
-    val premium = student?.premium ?: false
-    val linkedinUrl = student?.linkedinUrl ?: ""
-    val githubUrl = student?.githubUrl ?: ""
-    val age = ageCal(student?.bornDate ?: "")
-    val location = student?.location ?: ""
-    var profileImageUri by remember { mutableStateOf<Uri?>(null) }
+//    val student by loginViewModel.loggedStudent.collectAsState()
+//
+//    val firstName = student?.user?.firstName ?: ""
+//    val lastName = student?.user?.lastName ?: ""
+//    val description = student?.description ?: ""
+//    val premium = student?.premium ?: false
+//    val linkedinUrl = student?.linkedinUrl ?: ""
+//    val githubUrl = student?.githubUrl ?: ""
+//    val age = ageCal(student?.bornDate ?: "")
+//    val location = student?.location ?: ""
+//    var profileImageUri by remember { mutableStateOf<Uri?>(null) }
 
     MainLayout(
         paddingValues = paddingValues,
@@ -66,114 +66,114 @@ fun PerfilScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
-
-            ProfileImageSection(profileImageUri) { profileImageUri = it }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = "$firstName $lastName",
-                style = MaterialTheme.typography.titleMedium
-            )
-
-            if (premium) {
-                Text(
-                    text = "★ Premium",
-                    color = Color(0xFFFFC107),
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primary
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Text(
-                text = "Sobre mi",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            if (age != null || location.isNotBlank()) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    if (age != null) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.icon_birth),
-                                contentDescription = "Edad",
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(20.dp)
-                            )
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Text(
-                                text = "$age",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
-                        }
-                    }
-
-                    if (location.isNotBlank()) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.icon_location),
-                                contentDescription = "Ubicación",
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(20.dp)
-                            )
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Text(
-                                text = location,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(12.dp))
-            }
-
-            LinkedInAndGitHubIcons(
-                linkedinUrl = linkedinUrl,
-                githubUrl = githubUrl
-            )
-
-            Button(
-                onClick = {},
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp),
-                shape = MaterialTheme.shapes.small,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
-            ) {
-                Text("Editar Perfil", color = Color.White)
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
+//            Spacer(modifier = Modifier.height(16.dp))
+//
+//            ProfileImageSection(profileImageUri) { profileImageUri = it }
+//
+//            Spacer(modifier = Modifier.height(12.dp))
+//
+//            Text(
+//                text = "$firstName $lastName",
+//                style = MaterialTheme.typography.titleMedium
+//            )
+//
+//            if (premium) {
+//                Text(
+//                    text = "★ Premium",
+//                    color = Color(0xFFFFC107),
+//                    style = MaterialTheme.typography.bodyMedium
+//                )
+//            }
+//
+//            Text(
+//                text = description,
+//                style = MaterialTheme.typography.bodyMedium,
+//                color = MaterialTheme.colorScheme.primary
+//            )
+//
+//            Spacer(modifier = Modifier.height(24.dp))
+//
+//            Text(
+//                text = "Sobre mi",
+//                style = MaterialTheme.typography.titleMedium,
+//                color = MaterialTheme.colorScheme.onBackground
+//            )
+//
+//            Spacer(modifier = Modifier.height(8.dp))
+//
+//            if (age != null || location.isNotBlank()) {
+//                Row(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(horizontal = 24.dp),
+//                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+//                    verticalAlignment = Alignment.CenterVertically
+//                ) {
+//                    if (age != null) {
+//                        Row(
+//                            verticalAlignment = Alignment.CenterVertically,
+//                            horizontalArrangement = Arrangement.Center,
+//                            modifier = Modifier.weight(1f)
+//                        ) {
+//                            Icon(
+//                                painter = painterResource(id = R.drawable.icon_birth),
+//                                contentDescription = "Edad",
+//                                tint = MaterialTheme.colorScheme.primary,
+//                                modifier = Modifier.size(20.dp)
+//                            )
+//                            Spacer(modifier = Modifier.width(6.dp))
+//                            Text(
+//                                text = "$age",
+//                                style = MaterialTheme.typography.bodyMedium,
+//                                color = MaterialTheme.colorScheme.onBackground
+//                            )
+//                        }
+//                    }
+//
+//                    if (location.isNotBlank()) {
+//                        Row(
+//                            verticalAlignment = Alignment.CenterVertically,
+//                            horizontalArrangement = Arrangement.Center,
+//                            modifier = Modifier.weight(1f)
+//                        ) {
+//                            Icon(
+//                                painter = painterResource(id = R.drawable.icon_location),
+//                                contentDescription = "Ubicación",
+//                                tint = MaterialTheme.colorScheme.primary,
+//                                modifier = Modifier.size(20.dp)
+//                            )
+//                            Spacer(modifier = Modifier.width(6.dp))
+//                            Text(
+//                                text = location,
+//                                style = MaterialTheme.typography.bodyMedium,
+//                                color = MaterialTheme.colorScheme.onBackground
+//                            )
+//                        }
+//                    }
+//                }
+//
+//                Spacer(modifier = Modifier.height(12.dp))
+//            }
+//
+//            LinkedInAndGitHubIcons(
+//                linkedinUrl = linkedinUrl,
+//                githubUrl = githubUrl
+//            )
+//
+//            Button(
+//                onClick = {},
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(48.dp),
+//                shape = MaterialTheme.shapes.small,
+//                colors = ButtonDefaults.buttonColors(
+//                    containerColor = MaterialTheme.colorScheme.primary
+//                )
+//            ) {
+//                Text("Editar Perfil", color = Color.White)
+//            }
+//
+//            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }
@@ -188,7 +188,8 @@ fun LinkedInAndGitHubIcons(linkedinUrl: String, githubUrl: String) {
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         IconButton(
-            onClick = { openUrl(context, linkedinUrl) },
+            onClick = {},
+           // onClick = { openUrl(context, linkedinUrl) },
             modifier = Modifier.weight(1f)
         ) {
             Icon(
@@ -200,7 +201,8 @@ fun LinkedInAndGitHubIcons(linkedinUrl: String, githubUrl: String) {
         }
 
         IconButton(
-            onClick = { openUrl(context, githubUrl) },
+            onClick = {},
+            //onClick = {  openUrl(context, githubUrl) },
             modifier = Modifier.weight(1f)
         ) {
             Icon(
