@@ -1,17 +1,25 @@
 package com.frontend.oportunia.data.repository
 
 import android.util.Log
+import com.frontend.oportunia.data.datasource.UserDataSource
 import com.frontend.oportunia.data.local.AuthPreferences
+import com.frontend.oportunia.data.mapper.UserMapper
 import com.frontend.oportunia.data.remote.AuthRemoteDataSource
+import com.frontend.oportunia.data.remote.dto.UserDto
 import com.frontend.oportunia.domain.repository.AuthRepository
 import com.frontend.oportunia.domain.model.Credentials
+import com.frontend.oportunia.domain.model.User
+import retrofit2.Response
+import java.net.UnknownHostException
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class AuthRepositoryImpl @Inject constructor(
     private val authRemoteDataSource: AuthRemoteDataSource,
-    private val authPreferences: AuthPreferences
+    private val authPreferences: AuthPreferences,
+    private val userDataSource: UserDataSource,
+    private val userMapper: UserMapper
 ) : AuthRepository {
 
     override suspend fun login(username: String, password: String): Result<Unit> {
@@ -23,13 +31,28 @@ class AuthRepositoryImpl @Inject constructor(
                 .onSuccess { authResult ->
                     val token = authResult.token
                     if (token.isNotBlank()) {
-                        Log.d(
-                            "AuthRepositoryImpl",
-                            "Login successful, token: ${token.take(10)}..."
-                        )
-                        // Save auth state to preferences
+                        Log.d("AuthRepositoryImpl", "Login successful, token: ${token.take(10)}...")
+
+                        // Guardar token y username
                         authPreferences.saveAuthToken(token)
                         authPreferences.saveUsername(username)
+
+                        // 🔹 Obtener el usuario desde backend y guardarlo localmente
+                        try {
+                            val response: Response<UserDto> = userDataSource.getCurrentUser()
+                            if (response.isSuccessful && response.body() != null) {
+                                val userDto = response.body()!!
+                                authPreferences.saveUser(userDto)
+                                Log.d("AuthRepositoryImpl", "UserDto saved after login: ${userDto.email}")
+                            } else {
+                                Log.e("AuthRepositoryImpl", "Failed to fetch current user: ${response.code()} ${response.message()}")
+                            }
+                        } catch (e: UnknownHostException) {
+                            Log.e("AuthRepositoryImpl", "Network error: Cannot connect to server.", e)
+                        } catch (e: Exception) {
+                            Log.e("AuthRepositoryImpl", "Error fetching current user after login: ${e.message}", e)
+                        }
+
                     } else {
                         Log.e("AuthRepositoryImpl", "Received empty token in auth result")
                     }
@@ -37,12 +60,14 @@ class AuthRepositoryImpl @Inject constructor(
                 .onFailure { error ->
                     Log.e("AuthRepositoryImpl", "Login failed: ${error.message}")
                 }
-                .map { }
+                .map { } // convierte Result<AuthResult> a Result<Unit>
+
         } catch (e: Exception) {
             Log.e("AuthRepositoryImpl", "Login exception: ${e.message}", e)
             Result.failure(e)
         }
     }
+
 
     override suspend fun logout(): Result<Unit> {
         return try {
@@ -80,7 +105,7 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun getCurrentUser(): Result<String?> {
+    override suspend fun getUser(): Result<String?> {
         return try {
             val username = authPreferences.getUsername()
             Log.d("AuthRepositoryImpl", "Current user: $username")
@@ -90,4 +115,25 @@ class AuthRepositoryImpl @Inject constructor(
             Result.failure(e)
         }
     }
+
+    override suspend fun getCurrentUser(): Result<User?> {
+        return try {
+            val userDto = authPreferences.getSavedUser()
+            if (userDto != null) {
+                val user = userMapper.mapToDomain(userDto)
+                Log.d("AuthRepositoryImpl", "Current user: $user")
+                Result.success(user)
+            } else {
+                Log.d("AuthRepositoryImpl", "No current user found")
+                Result.success(null)
+            }
+        }
+        catch (e: Exception) {
+            Log.e("AuthRepositoryImpl", "Get current user exception: ${e.message}", e)
+            Result.failure(e)
+        }
+
+    }
+
+
 }
