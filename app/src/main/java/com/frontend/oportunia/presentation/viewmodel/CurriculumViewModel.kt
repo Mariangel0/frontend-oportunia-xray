@@ -45,6 +45,8 @@ class CurriculumViewModel @Inject constructor(
         }
     }
 
+
+
 }
 
 sealed class UploadState {
