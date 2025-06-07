@@ -30,6 +30,7 @@ import com.frontend.oportunia.presentation.ui.components.HeaderType
 import com.frontend.oportunia.presentation.ui.layout.MainLayout
 import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
 import com.example.oportunia.R
+import com.frontend.oportunia.presentation.viewmodel.ProfileViewModel
 import java.time.LocalDate
 import java.time.Period
 import java.time.format.DateTimeFormatter
@@ -38,19 +39,20 @@ import java.time.format.DateTimeFormatter
 fun PerfilScreen(
     navController: NavController,
     paddingValues: PaddingValues,
-    loginViewModel: LoginViewModel
+    profileViewModel: ProfileViewModel
 ) {
-//    val student by loginViewModel.loggedStudent.collectAsState()
-//
-//    val firstName = student?.user?.firstName ?: ""
-//    val lastName = student?.user?.lastName ?: ""
-//    val description = student?.description ?: ""
-//    val premium = student?.premium ?: false
-//    val linkedinUrl = student?.linkedinUrl ?: ""
-//    val githubUrl = student?.githubUrl ?: ""
-//    val age = ageCal(student?.bornDate ?: "")
-//    val location = student?.location ?: ""
-//    var profileImageUri by remember { mutableStateOf<Uri?>(null) }
+    val user by profileViewModel.currentUser.collectAsState()
+    val student by profileViewModel.loggedStudent.collectAsState()
+
+    val firstName = user?.firstName ?: ""
+    val lastName = user?.lastName ?: ""
+    val description = student?.description ?: ""
+    val premium = student?.premium ?: false
+    val linkedinUrl = student?.linkedinUrl ?: ""
+    val githubUrl = student?.githubUrl ?: ""
+    val age = ageCal(student?.bornDate ?: "")
+    val location = student?.location ?: ""
+    var profileImageUri by remember { mutableStateOf<Uri?>(null) }
 
     MainLayout(
         paddingValues = paddingValues,
@@ -66,114 +68,114 @@ fun PerfilScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-//            Spacer(modifier = Modifier.height(16.dp))
-//
-//            ProfileImageSection(profileImageUri) { profileImageUri = it }
-//
-//            Spacer(modifier = Modifier.height(12.dp))
-//
-//            Text(
-//                text = "$firstName $lastName",
-//                style = MaterialTheme.typography.titleMedium
-//            )
-//
-//            if (premium) {
-//                Text(
-//                    text = "★ Premium",
-//                    color = Color(0xFFFFC107),
-//                    style = MaterialTheme.typography.bodyMedium
-//                )
-//            }
-//
-//            Text(
-//                text = description,
-//                style = MaterialTheme.typography.bodyMedium,
-//                color = MaterialTheme.colorScheme.primary
-//            )
-//
-//            Spacer(modifier = Modifier.height(24.dp))
-//
-//            Text(
-//                text = "Sobre mi",
-//                style = MaterialTheme.typography.titleMedium,
-//                color = MaterialTheme.colorScheme.onBackground
-//            )
-//
-//            Spacer(modifier = Modifier.height(8.dp))
-//
-//            if (age != null || location.isNotBlank()) {
-//                Row(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(horizontal = 24.dp),
-//                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-//                    verticalAlignment = Alignment.CenterVertically
-//                ) {
-//                    if (age != null) {
-//                        Row(
-//                            verticalAlignment = Alignment.CenterVertically,
-//                            horizontalArrangement = Arrangement.Center,
-//                            modifier = Modifier.weight(1f)
-//                        ) {
-//                            Icon(
-//                                painter = painterResource(id = R.drawable.icon_birth),
-//                                contentDescription = "Edad",
-//                                tint = MaterialTheme.colorScheme.primary,
-//                                modifier = Modifier.size(20.dp)
-//                            )
-//                            Spacer(modifier = Modifier.width(6.dp))
-//                            Text(
-//                                text = "$age",
-//                                style = MaterialTheme.typography.bodyMedium,
-//                                color = MaterialTheme.colorScheme.onBackground
-//                            )
-//                        }
-//                    }
-//
-//                    if (location.isNotBlank()) {
-//                        Row(
-//                            verticalAlignment = Alignment.CenterVertically,
-//                            horizontalArrangement = Arrangement.Center,
-//                            modifier = Modifier.weight(1f)
-//                        ) {
-//                            Icon(
-//                                painter = painterResource(id = R.drawable.icon_location),
-//                                contentDescription = "Ubicación",
-//                                tint = MaterialTheme.colorScheme.primary,
-//                                modifier = Modifier.size(20.dp)
-//                            )
-//                            Spacer(modifier = Modifier.width(6.dp))
-//                            Text(
-//                                text = location,
-//                                style = MaterialTheme.typography.bodyMedium,
-//                                color = MaterialTheme.colorScheme.onBackground
-//                            )
-//                        }
-//                    }
-//                }
-//
-//                Spacer(modifier = Modifier.height(12.dp))
-//            }
-//
-//            LinkedInAndGitHubIcons(
-//                linkedinUrl = linkedinUrl,
-//                githubUrl = githubUrl
-//            )
-//
-//            Button(
-//                onClick = {},
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(48.dp),
-//                shape = MaterialTheme.shapes.small,
-//                colors = ButtonDefaults.buttonColors(
-//                    containerColor = MaterialTheme.colorScheme.primary
-//                )
-//            ) {
-//                Text("Editar Perfil", color = Color.White)
-//            }
-//
-//            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+
+            ProfileImageSection(profileImageUri) { profileImageUri = it }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(
+                text = "$firstName $lastName",
+                style = MaterialTheme.typography.titleMedium
+            )
+
+            if (premium) {
+                Text(
+                    text = "★ Premium",
+                    color = Color(0xFFFFC107),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+
+            Text(
+                text = description,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                text = "Sobre mi",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            if (age != null || location.isNotBlank()) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (age != null) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.icon_birth),
+                                contentDescription = "Edad",
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = "$age",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                        }
+                    }
+
+                    if (location.isNotBlank()) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.icon_location),
+                                contentDescription = "Ubicación",
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = location,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+
+            LinkedInAndGitHubIcons(
+                linkedinUrl = linkedinUrl,
+                githubUrl = githubUrl
+            )
+
+            Button(
+                onClick = {},
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp),
+                shape = MaterialTheme.shapes.small,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                )
+            ) {
+                Text("Editar Perfil", color = Color.White)
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }

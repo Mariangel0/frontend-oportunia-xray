@@ -11,6 +11,7 @@ class StudentMapper @Inject constructor(
     fun mapToDomain(dto: StudentDto): Student {
         return Student(
           //  user = userMapper.mapToDomain(dto.user),
+            id = dto.id,
             description = dto.description,
             premium = dto.premium,
             linkedinUrl = dto.linkedinUrl,
@@ -27,6 +28,7 @@ class StudentMapper @Inject constructor(
     fun mapToDto(domain: Student): StudentDto {
         return StudentDto(
           //  user = userMapper.mapToDto(domain.user),
+            id = domain.id,
             description = domain.description,
             premium = domain.premium,
             linkedinUrl = domain.linkedinUrl,

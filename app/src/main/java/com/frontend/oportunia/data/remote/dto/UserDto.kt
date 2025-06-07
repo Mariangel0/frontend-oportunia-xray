@@ -10,5 +10,6 @@ open class UserDto(
     val firstName: String,
     val lastName: String,
     val password: String,
-    val tokenExpired: Boolean
+    val tokenExpired: Boolean,
+    val roles: List<RoleDto>
 )

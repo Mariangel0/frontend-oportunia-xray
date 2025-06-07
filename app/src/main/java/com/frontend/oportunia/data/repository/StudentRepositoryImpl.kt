@@ -55,6 +55,30 @@ class StudentRepositoryImpl @Inject constructor(
             studentMapper.mapToDomain(studentDto)
         }
 
+    override suspend fun updateStudent(student: Student): Result<Student> {
+        return try {
+            // Mapear el dominio a DTO
+            val studentDto = studentMapper.mapToDto(student)
+
+            // Llamar al data source
+            val response = dataSource.updateStudent(student.id, studentDto)
+
+            if (response.isSuccessful && response.body() != null) {
+                val updatedDto = response.body()!!
+                val updatedStudent = studentMapper.mapToDomain(updatedDto)
+                Result.success(updatedStudent)
+            } else {
+                Result.failure(Exception("Error actualizando estudiante: ${response.code()}"))
+            }
+
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun deleteStudent(studentId: Long): Result<Unit> {
+        TODO("Not yet implemented")
+    }
 
 
 }

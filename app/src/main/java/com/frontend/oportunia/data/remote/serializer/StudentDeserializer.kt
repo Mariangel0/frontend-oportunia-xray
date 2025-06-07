@@ -26,6 +26,7 @@ class StudentDeserializer : JsonDeserializer<StudentDto> {
             }
             else -> throw IllegalStateException("Respuesta inesperada del servidor: $json")
         }
+        val id = jsonObject.get("id").asLong
 
         //val user = context.deserialize<UserDto>(jsonObject.get("user"), UserDto::class.java)
         val description = jsonObject.get("description")?.asString ?: ""
@@ -39,6 +40,7 @@ class StudentDeserializer : JsonDeserializer<StudentDto> {
 
         return StudentDto(
          //   user = user,
+            id = id,
             description = description,
             premium = premium,
             linkedinUrl = linkedinUrl,

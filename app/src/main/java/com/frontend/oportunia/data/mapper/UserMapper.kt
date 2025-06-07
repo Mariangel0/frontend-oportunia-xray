@@ -14,7 +14,8 @@ class UserMapper @Inject constructor(){
             firstName = dto.firstName,
             lastName = dto.lastName,
             password = dto.password,
-            tokenExpired = dto.tokenExpired
+            tokenExpired = dto.tokenExpired,
+            roles = dto.roles.map { RoleMapper().mapToDomain(it) }
         )
     }
 
@@ -31,7 +32,8 @@ class UserMapper @Inject constructor(){
             firstName = domain.firstName,
             lastName = domain.lastName,
             password = domain.password,
-            tokenExpired = domain.tokenExpired
+            tokenExpired = domain.tokenExpired,
+            roles = domain.roles.map { RoleMapper().mapToDto(it) }
         )
     }
 
