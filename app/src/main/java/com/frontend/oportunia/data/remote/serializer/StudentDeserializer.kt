@@ -38,8 +38,12 @@ class StudentDeserializer : JsonDeserializer<StudentDto> {
         } ?: Date()
         val location = jsonObject.get("location")?.asString ?: ""
 
+        val userJson = jsonObject.get("user")
+        val user = context.deserialize<UserDto>(userJson, UserDto::class.java)
+
+
         return StudentDto(
-         //   user = user,
+            user = user,
             id = id,
             description = description,
             premium = premium,

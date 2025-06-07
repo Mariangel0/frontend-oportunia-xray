@@ -37,6 +37,17 @@ import com.frontend.oportunia.presentation.ui.layout.MainLayout
 import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 @Composable
@@ -143,13 +154,13 @@ fun CompanyInformationSection(companyViewModel: CompanyViewModel) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            SectionTitle("Valores")
-//            Text(text = it.values ?: "Sin información")
+            SectionTitle("Visión")
+            Text(text = it.vision ?: "Sin información")
 
             Spacer(modifier = Modifier.height(16.dp))
 
             SectionTitle("Misión")
-//            Text(text = it.mission ?: "Sin información")
+            Text(text = it.mission ?: "Sin información")
         }
     } ?: Text("Cargando información...")
 }
@@ -191,8 +202,9 @@ fun ReviewCard(review: CompanyReview) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("persona", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSecondaryContainer) // nombre de la persona
-               // Text(text = "Hace ${daysAgo(review.createdAt)} días", style = MaterialTheme.typography.bodySmall)
+                Text(
+                    (review.studentId.user?.firstName + " " + review.studentId.user?.lastName), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSecondaryContainer) // nombre de la persona
+                Text(text = "Hace ${daysAgo(review.createdAt)} días", style = MaterialTheme.typography.bodySmall)
             }
 
             RatingStars(
@@ -244,3 +256,23 @@ fun SectionTitle(title: String) {
     )
 }
 
+
+
+
+
+fun daysAgo(dateString: String): Int {
+    return try {
+        val date: Date = try {
+            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault())
+                .parse(dateString)
+        } catch (e: ParseException) {
+            SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+                .parse(dateString)
+        } ?: return -1
+        val diffMillis = System.currentTimeMillis() - date.time
+        TimeUnit.MILLISECONDS.toDays(diffMillis).toInt()
+    } catch (e: Exception) {
+        e.printStackTrace()
+        -1
+    }
+}

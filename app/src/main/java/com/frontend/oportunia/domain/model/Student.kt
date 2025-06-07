@@ -1,12 +1,12 @@
 package com.frontend.oportunia.domain.model
 
 data class Student(
-    //val user: User,
+    val user: User? = null,
     val id: Long,
-    val description: String,
-    val premium: Boolean,
-    val linkedinUrl: String,
-    val githubUrl: String,
-    val bornDate: String ,
-    val location: String
+    val description: String? = null,
+    val premium: Boolean? = null,
+    val linkedinUrl: String? = null,
+    val githubUrl: String? = null,
+    val bornDate: String ? = null,
+    val location: String? = null
 )

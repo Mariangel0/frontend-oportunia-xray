@@ -30,14 +30,8 @@ class CompanyReviewRepositoryImpl @Inject constructor(
         }
 
     override suspend fun findCompanyReviewsByCompanyId(companyId: Long): Result<List<CompanyReview>> {
-        return try {
-            dataSource.getReviewsByCompanyId(companyId).map { reviewDtos ->
-                companyReviewMapper.mapToDomainList(reviewDtos)
-            }
-        } catch (e: UnknownHostException) {
-            Result.failure(Exception("Network error: Cannot connect to server. Please check your internet connection."))
-        } catch (e: Exception) {
-            Result.failure(Exception("Error fetching tasks: ${e.message}"))
+        return dataSource.getReviewsByCompanyId(companyId).map { reviewDtos ->
+            companyReviewMapper.mapToDomainList(reviewDtos)
         }
     }
 

@@ -19,8 +19,8 @@ interface CompanyReviewService {
     @GET("reviews/{id}")
     suspend fun getReviewById(@Path("id") id: Long): Response<CompanyReviewDto>
 
-    @GET("reviews")
-    suspend fun getReviewsByCompanyId(@Query("companyId.id") companyId: Long): Response<List<CompanyReviewDto>>
+    @GET("reviews/company/{companyId}")
+    suspend fun getReviewsByCompanyId(@Path("companyId") companyId: Long): Response<List<CompanyReviewDto>>
 
 
     @POST("reviews")

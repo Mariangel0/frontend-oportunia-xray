@@ -50,6 +50,15 @@ class CompanyMapper @Inject constructor() {
         )
     }
 
+    fun mapToDtoSDto(domain: Company): CompanySDto {
+        return CompanySDto(
+            id = domain.id,
+            name = domain.name,
+            description = domain.description,
+            rating = domain.rating
+        )
+    }
+
     fun mapToDtoList(companies: List<Company>): List<CompanyDto> {
         return companies.map { mapToDto(it) }
     }
