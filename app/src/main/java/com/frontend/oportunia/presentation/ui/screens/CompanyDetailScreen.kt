@@ -136,10 +136,10 @@ fun CompanyInformationSection(companyViewModel: CompanyViewModel) {
     company?.let {
         Column {
             SectionTitle("Información")
-            InfoRow(label = "Tipo:", value = it.type)
+            InfoRow(label = "Tipo:", value = it.type.toString())
             InfoRow(label = "Cantidad de empleados:", value = it.employees.toString())
-            InfoRow(label = "Ubicación:", value = it.ubication)
-            InfoRow(label = "Sitio web:", value = it.websiteUrl)
+            InfoRow(label = "Ubicación:", value = it.location.toString())
+            InfoRow(label = "Sitio web:", value = it.websiteUrl.toString())
 
             Spacer(modifier = Modifier.height(16.dp))
 

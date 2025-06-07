@@ -1,6 +1,7 @@
 package com.frontend.oportunia.data.mapper
 
 import com.frontend.oportunia.data.remote.dto.CompanyDto
+import com.frontend.oportunia.data.remote.dto.CompanySDto
 import com.frontend.oportunia.domain.model.Company
 import javax.inject.Inject
 
@@ -11,10 +12,21 @@ class CompanyMapper @Inject constructor() {
             name = dto.name,
             description = dto.description,
             type = dto.type,
-            ubication = dto.ubication,
+            location = dto.location,
             employees = dto.employees,
             websiteUrl = dto.websiteUrl,
-            rating = dto.rating
+            rating = dto.rating,
+            vision = dto.vision,
+            mission = dto.mission
+        )
+    }
+
+    fun mapToDomainSDto(dto: CompanySDto): Company {
+        return Company(
+            id = dto.id,
+            name = dto.name,
+            description = dto.description,
+            rating = dto.rating,
         )
     }
 
@@ -29,11 +41,12 @@ class CompanyMapper @Inject constructor() {
             name = domain.name,
             description = domain.description,
             type = domain.type,
-            ubication = domain.ubication,
+            location = domain.location,
             employees = domain.employees,
             websiteUrl = domain.websiteUrl,
-            rating = domain.rating
-
+            rating = domain.rating,
+            vision = domain.vision,
+            mission = domain.mission
         )
     }
 

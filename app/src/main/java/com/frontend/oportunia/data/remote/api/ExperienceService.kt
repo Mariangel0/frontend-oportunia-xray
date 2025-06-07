@@ -22,7 +22,7 @@ public interface ExperienceService {
     @POST("experiences")
     suspend fun createExperience(@Body ability: ExperienceDto): Response<ExperienceDto>
 
-    @GET("experiences/{userId}")
+    @GET("experiences/student/{userId}")
     suspend fun getExperiencesByStudentId(@Path("userId") userId: Long): Response<List<ExperienceDto>>
 
     @PUT("experiences/{id}")

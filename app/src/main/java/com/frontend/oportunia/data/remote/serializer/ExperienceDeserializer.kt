@@ -21,7 +21,12 @@ class ExperienceDeserializer : JsonDeserializer<ExperienceDto> {
         val id = jsonObject.get("id").asLong
         val role = jsonObject.get("role").asString
 
-        val timeline = jsonObject.get("timeline").asString
+        val timeline = if (
+            jsonObject.has("timeline") &&
+            !jsonObject.get("timeline").isJsonNull
+        ) {
+            jsonObject.get("timeline").asString
+        } else "Tiempo indefinido"
 
         val studentDto = if (jsonObject.has("student") && !jsonObject.get("student").isJsonNull) {
             context.deserialize<StudentDto>(jsonObject.get("student"), StudentDto::class.java)
@@ -29,7 +34,12 @@ class ExperienceDeserializer : JsonDeserializer<ExperienceDto> {
             throw JsonParseException("Experience must contain non-null student")
         }
 
-        val companyName = jsonObject.get("company").asString
+        val companyName = if (
+            jsonObject.has("company") &&
+            !jsonObject.get("company").isJsonNull
+        ) {
+            jsonObject.get("company").asString
+        } else "Empresa desconocida"
 
         return ExperienceDto(
             id = id,
