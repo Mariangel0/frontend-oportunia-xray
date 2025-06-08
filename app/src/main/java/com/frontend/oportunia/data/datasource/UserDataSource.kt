@@ -31,6 +31,11 @@ class UserDataSource @Inject constructor(
 //    suspend fun getStudents(): Flow<List<UserDto>> // Obtener solo estudiantes
 ////    suspend fun getAdmins(): Flow<List<UserDto>> // Obtener solo administradores
 
+    suspend fun getCurrentUser(): Response<UserDto> {
+        return  userService.getCurrentUser()
+    }
+
+
 
     private suspend fun <T> safeApiCall(apiCall: suspend () -> Response<T>): Result<T> = try {
         val response = apiCall()

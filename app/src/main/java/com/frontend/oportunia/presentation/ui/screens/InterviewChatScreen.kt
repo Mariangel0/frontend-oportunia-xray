@@ -2,18 +2,7 @@ package com.frontend.oportunia.presentation.ui.screens
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -21,124 +10,47 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Send
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.oportunia.R
+import com.frontend.oportunia.domain.model.ChatMessage
 import com.frontend.oportunia.presentation.ui.components.HeaderType
 import com.frontend.oportunia.presentation.ui.layout.MainLayout
-import kotlinx.coroutines.delay
+import com.frontend.oportunia.presentation.viewmodel.InterviewViewModel
 import kotlinx.coroutines.launch
-import java.util.UUID
-import androidx.compose.material3.HorizontalDivider
+import java.util.*
 
-data class ChatMessage(
-    val id: String,
-    val content: String,
-    val isFromUser: Boolean,
-    val timestamp: Long = System.currentTimeMillis()
-)
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InterviewChatScreen(
     navController: NavController,
     paddingValues: PaddingValues,
-    jobPosition: String,
-    companyName: String,
-    interviewType: String
+    studentId: Long,
+    interviewViewModel: InterviewViewModel,
 ) {
+    val context = LocalContext.current
+    val messages = interviewViewModel.messages
+    val isLoading = interviewViewModel.isLoading
+    val jobPosition = interviewViewModel.currentJobPosition
+    val interviewType = interviewViewModel.currentInterviewType
     var messageText by remember { mutableStateOf("") }
-    var messages by remember { mutableStateOf<List<ChatMessage>>(emptyList()) }
-    var isLoading by remember { mutableStateOf(false) }
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(Unit) {
-        val welcomeMessage = ChatMessage(
-            id = UUID.randomUUID().toString(),
-            content = "¡Hola! Soy tu asistente de entrevistas de OportunIA. Estamos simulando una entrevista para el puesto de $jobPosition en $companyName. Este será un proceso de entrevista $interviewType. ¿Estás listo para comenzar?",
-            isFromUser = false
-        )
-        messages = listOf(welcomeMessage)
-    }
-
-    // Auto-scroll to bottom when new messages arrive
     LaunchedEffect(messages.size) {
         if (messages.isNotEmpty()) {
             coroutineScope.launch {
-                listState.animateScrollToItem(messages.size - 1)
+                listState.animateScrollToItem(messages.lastIndex)
             }
-        }
-    }
-
-    // Function to simulate AI response (replace with actual API call later)
-    fun sendMessage(userMessage: String) {
-        // Add user message
-        val newUserMessage = ChatMessage(
-            id = UUID.randomUUID().toString(),
-            content = userMessage,
-            isFromUser = true
-        )
-        messages = messages + newUserMessage
-
-        // Simulate AI thinking
-        isLoading = true
-
-        coroutineScope.launch {
-            // Simulate network delay
-            delay(1500)
-
-            // Mock AI responses based on common interview questions
-            val aiResponse = when {
-                userMessage.lowercase().contains("listo") || userMessage.lowercase().contains("comenzar") ->
-                    "Perfecto, comencemos. Cuéntame un poco sobre ti y por qué te interesa trabajar en $companyName."
-
-                userMessage.lowercase().contains("experiencia") ->
-                    "Interesante experiencia. ¿Puedes darme un ejemplo específico de un proyecto desafiante que hayas completado?"
-
-                userMessage.lowercase().contains("fortaleza") ->
-                    "Esa es una buena fortaleza. ¿Cómo la aplicarías específicamente en el rol de $jobPosition?"
-
-                userMessage.lowercase().contains("debilidad") ->
-                    "Aprecio tu honestidad. ¿Qué pasos estás tomando para mejorar en esa área?"
-
-                userMessage.lowercase().contains("pregunta") ->
-                    "Excelente pregunta. Eso demuestra tu interés genuino en la posición. ¿Hay algo más que tegustaría saber sobre $companyName?"
-
-                else -> "Muy bien. Basándome en lo que me has contado, me gustaría profundizar más. ¿Podrías contarme sobre una situación donde tuviste que trabajar bajo presión?"
-            }
-
-            val aiMessage = ChatMessage(
-                id = UUID.randomUUID().toString(),
-                content = aiResponse,
-                isFromUser = false
-            )
-
-            messages = messages + aiMessage
-            isLoading = false
         }
     }
 
@@ -148,15 +60,9 @@ fun InterviewChatScreen(
         title = stringResource(R.string.interview_chat),
         onBackClick = { navController.navigateUp() }
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            // Chat header with company info
-            InterviewChatHeader(
-                interviewType = interviewType
-            )
+        Column(modifier = Modifier.fillMaxSize()) {
+            InterviewChatHeader(interviewType = interviewType)
 
-            // Messages list
             LazyColumn(
                 state = listState,
                 modifier = Modifier
@@ -166,24 +72,20 @@ fun InterviewChatScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(vertical = 16.dp)
             ) {
-                items(messages) { message ->
-                    ChatMessageItem(message = message)
-                }
-
-                if (isLoading) {
-                    item {
-                        TypingIndicator()
-                    }
-                }
+                items(messages) { message -> ChatMessageItem(message) }
+                if (isLoading) item { TypingIndicator() }
             }
 
-            // Message input
             ChatMessageInput(
                 messageText = messageText,
                 onMessageTextChange = { messageText = it },
                 onSendMessage = {
                     if (messageText.isNotBlank()) {
-                        sendMessage(messageText)
+                        interviewViewModel.sendMessage(
+                            context = context,
+                            studentId = studentId,
+                            message = messageText
+                        )
                         messageText = ""
                     }
                 },
@@ -194,9 +96,7 @@ fun InterviewChatScreen(
 }
 
 @Composable
-fun InterviewChatHeader(
-    interviewType: String
-) {
+fun InterviewChatHeader(interviewType: String) {
     Column {
         Row(
             modifier = Modifier
@@ -214,7 +114,7 @@ fun InterviewChatHeader(
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.logo),
-                    contentDescription = "OportunIA",
+                    contentDescription = stringResource(R.string.app_name),
                     modifier = Modifier.size(24.dp),
                     tint = MaterialTheme.colorScheme.primary
                 )
@@ -224,7 +124,7 @@ fun InterviewChatHeader(
 
             Column {
                 Text(
-                    text = "OportunIA",
+                    text = stringResource(R.string.app_name),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSecondaryContainer
@@ -238,7 +138,7 @@ fun InterviewChatHeader(
         }
         HorizontalDivider(
             modifier = Modifier.fillMaxWidth(),
-            thickness = 0.3.dp,
+            thickness = 0.5.dp,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
         )
     }
@@ -307,7 +207,7 @@ fun TypingIndicator() {
                             .size(8.dp)
                             .clip(CircleShape)
                             .background(
-                                MaterialTheme.colorScheme.onSurface
+                                MaterialTheme.colorScheme.onSurface.copy(alpha = alpha)
                             )
                     )
                     if (index < 2) {

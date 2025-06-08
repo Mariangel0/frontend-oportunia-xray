@@ -62,7 +62,7 @@ fun MenuScreen(
             headerType = HeaderType.WELCOME,
             username = username,
         ) {
-            DailyQuizAlert(onClick = {})
+            DailyQuizAlert(navController = navController)
             StreakCalendar()
             Learning(navController = navController, studentId = student?.user?.id ?: -1L)
             CompaniesCarousel(companyViewModel = companyViewModel, navController = navController)

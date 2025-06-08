@@ -48,13 +48,14 @@ sealed class NavRoutes {
     }
 
     data object InterviewChat : NavRoutes() {
-        const val ROUTE = "interview_chat/{studentId}/{jobPosition}/{companyName}/{interviewType}"
+        const val ROUTE = "interview_chat/{studentId}"
         const val ARG_INC_ID = "studentId"
-        const val ARG_JOB_POSITION = "jobPosition"
-        const val ARG_COMPANY_NAME = "companyName"
-        const val ARG_INTERVIEW_TYPE = "interviewType"
 
-        fun createRoute(studentId: Long, jobPosition: String, companyName: String, interviewType: String) = "interview_chat/$studentId/$jobPosition/$companyName/$interviewType"
+        fun createRoute(studentId: Long) = "interview_chat/$studentId"
+    }
+
+    data object QuizScreen : NavRoutes() {
+        const val ROUTE = "quiz"
     }
 
 }

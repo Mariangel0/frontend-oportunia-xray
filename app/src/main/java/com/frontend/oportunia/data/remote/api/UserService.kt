@@ -29,4 +29,7 @@ interface UserService {
 
     @DELETE("users/{id}")
     suspend fun deleteUser(@Path("id") id: Long): Response<Unit>
+
+    @GET("users/current")
+    suspend fun getCurrentUser(): Response<UserDto>
 }

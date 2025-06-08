@@ -123,5 +123,13 @@
     <string name="interview_chat">Entrevista Chat</string>
     <string name="type_your_message">Escribe tu mensaje</string>
     <string name="send">Enviar</string>
+    <string name="interview_intro_template">¡Hola! Soy tu asistente de entrevistas, OportunIA. Estamos simulando una entrevista para el puesto de {jobPosition} en {companyName}. Este será un proceso de entrevista {interviewType}. ¿Estás listo para comenzar?</string>
+    <string name="no_model_response">Sin respuesta del modelo.</string>
+    <string name="network_error_template">Error de red: %1$s</string>
+    <string name="start_ai_interview">Inicia con la primera pregunta para el usuario de una nueva entrevista.</string>
+
+
+    <!--  Quiz Screen  -->
+    <string name="next">Siguiente</string>
 
 </resources>

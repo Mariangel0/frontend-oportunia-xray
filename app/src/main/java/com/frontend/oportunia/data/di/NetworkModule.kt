@@ -15,6 +15,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import com.frontend.oportunia.data.remote.api.CompanyService
 import com.frontend.oportunia.data.remote.api.ExperienceService
+import com.frontend.oportunia.data.remote.api.InterviewService
 import com.frontend.oportunia.data.remote.api.StudentService
 import com.frontend.oportunia.data.remote.api.UserService
 import com.frontend.oportunia.data.remote.dto.AbilityDto
@@ -134,5 +135,10 @@ object NetworkModule {
     @Singleton
     fun provideAuthService(retrofit: Retrofit): AuthService =
         retrofit.create(AuthService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideInterviewApiService(retrofit: Retrofit): InterviewService =
+        retrofit.create(InterviewService::class.java)
 }
 

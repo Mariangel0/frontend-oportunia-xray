@@ -17,10 +17,12 @@ import com.frontend.oportunia.presentation.ui.screens.LoginScreen
 import com.frontend.oportunia.presentation.ui.screens.MainScreen
 import com.frontend.oportunia.presentation.ui.screens.MenuScreen
 import com.frontend.oportunia.presentation.ui.screens.PerfilScreen
+import com.frontend.oportunia.presentation.ui.screens.QuizScreen
 import com.frontend.oportunia.presentation.ui.screens.RegisterScreen
 import com.frontend.oportunia.presentation.ui.screens.SkillsScreen
 import com.frontend.oportunia.presentation.viewmodel.AdviceViewModel
 import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
+import com.frontend.oportunia.presentation.viewmodel.InterviewViewModel
 import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
 import com.frontend.oportunia.presentation.viewmodel.RegisterViewModel
 import com.frontend.oportunia.presentation.viewmodel.SkillsViewModel
@@ -34,7 +36,8 @@ fun NavGraph(
     loginViewModel: LoginViewModel,
     registerViewModel: RegisterViewModel,
     skillsViewModel: SkillsViewModel,
-    adviceViewModel: AdviceViewModel
+    adviceViewModel: AdviceViewModel,
+    interviewViewModel: InterviewViewModel
 ) {
     NavHost(navController, startDestination = NavRoutes.MainPage.ROUTE) {
 
@@ -121,33 +124,28 @@ fun NavGraph(
             InterviewMenuScreen(
                 companyViewModel = companyViewModel,
                 navController = navController,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
+                interviewViewModel = interviewViewModel
             )
         }
 
         composable(
             route = NavRoutes.InterviewChat.ROUTE,
-            arguments = listOf(
-                navArgument(NavRoutes.InterviewChat.ARG_JOB_POSITION) { type = NavType.StringType },
-                navArgument(NavRoutes.InterviewChat.ARG_COMPANY_NAME) { type = NavType.StringType },
-                navArgument(NavRoutes.InterviewChat.ARG_INTERVIEW_TYPE) { type = NavType.StringType }
-            )
+            arguments = listOf(navArgument(NavRoutes.InterviewChat.ARG_INC_ID) {
+                type = NavType.LongType
+            })
         ) { backStackEntry ->
-            val jobPosition =
-                backStackEntry.arguments?.getString(NavRoutes.InterviewChat.ARG_JOB_POSITION) ?: ""
-            val companyName =
-                backStackEntry.arguments?.getString(NavRoutes.InterviewChat.ARG_COMPANY_NAME) ?: ""
-            val interviewType =
-                backStackEntry.arguments?.getString(NavRoutes.InterviewChat.ARG_INTERVIEW_TYPE)
-                    ?: ""
-
+            val stdId = backStackEntry.arguments?.getLong(NavRoutes.InterviewChat.ARG_INC_ID) ?: 0L
             InterviewChatScreen(
                 navController = navController,
                 paddingValues = paddingValues,
-                jobPosition = jobPosition,
-                companyName = companyName,
-                interviewType = interviewType
+                interviewViewModel = interviewViewModel,
+                studentId = stdId
             )
+        }
+
+        composable(NavRoutes.QuizScreen.ROUTE) {
+            QuizScreen(navController, paddingValues)
         }
     }
 }

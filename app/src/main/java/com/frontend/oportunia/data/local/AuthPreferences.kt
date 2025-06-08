@@ -5,8 +5,11 @@ import android.util.Log
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.datastore.preferences.core.edit
+import com.frontend.oportunia.data.di.NetworkModule.provideGson
+import com.frontend.oportunia.data.remote.dto.UserDto
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -36,6 +39,7 @@ class AuthPreferences @Inject constructor(
     private object PreferencesKeys {
         val AUTH_TOKEN = stringPreferencesKey("auth_token")
         val USERNAME = stringPreferencesKey("username")
+        val USER_JSON = stringPreferencesKey("user_json")
     }
 
     /**
@@ -153,6 +157,7 @@ class AuthPreferences @Inject constructor(
             dataStore.edit { preferences ->
                 preferences.remove(PreferencesKeys.AUTH_TOKEN)
                 preferences.remove(PreferencesKeys.USERNAME)
+                preferences.remove(PreferencesKeys.USER_JSON)
             }
             Log.d(TAG, "Auth data cleared")
         } catch (e: Exception) {
@@ -173,4 +178,34 @@ class AuthPreferences @Inject constructor(
         Log.d(TAG, "Checking authentication status: $isAuth")
         return isAuth
     }
+
+    suspend fun saveUser(user: UserDto) {
+        try {
+            val json = provideGson().toJson(user)
+            dataStore.edit { prefs ->
+                prefs[PreferencesKeys.USER_JSON] = json
+            }
+            Log.d(TAG, "UserDto guardado en JSON")
+        } catch (e: Exception) {
+            Log.e(TAG, "Error guardando UserDto: ${e.message}", e)
+        }
+    }
+
+    suspend fun getSavedUser(): UserDto? {
+        return try {
+            val json = dataStore.data.map { prefs ->
+                prefs[PreferencesKeys.USER_JSON]
+            }.firstOrNull()
+
+            if (!json.isNullOrEmpty()) {
+                provideGson().fromJson(json, UserDto::class.java)
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error recuperando UserDto: ${e.message}", e)
+            null
+        }
+    }
+
 }
