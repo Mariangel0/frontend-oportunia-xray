@@ -14,19 +14,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.List
-import androidx.compose.material.icons.filled.ThumbUp
-import androidx.compose.material.icons.outlined.AccountBox
-import androidx.compose.material.icons.outlined.Build
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.oportunia.R
 import com.frontend.oportunia.presentation.ui.components.CustomCardWithText
@@ -36,9 +31,8 @@ import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
-
 import com.frontend.oportunia.presentation.ui.components.HeaderType
 import com.frontend.oportunia.presentation.ui.layout.MainLayout
 import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
@@ -70,12 +64,8 @@ fun MenuScreen(
     }
 }
 
-
-
-
 @Composable
 fun Learning(navController: NavController, studentId: Long) {
-    // Usar el composable reutilizable
     CustomCardWithText(
         title = stringResource(id = R.string.learning)
     ) {
@@ -86,28 +76,27 @@ fun Learning(navController: NavController, studentId: Long) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             LearnItem(
-                icon = Icons.Outlined.AccountBox,
+                iconResId = R.drawable.icon_icon27,
                 text = "Entrevistas",
                 onClick = { navController.navigate(NavRoutes.InterviewScreen.createRoute(studentId)) }
             )
             LearnItem(
-                icon = Icons.AutoMirrored.Outlined.List,
+                iconResId = R.drawable.icon_curriculum,
                 text = "Curriculum",
-                onClick = { /* Navegar si se quiere */ }
+                onClick = { navController.navigate(NavRoutes.CurriculumScreen.ROUTE) }
             )
             LearnItem(
-                icon = Icons.Outlined.Build,
+                iconResId = R.drawable.icon_shield_ban,
                 text = "Habilidades",
-                onClick = { navController.navigate(NavRoutes.SkillScreen.createRoute(studentId))}
+                onClick = { navController.navigate(NavRoutes.SkillScreen.createRoute(studentId)) }
             )
-
         }
     }
 }
 
 @Composable
 fun LearnItem(
-    icon: ImageVector,
+    iconResId: Int,
     text: String,
     onClick: () -> Unit
 ) {
@@ -117,7 +106,7 @@ fun LearnItem(
         modifier = Modifier.clickable(onClick = onClick)
     ) {
         Icon(
-            imageVector = icon,
+            painter = painterResource(id = iconResId),
             contentDescription = text,
             modifier = Modifier.size(32.dp),
             tint = MaterialTheme.colorScheme.primary
@@ -140,10 +129,10 @@ fun CompaniesCarousel(companyViewModel: CompanyViewModel, navController: NavCont
 
     CustomCardWithText(
         title = stringResource(id = R.string.companies),
-        )
-    { Box(modifier = Modifier.fillMaxWidth().clickable{
-        navController.navigate(NavRoutes.CompanyMenu.ROUTE)
-    }) {
+    ) {
+        Box(modifier = Modifier.fillMaxWidth().clickable {
+            navController.navigate(NavRoutes.CompanyMenu.ROUTE)
+        }) {
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -156,10 +145,8 @@ fun CompaniesCarousel(companyViewModel: CompanyViewModel, navController: NavCont
                 }
             }
         }
-
     }
 }
-
 
 @Composable
 fun CompanyIcon(
@@ -183,4 +170,3 @@ fun CompanyIcon(
         )
     }
 }
-

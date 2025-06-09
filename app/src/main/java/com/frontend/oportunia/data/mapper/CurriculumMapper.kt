@@ -2,21 +2,22 @@ package com.frontend.oportunia.data.mapper
 
 import com.frontend.oportunia.data.remote.dto.CurriculumDto
 import com.frontend.oportunia.domain.model.Curriculum
+import javax.inject.Inject
 
-class CurriculumMapper(
+class CurriculumMapper  @Inject constructor(
     private val studentMapper: StudentMapper
 ) {
     fun mapToDomain(dto: CurriculumDto): Curriculum = Curriculum(
         id = dto.id,
-        studentId = studentMapper.mapToDomain(dto.studentId),
         archiveUrl = dto.archiveUrl,
-        feedback = dto.feedback
+        s3Key = dto.s3Key,
+        student = studentMapper.mapToDomain(dto.student),
     )
 
     fun mapToDto(domain: Curriculum): CurriculumDto = CurriculumDto(
         id = domain.id,
-        studentId = studentMapper.mapToDto(domain.studentId),
+        student = studentMapper.mapToDto(domain.student),
         archiveUrl = domain.archiveUrl,
-        feedback = domain.feedback
+        s3Key = domain.s3Key
     )
 }

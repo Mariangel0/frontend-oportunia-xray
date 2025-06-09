@@ -1,6 +1,7 @@
 package com.frontend.oportunia
 
 
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,6 +24,7 @@ import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
 import com.frontend.oportunia.presentation.viewmodel.QuizViewModel
 import com.frontend.oportunia.presentation.viewmodel.RegisterViewModel
 import com.frontend.oportunia.presentation.viewmodel.SkillsViewModel
+import com.frontend.oportunia.presentation.viewmodel.CurriculumViewModel
 
 
 @AndroidEntryPoint
@@ -43,6 +45,8 @@ class MainActivity : ComponentActivity() {
 
     private val adviceViewModel: AdviceViewModel by viewModels ()
 
+    private val curriculumViewModel: CurriculumViewModel by viewModels ()
+
     private val interviewViewModel: InterviewViewModel by viewModels ()
 
     private val quizViewModel: QuizViewModel by viewModels ()
@@ -52,7 +56,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             OportunIATheme {
-                Main(companyViewModel, loginViewModel, registerViewModel, skillViewModel, adviceViewModel, interviewViewModel, quizViewModel)
+                Main(companyViewModel, loginViewModel, registerViewModel, skillViewModel, adviceViewModel, interviewViewModel, quizViewModel, curriculumViewModel)
             }
         }
     }
@@ -62,7 +66,7 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, registerViewModel: RegisterViewModel, skillViewModel: SkillsViewModel, adviceViewModel: AdviceViewModel, interviewViewModel: InterviewViewModel, quizViewModel: QuizViewModel) {
+fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, registerViewModel: RegisterViewModel, skillViewModel: SkillsViewModel, adviceViewModel: AdviceViewModel, interviewViewModel: InterviewViewModel, quizViewModel: QuizViewModel, curriculumViewModel: CurriculumViewModel) {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
@@ -88,7 +92,8 @@ fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, reg
             skillsViewModel = skillViewModel,
             adviceViewModel = adviceViewModel,
             interviewViewModel = interviewViewModel,
-            quizViewModel = quizViewModel
+            quizViewModel = quizViewModel,
+            curriculumViewModel = curriculumViewModel
         )
     }
 }
