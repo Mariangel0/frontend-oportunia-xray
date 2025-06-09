@@ -2,8 +2,10 @@ package com.frontend.oportunia.data.repository
 
 import android.util.Log
 import com.frontend.oportunia.data.datasource.CurriculumDataSource
+import com.frontend.oportunia.data.mapper.CVAnalysisMapper
 import com.frontend.oportunia.data.mapper.CurriculumMapper
 import com.frontend.oportunia.domain.error.DomainError
+import com.frontend.oportunia.domain.model.AnalyzedCVResponse
 import com.frontend.oportunia.domain.model.Curriculum
 import com.frontend.oportunia.domain.repository.CurriculumRepository
 import kotlinx.coroutines.flow.first
@@ -15,7 +17,8 @@ import javax.inject.Inject
 
 class CurriculumRepositoryImpl  @Inject constructor(
     private val dataSource: CurriculumDataSource,
-    private val curriculumMapper: CurriculumMapper
+    private val curriculumMapper: CurriculumMapper,
+    private val cvAnalysisMapper: CVAnalysisMapper
 ) : CurriculumRepository {
 
     companion object {
@@ -59,6 +62,19 @@ class CurriculumRepositoryImpl  @Inject constructor(
             curriculumMapper.mapToDomain(dto)
         } else {
             throw result.exceptionOrNull() ?: Exception("Upload failed with unknown error")
+        }
+    }
+
+    override suspend fun uploadCurriculumAI(fileData: ByteArray, studentId: Long): Result<AnalyzedCVResponse> = runCatching {
+        val requestFile = RequestBody.create("application/pdf".toMediaTypeOrNull(), fileData)
+        val body = MultipartBody.Part.createFormData("file", "curriculum.pdf", requestFile)
+
+        val result = dataSource.uploadCurriculumAI(body, studentId)
+        if (result.isSuccess) {
+            val dto = result.getOrThrow()
+            cvAnalysisMapper.mapToDomain(dto)
+        } else {
+            throw result.exceptionOrNull() ?: Exception("AI analysis failed with unknown error")
         }
     }
 

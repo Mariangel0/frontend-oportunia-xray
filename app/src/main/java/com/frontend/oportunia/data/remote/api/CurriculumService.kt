@@ -1,5 +1,6 @@
 package com.frontend.oportunia.data.remote.api
 
+import com.frontend.oportunia.data.remote.dto.AnalyzedCVResponseDto
 import com.frontend.oportunia.data.remote.dto.CurriculumDto
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -28,4 +29,12 @@ interface CurriculumService {
 
     @DELETE("curriculums/{id}")
     suspend fun deleteCurriculum(@Path("id") id: Long): Response<Unit>
+
+    @Multipart
+    @POST("api/ai/{studentId}/curriculum")
+    suspend fun uploadCurriculumAI(
+        @Path("studentId") studentId: Long,
+        @Part file: MultipartBody.Part
+    ): Response<AnalyzedCVResponseDto>
+
 }

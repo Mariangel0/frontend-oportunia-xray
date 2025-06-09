@@ -41,7 +41,7 @@ sealed class NavRoutes {
     }
 
     data object CurriculumScreen : NavRoutes() {
-        const val ROUTE = "curriculum"
+        const val ROUTE = "curriculum/{studentId}"
         const val ARG_STD_ID = "studentId"
 
         fun createRoute(studentId: Long) = "curriculum/$studentId"
@@ -73,6 +73,10 @@ sealed class NavRoutes {
         const val ARG_QU_ID = "studentId"
 
         fun createRoute(studentId: Long) = "quiz/$studentId"
+    }
+
+    data object CVAnalysis : NavRoutes() {
+        const val ROUTE = "cv_analysis"
     }
 
 }

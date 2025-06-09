@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.frontend.oportunia.presentation.ui.screens.AddReviewScreen
 import com.frontend.oportunia.presentation.ui.screens.AdviceScreen
+import com.frontend.oportunia.presentation.ui.screens.CVAnalysisScreen
 import com.frontend.oportunia.presentation.ui.screens.CompanyScreen
 import com.frontend.oportunia.presentation.ui.screens.CompanyTabsScreen
 import com.frontend.oportunia.presentation.ui.screens.InterviewChatScreen
@@ -141,14 +142,20 @@ fun NavGraph(
         }
 
 
-        composable(NavRoutes.CurriculumScreen.ROUTE) {
+        composable(
+            route = NavRoutes.CurriculumScreen.ROUTE,
+            arguments = listOf(navArgument(NavRoutes.CurriculumScreen.ARG_STD_ID) {
+                type = NavType.LongType
+            })
+        ) { backStackEntry ->
+            val studentId = backStackEntry.arguments?.getLong(NavRoutes.CurriculumScreen.ARG_STD_ID) ?: 0L
             CurriculumScreen(
+                studentId = studentId,
                 navController = navController,
                 paddingValues = paddingValues,
                 curriculumViewModel = curriculumViewModel
             )
         }
-
 
         composable(
             route = NavRoutes.InterviewScreen.ROUTE,
@@ -192,6 +199,13 @@ fun NavGraph(
                 paddingValues = paddingValues,
                 quizViewModel = quizViewModel,
                 studentId = stdId
+            )
+        }
+
+        composable(NavRoutes.CVAnalysis.ROUTE) {
+            CVAnalysisScreen(
+                navController = navController,
+                viewModel = curriculumViewModel
             )
         }
 

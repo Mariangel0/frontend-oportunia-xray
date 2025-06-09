@@ -83,7 +83,7 @@ fun Learning(navController: NavController, studentId: Long) {
             LearnItem(
                 iconResId = R.drawable.icon_curriculum,
                 text = "Curriculum",
-                onClick = { navController.navigate(NavRoutes.CurriculumScreen.ROUTE) }
+                onClick = { navController.navigate(NavRoutes.CurriculumScreen.createRoute(studentId)) }
             )
             LearnItem(
                 iconResId = R.drawable.icon_shield_ban,

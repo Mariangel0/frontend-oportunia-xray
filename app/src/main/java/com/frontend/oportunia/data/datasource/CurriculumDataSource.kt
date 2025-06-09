@@ -2,6 +2,7 @@ package com.frontend.oportunia.data.datasource
 
 import android.util.Log
 import com.frontend.oportunia.data.remote.api.CurriculumService
+import com.frontend.oportunia.data.remote.dto.AnalyzedCVResponseDto
 import com.frontend.oportunia.data.remote.dto.CurriculumDto
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -57,6 +58,13 @@ class CurriculumDataSource @Inject constructor(
         studentId: Long
     ): Result<CurriculumDto> = safeApiCall {
         curriculumService.uploadCurriculum(studentId, filePart)
+    }
+
+    suspend fun uploadCurriculumAI(
+        filePart: MultipartBody.Part,
+        studentId: Long
+    ): Result<AnalyzedCVResponseDto> = safeApiCall {
+        curriculumService.uploadCurriculumAI(studentId, filePart)
     }
 
     private suspend fun <T> safeApiCall(apiCall: suspend () -> Response<T>): Result<T> {

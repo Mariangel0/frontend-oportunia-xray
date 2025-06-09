@@ -1,11 +1,13 @@
 package com.frontend.oportunia.presentation.ui.screens
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -28,15 +30,14 @@ import com.frontend.oportunia.presentation.ui.components.HeaderType
 import com.frontend.oportunia.presentation.ui.layout.MainLayout
 import com.frontend.oportunia.presentation.viewmodel.CurriculumViewModel
 import com.frontend.oportunia.presentation.viewmodel.UploadState
-
-
+import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
 
 fun getFileName(uri: Uri, context: Context): String? {
     val cursor = context.contentResolver.query(uri, null, null, null, null)
     cursor?.use {
         val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
         if (it.moveToFirst()) {
-            return it.getString(nameIndex) // Devuelve el nombre del archivo
+            return it.getString(nameIndex)
         }
     }
     return null
@@ -44,6 +45,7 @@ fun getFileName(uri: Uri, context: Context): String? {
 
 @Composable
 fun CurriculumScreen(
+    studentId: Long,
     navController: NavController,
     paddingValues: PaddingValues,
     curriculumViewModel: CurriculumViewModel
@@ -52,6 +54,7 @@ fun CurriculumScreen(
     var fileUri by remember { mutableStateOf<Uri?>(null) }
     var fileName by remember { mutableStateOf<String?>(null) }
     val uploadState by curriculumViewModel.uploadState.collectAsState()
+    var showSuccessDialog by remember { mutableStateOf(false) }
 
     val documentLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -60,16 +63,18 @@ fun CurriculumScreen(
         fileName = uri?.let { getFileName(it, context) }
     }
 
-    LaunchedEffect(key1 = curriculumViewModel) {
+    LaunchedEffect(Unit) {
         curriculumViewModel.uploadState.collect { uploadState ->
             when (uploadState) {
                 is UploadState.Success -> {
-                    Toast.makeText(context, "Currículum subido exitosamente", Toast.LENGTH_SHORT).show()
+                    showSuccessDialog = true
                     fileUri = null
                     fileName = null
+                    curriculumViewModel.resetUploadState()
                 }
                 is UploadState.Error -> {
                     Toast.makeText(context, uploadState.message, Toast.LENGTH_SHORT).show()
+                    curriculumViewModel.resetUploadState()
                 }
                 else -> Unit
             }
@@ -91,6 +96,8 @@ fun CurriculumScreen(
         ) {
             Text("Sube tu currículum para su análisis", style = MaterialTheme.typography.titleMedium)
 
+            FormatCard()
+
             Text(
                 "Nuestro sistema puede analizar tu currículum de dos formas:\n\n" +
                         "• ☁️ Análisis en la nube: extrae tus habilidades, educación y experiencia para guardarlas automáticamente en tu perfil.\n\n" +
@@ -109,18 +116,92 @@ fun CurriculumScreen(
                 }
             )
 
-            AnalysisButtons(
-                fileUri = fileUri,
-                onCloudAnalysisClick = {
-                    fileUri?.let { curriculumViewModel.uploadToTextract(it, studentId = 1L) }
-                },
-                onIAAnalysisClick = {
-                    Toast.makeText(context, "Funcionalidad IA pendiente", Toast.LENGTH_SHORT).show()
+            Crossfade(targetState = uploadState is UploadState.Loading) { isLoading ->
+                if (isLoading) {
+                    CircularProgressIndicator(color = Color(0xFF7C4DFF))
+                } else {
+                    AnalysisButtons(
+                        fileUri = fileUri,
+                        onCloudAnalysisClick = {
+                            fileUri?.let {
+                                curriculumViewModel.uploadToTextract(it, studentId)
+                            }
+                        },
+                        onIAAnalysisClick = {
+                            if (fileUri != null) {
+                                try {
+                                    val bytes = context.contentResolver.openInputStream(fileUri!!)!!.readBytes()
+                                    curriculumViewModel.analyzeCurriculumWithIA(bytes, studentId)
+                                    navController.navigate(NavRoutes.CVAnalysis.ROUTE)
+                                } catch (e: Exception) {
+                                    Toast.makeText(context, "Error leyendo archivo", Toast.LENGTH_SHORT).show()
+                                }
+                            } else {
+                                Toast.makeText(context, "Selecciona un archivo primero", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    )
                 }
-            )
+            }
+        }
+
+        if (showSuccessDialog) {
+            SuccessDialog {
+                showSuccessDialog = false
+            }
         }
     }
 }
+
+@Composable
+fun FormatCard() {
+    val context = LocalContext.current
+    val url = "https://oportunia-cv.s3.us-east-2.amazonaws.com/curriculums/FORMATO_CV_CD.pdf"
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(80.dp)
+            .clickable {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                context.startActivity(intent)
+            },
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFD1C4E9)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Default.Upload,
+                contentDescription = null,
+                tint = Color(0xFF512DA8),
+                modifier = Modifier.size(30.dp)
+            )
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+            Column {
+                Text(
+                    text = "Ver formato oficial",
+                    color = Color(0xFF512DA8),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                )
+                Text(
+                    text = "Solo para análisis en la nube",
+                    color = Color(0xFF512DA8),
+                    fontSize = 13.sp
+                )
+            }
+        }
+    }
+}
+
 
 @Composable
 fun FileUploadBox(
@@ -141,7 +222,7 @@ fun FileUploadBox(
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Icon(Icons.Default.Upload, contentDescription = null, tint = Color(0xFF7C4DFF))
                 Text("Cargar currículum", color = Color(0xFF7C4DFF), fontWeight = FontWeight.Bold)
-                Text("Usa un archivo .pdf o .docx", fontSize = 12.sp)
+                Text("Usa un archivo .pdf", fontSize = 12.sp)
             }
         }
     } else {
@@ -189,4 +270,41 @@ fun AnalysisButtons(
             Text("Análisis con IA", color = Color.White)
         }
     }
+}
+
+@Composable
+fun SuccessDialog(onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            Button(
+                onClick = onDismiss,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF7C4DFF),
+                    contentColor = Color.White
+                ),
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            ) {
+                Text("Aceptar", fontWeight = FontWeight.SemiBold)
+            }
+        },
+        title = {
+            Text(
+                text = "Análisis exitoso",
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+        },
+        text = {
+            Column {
+                Text("Tu currículum fue analizado correctamente.")
+                Text("Tus datos se han actualizado en tu perfil.")
+            }
+        },
+        shape = RoundedCornerShape(20.dp),
+        containerColor = Color(0xFFE8F5E9)
+    )
 }
