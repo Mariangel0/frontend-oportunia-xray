@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.frontend.oportunia.data.remote.dto.StudentDto
 import com.frontend.oportunia.data.remote.dto.UserDto
+import com.frontend.oportunia.domain.model.Role
 import com.frontend.oportunia.domain.model.Student
 import com.frontend.oportunia.domain.model.User
 import com.frontend.oportunia.domain.repository.StudentRepository
@@ -91,26 +92,34 @@ class RegisterViewModel @Inject constructor (
             return
         }
 
-
+        val idR = (1..9999).random().toLong()
         val user = User(
-            id = (1..9999).random().toLong(),
-            createDate = LocalDateTime.now().toString(),
+            id = idR,
+            createDate = Date(),
             email = email.value,
             enabled = true,
             firstName = name.value,
             lastName = lastName.value,
             password = password.value,
-            tokenExpired = false
+            tokenExpired = false,
+            roles = listOf(
+                Role(
+                    id = 1,
+                    name = "STUDENT"
+                )
+            )
         )
         val formattedDate = birthDate.value?.let { convertMillisToDate(it) } ?: ""
         val student = Student(
-            user = user,
+           // user = user,
+            id = idR,
             description = "Nuevo estudiante",
             premium = false,
             linkedinUrl = "",
             githubUrl = "" ,
             bornDate = formattedDate,
-            location = ""
+            location = "",
+
         )
 
         viewModelScope.launch {

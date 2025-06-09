@@ -2,8 +2,10 @@ package com.frontend.oportunia.data.repository
 
 import com.frontend.oportunia.data.datasource.UserDataSource
 import com.frontend.oportunia.data.mapper.UserMapper
+import com.frontend.oportunia.data.remote.dto.UserDto
 import com.frontend.oportunia.domain.model.User
 import com.frontend.oportunia.domain.repository.UserRepository
+import retrofit2.Response
 import java.net.UnknownHostException
 import javax.inject.Inject
 
@@ -29,9 +31,26 @@ class UserRepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
+    override suspend fun getCurrentUser(): Result<User?> {
+        return try {
+            val response: Response<UserDto> = dataSource.getCurrentUser()
+            if (response.isSuccessful && response.body() != null) {
+                val userDto: UserDto = response.body()!!
+                val userDomain: User = userMapper.mapToDomain(userDto)
+                Result.success(userDomain)
+            } else {
+                Result.failure(Exception("Error fetching current user: ${response.code()} ${response.message()}"))
+            }
+        } catch (e: UnknownHostException) {
+            Result.failure(Exception("Network error: Cannot connect to server."))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
 
 //    override suspend fun findUserById(userId: Long): Result<User> = runCatching {
-//        val userDto = dataSource.getUserById(userId) ?: throw DomainError.UserError("User not found")
+//        val userDto = dataSource.getUserById(userId)
 //        userMapper.mapToDomain(userDto)
 //    }.recoverCatching { throwable ->
 //        Log.e(TAG, "Failed to fetch user with ID: $userId", throwable)

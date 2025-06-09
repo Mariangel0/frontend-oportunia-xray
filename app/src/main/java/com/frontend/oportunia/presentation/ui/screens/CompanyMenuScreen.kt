@@ -47,7 +47,9 @@ import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
 import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
 
 @Composable
-fun CompanyScreen( paddingValues: PaddingValues, companyViewModel: CompanyViewModel,  navController: NavController,) {
+fun CompanyScreen( paddingValues: PaddingValues,
+                   companyViewModel: CompanyViewModel,
+                   navController: NavController) {
     val companyList by companyViewModel.companyList.collectAsState()
     val searchQuery = remember { mutableStateOf("") }
 

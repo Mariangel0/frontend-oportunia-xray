@@ -22,6 +22,7 @@ class StudentProgressMapper(
         totalInterviews = domain.totalInterviews,
         averageScore = domain.averageScore,
         uploadedCl = domain.uploadedCl,
-        lastActivity = domain.lastActivity
+        lastActivity = domain.lastActivity,
+
     )
 }

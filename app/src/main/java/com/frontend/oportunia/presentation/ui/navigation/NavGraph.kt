@@ -9,6 +9,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.frontend.oportunia.presentation.ui.screens.AddReviewScreen
 import com.frontend.oportunia.presentation.ui.screens.AdviceScreen
 import com.frontend.oportunia.presentation.ui.screens.CompanyScreen
 import com.frontend.oportunia.presentation.ui.screens.CompanyTabsScreen
@@ -23,9 +24,11 @@ import com.frontend.oportunia.presentation.ui.screens.QuizScreen
 import com.frontend.oportunia.presentation.ui.screens.RegisterScreen
 import com.frontend.oportunia.presentation.ui.screens.SkillsScreen
 import com.frontend.oportunia.presentation.viewmodel.AdviceViewModel
+import com.frontend.oportunia.presentation.viewmodel.CompanyReviewViewModel
 import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
 import com.frontend.oportunia.presentation.viewmodel.InterviewViewModel
 import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
+import com.frontend.oportunia.presentation.viewmodel.ProfileViewModel
 import com.frontend.oportunia.presentation.viewmodel.QuizViewModel
 import com.frontend.oportunia.presentation.viewmodel.RegisterViewModel
 import com.frontend.oportunia.presentation.viewmodel.SkillsViewModel
@@ -40,6 +43,8 @@ fun NavGraph(
     registerViewModel: RegisterViewModel,
     skillsViewModel: SkillsViewModel,
     adviceViewModel: AdviceViewModel,
+    profileViewModel: ProfileViewModel,
+    reviewViewModel: CompanyReviewViewModel,
     curriculumViewModel: CurriculumViewModel,
     interviewViewModel: InterviewViewModel,
     quizViewModel: QuizViewModel
@@ -85,7 +90,7 @@ fun NavGraph(
 
 
         composable(NavRoutes.Profile.ROUTE) {
-            PerfilScreen(navController, paddingValues,loginViewModel)
+            PerfilScreen(navController, paddingValues, profileViewModel)
         }
 
 
@@ -100,7 +105,23 @@ fun NavGraph(
                 companyId = compId,
                 companyViewModel = companyViewModel,
                 navController = navController,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
+                reviewViewModel = reviewViewModel,
+            )
+        }
+
+        composable(
+            route = NavRoutes.CompanyReview.ROUTE,
+            arguments = listOf(navArgument(NavRoutes.CompanyReview.ARG_COMP_ID) {
+                type = NavType.LongType
+            })
+        ){ backStackEntry ->
+            val compId = backStackEntry.arguments?.getLong(NavRoutes.CompanyReview.ARG_COMP_ID) ?: 0L
+            AddReviewScreen(
+                companyId = compId,
+                navController = navController,
+                paddingValues = paddingValues,
+                reviewViewModel = reviewViewModel
             )
         }
 

@@ -1,5 +1,6 @@
 package com.frontend.oportunia.data.remote.serializer
 
+import com.frontend.oportunia.data.remote.dto.RoleDto
 import com.frontend.oportunia.data.remote.dto.UserDto
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
@@ -17,8 +18,8 @@ class UserDeserializer : JsonDeserializer<UserDto> {
 
         val id = jsonObject.get("id").asLong
 
-        val createDate = jsonObject.get("createDate")?.let {
-            context.deserialize<Date>(it, Date::class.java)
+        val createDate: Date = jsonObject.get("createDate")?.let {
+            context.deserialize(it, Date::class.java)
         } ?: Date()
 
         val email = jsonObject.get("email").asString
@@ -27,7 +28,14 @@ class UserDeserializer : JsonDeserializer<UserDto> {
         val lastName = jsonObject.get("lastName").asString
         val password = jsonObject.get("password").asString
         val tokenExpired = jsonObject.get("tokenExpired").asBoolean
+        val roles = if (jsonObject.has("roles") && jsonObject.get("roles").isJsonArray) {
+            jsonObject.getAsJsonArray("roles").map { roleElement ->
+                context.deserialize<RoleDto>(roleElement, RoleDto::class.java)
+            }
+        } else emptyList()
 
-        return UserDto(id, createDate.toString(), email, enabled, firstName, lastName, password, tokenExpired)
+
+
+        return UserDto(id, createDate, email, enabled, firstName, lastName, password, tokenExpired, roles)
     }
 }

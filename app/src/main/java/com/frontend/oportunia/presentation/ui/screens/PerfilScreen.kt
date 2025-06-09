@@ -30,6 +30,7 @@ import com.frontend.oportunia.presentation.ui.components.HeaderType
 import com.frontend.oportunia.presentation.ui.layout.MainLayout
 import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
 import com.example.oportunia.R
+import com.frontend.oportunia.presentation.viewmodel.ProfileViewModel
 import java.time.LocalDate
 import java.time.Period
 import java.time.format.DateTimeFormatter
@@ -38,12 +39,13 @@ import java.time.format.DateTimeFormatter
 fun PerfilScreen(
     navController: NavController,
     paddingValues: PaddingValues,
-    loginViewModel: LoginViewModel
+    profileViewModel: ProfileViewModel
 ) {
-    val student by loginViewModel.loggedStudent.collectAsState()
+    val user by profileViewModel.currentUser.collectAsState()
+    val student by profileViewModel.loggedStudent.collectAsState()
 
-    val firstName = student?.user?.firstName ?: ""
-    val lastName = student?.user?.lastName ?: ""
+    val firstName = user?.firstName ?: ""
+    val lastName = user?.lastName ?: ""
     val description = student?.description ?: ""
     val premium = student?.premium ?: false
     val linkedinUrl = student?.linkedinUrl ?: ""
@@ -188,7 +190,8 @@ fun LinkedInAndGitHubIcons(linkedinUrl: String, githubUrl: String) {
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         IconButton(
-            onClick = { openUrl(context, linkedinUrl) },
+            onClick = {},
+           // onClick = { openUrl(context, linkedinUrl) },
             modifier = Modifier.weight(1f)
         ) {
             Icon(
@@ -200,7 +203,8 @@ fun LinkedInAndGitHubIcons(linkedinUrl: String, githubUrl: String) {
         }
 
         IconButton(
-            onClick = { openUrl(context, githubUrl) },
+            onClick = {},
+            //onClick = {  openUrl(context, githubUrl) },
             modifier = Modifier.weight(1f)
         ) {
             Icon(

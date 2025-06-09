@@ -4,9 +4,12 @@ data class Company(
     val id: Long,
     val name: String,
     val description: String,
-    val type: String,
-    val ubication: String,
-    val employees: Int,
-    val websiteUrl: String,
-    val rating: Float
+    val rating: Float,
+    val type: String? = null,
+    val location: String? = null,
+    val employees: Int? = null,
+    val websiteUrl: String? = null,
+    val vision: String? = null,
+    val mission: String? = null
 )
+

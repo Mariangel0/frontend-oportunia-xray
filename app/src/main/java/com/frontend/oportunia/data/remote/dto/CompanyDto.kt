@@ -4,10 +4,12 @@ data class CompanyDto(
     val id: Long,
     val name: String,
     val description: String,
-    val type: String,
-    val ubication: String,
-    val employees: Int,
-    val websiteUrl: String,
-    val rating: Float
-
+    val rating: Float,
+    val type: String?,
+    val location: String?,
+    val employees: Int?,
+    val websiteUrl: String?,
+    val vision: String?,
+    val mission: String?
 )
+

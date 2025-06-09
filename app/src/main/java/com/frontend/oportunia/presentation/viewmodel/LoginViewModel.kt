@@ -7,6 +7,7 @@ import com.frontend.oportunia.domain.model.Student
 import androidx.lifecycle.viewModelScope
 import com.frontend.oportunia.domain.model.Ability
 import com.frontend.oportunia.domain.model.Experience
+import com.frontend.oportunia.domain.model.User
 import com.frontend.oportunia.domain.repository.AuthRepository
 import com.frontend.oportunia.domain.repository.StudentRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,8 +45,8 @@ class LoginViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    private val _loggedStudent = MutableStateFlow<Student?>(null)
-    val loggedStudent: StateFlow<Student?> get() = _loggedStudent
+    private val _loggedUser = MutableStateFlow<User?>(null)
+    val loggedUser: StateFlow<User?> = _loggedUser
 
 
     private val _loginState = MutableStateFlow<LoginState>(LoginState.Initial)
@@ -104,16 +105,18 @@ class LoginViewModel @Inject constructor(
                 .onSuccess {
                     _loginState.value = LoginState.Success
                     _isLoggedIn.value = true
+                    authRepository.getCurrentUser()
+                        .onSuccess { user ->
+                            _loggedUser.value = user
+                            Log.d("LoginViewModel", "User loaded: ${user?.firstName}")
+                        }
+                        .onFailure {
+                            Log.e("LoginViewModel", "Failed to load current user after login: ${it.message}")
+                        }
+
                     Log.d("LoginViewModel", "Login successful for user: $username")
                 }
-                .onFailure { exception ->
-                    _loginState.value =
-                        LoginState.Error(exception.message ?: "Authentication failed")
-                    Log.e(
-                        "LoginViewModel",
-                        "Login failed for user: $username, error: ${exception.message}"
-                    )
-                }
+
 
 
             _isLoading.value = false
@@ -152,4 +155,8 @@ class LoginViewModel @Inject constructor(
     fun resetLoginState() {
         _loginState.value = LoginState.Initial
     }
+
+
+
+
 }

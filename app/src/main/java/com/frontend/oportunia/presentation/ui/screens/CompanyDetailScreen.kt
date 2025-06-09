@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -37,6 +38,19 @@ import com.frontend.oportunia.presentation.ui.layout.MainLayout
 import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
+import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
+import com.frontend.oportunia.presentation.viewmodel.CompanyReviewViewModel
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 @Composable
@@ -44,11 +58,13 @@ fun CompanyTabsScreen(
     companyId: Long,
     companyViewModel: CompanyViewModel,
     navController: NavController,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    reviewViewModel: CompanyReviewViewModel
 ) {
-    val tabTitles = listOf("Reseñas", "Información")
+    val tabTitles = listOf("Reseñas", "Información", "Agregar Reseña")
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
+    // Carga company y reviews al inicio
     LaunchedEffect(companyId) {
         companyViewModel.loadCompanyById(companyId)
         companyViewModel.getReviewsForCompany(companyId)
@@ -58,18 +74,20 @@ fun CompanyTabsScreen(
 
     MainLayout(
         paddingValues = paddingValues,
-        headerType = HeaderType.BACK,
-        title = selectedCompany?.name ?: stringResource(id = R.string.reviews),
-        onBackClick = { navController.navigateUp() }
+        headerType    = HeaderType.BACK,
+        title         = selectedCompany?.name ?: stringResource(id = R.string.reviews),
+        onBackClick   = { navController.navigateUp() }
     ) {
         Column(modifier = Modifier.padding(24.dp)) {
-            // Tabs
             TabRow(selectedTabIndex = selectedTabIndex) {
                 tabTitles.forEachIndexed { index, title ->
                     Tab(
                         selected = selectedTabIndex == index,
-                        onClick = { selectedTabIndex = index },
-                        text = { Text(title) }
+                        onClick  = { selectedTabIndex = index },
+                        text     = {
+                            Text(title, style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer)
+                        }
                     )
                 }
             }
@@ -79,10 +97,27 @@ fun CompanyTabsScreen(
             when (selectedTabIndex) {
                 0 -> CompanyReviewsSection(companyViewModel)
                 1 -> CompanyInformationSection(companyViewModel)
+                2 -> AddReviewScreen(
+                    paddingValues = paddingValues,
+                    navController = navController,
+                    companyId     = companyId,
+                    reviewViewModel = reviewViewModel
+                )
             }
         }
     }
 }
+
+
+@Composable
+fun AddReviewButton(onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth().height(48.dp),
+        shape = MaterialTheme.shapes.medium
+    ) { Text("Agregar Reseña") }
+}
+
 
 
 @Composable
@@ -136,20 +171,20 @@ fun CompanyInformationSection(companyViewModel: CompanyViewModel) {
     company?.let {
         Column {
             SectionTitle("Información")
-            InfoRow(label = "Tipo:", value = it.type)
+            InfoRow(label = "Tipo:", value = it.type.toString())
             InfoRow(label = "Cantidad de empleados:", value = it.employees.toString())
-            InfoRow(label = "Ubicación:", value = it.ubication)
-            InfoRow(label = "Sitio web:", value = it.websiteUrl)
+            InfoRow(label = "Ubicación:", value = it.location.toString())
+            InfoRow(label = "Sitio web:", value = it.websiteUrl.toString())
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            SectionTitle("Valores")
-//            Text(text = it.values ?: "Sin información")
+            SectionTitle("Visión")
+            Text(text = it.vision ?: "Sin información")
 
             Spacer(modifier = Modifier.height(16.dp))
 
             SectionTitle("Misión")
-//            Text(text = it.mission ?: "Sin información")
+            Text(text = it.mission ?: "Sin información")
         }
     } ?: Text("Cargando información...")
 }
@@ -191,8 +226,9 @@ fun ReviewCard(review: CompanyReview) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(review.studentId.user.firstName, style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSecondaryContainer) // nombre de la persona
-               // Text(text = "Hace ${daysAgo(review.createdAt)} días", style = MaterialTheme.typography.bodySmall)
+                Text(
+                    (review.student.user?.firstName + " " + review.student.user?.lastName), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSecondaryContainer) // nombre de la persona
+                Text(text = "Hace ${daysAgo(review.createdAt)} días", style = MaterialTheme.typography.bodySmall)
             }
 
             RatingStars(
@@ -244,3 +280,23 @@ fun SectionTitle(title: String) {
     )
 }
 
+
+
+
+
+fun daysAgo(dateString: String): Int {
+    return try {
+        val date: Date = try {
+            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault())
+                .parse(dateString)
+        } catch (e: ParseException) {
+            SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+                .parse(dateString)
+        } ?: return -1
+        val diffMillis = System.currentTimeMillis() - date.time
+        TimeUnit.MILLISECONDS.toDays(diffMillis).toInt()
+    } catch (e: Exception) {
+        e.printStackTrace()
+        -1
+    }
+}

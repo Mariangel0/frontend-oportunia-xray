@@ -46,6 +46,7 @@ sealed class NavRoutes {
 
         fun createRoute(studentId: Long) = "curriculum/$studentId"
     }
+
     data object InterviewScreen : NavRoutes() {
         const val ROUTE = "interview/{studentId}"
         const val ARG_INT_ID = "studentId"
@@ -56,10 +57,16 @@ sealed class NavRoutes {
     data object InterviewChat : NavRoutes() {
         const val ROUTE = "interview_chat/{studentId}"
         const val ARG_INC_ID = "studentId"
-
         fun createRoute(studentId: Long) = "interview_chat/$studentId"
     }
 
+
+    data object CompanyReview : NavRoutes() {
+        const val ROUTE = "companyReview/{companyId}"
+        const val ARG_COMP_ID = "companyId"
+
+        fun createRoute(companyId: Long) = "companyReview/$companyId"
+    }
 
     data object QuizScreen : NavRoutes() {
         const val ROUTE = "quiz/{studentId}"

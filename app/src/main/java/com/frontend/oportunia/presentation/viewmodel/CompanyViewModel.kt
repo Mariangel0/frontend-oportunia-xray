@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.frontend.oportunia.data.repository.UserRepositoryImpl
 import com.frontend.oportunia.domain.model.Company
 import com.frontend.oportunia.domain.model.CompanyReview
+import com.frontend.oportunia.domain.repository.AuthRepository
 import com.frontend.oportunia.domain.repository.CompanyRepository
 import com.frontend.oportunia.domain.repository.CompanyReviewRepository
 import com.frontend.oportunia.domain.repository.UserRepository
@@ -19,7 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CompanyViewModel @Inject constructor(
     private val repository: CompanyRepository,
-    private val reviewRepository: CompanyReviewRepository
+    private val reviewRepository: CompanyReviewRepository,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
 

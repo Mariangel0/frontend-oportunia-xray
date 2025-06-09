@@ -11,12 +11,16 @@ class CompanyMapper @Inject constructor() {
             name = dto.name,
             description = dto.description,
             type = dto.type,
-            ubication = dto.ubication,
+            location = dto.location,
             employees = dto.employees,
             websiteUrl = dto.websiteUrl,
-            rating = dto.rating
+            rating = dto.rating,
+            vision = dto.vision,
+            mission = dto.mission
         )
     }
+
+
 
     fun mapToDomainList(companyDto: List<CompanyDto>): List<Company> {
         return companyDto.map { mapToDomain(it) }
@@ -29,13 +33,15 @@ class CompanyMapper @Inject constructor() {
             name = domain.name,
             description = domain.description,
             type = domain.type,
-            ubication = domain.ubication,
+            location = domain.location,
             employees = domain.employees,
             websiteUrl = domain.websiteUrl,
-            rating = domain.rating
-
+            rating = domain.rating,
+            vision = domain.vision,
+            mission = domain.mission
         )
     }
+
 
     fun mapToDtoList(companies: List<Company>): List<CompanyDto> {
         return companies.map { mapToDto(it) }

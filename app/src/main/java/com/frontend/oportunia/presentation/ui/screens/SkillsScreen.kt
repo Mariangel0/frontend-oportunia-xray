@@ -49,10 +49,10 @@ fun SkillsScreen(
         skillsViewModel.getExperiencesForStudent(studentId)
     }
 
-    val student by skillsViewModel.loggedStudent.collectAsState()
+    val user by skillsViewModel.loggedUser.collectAsState()
     val abilities by skillsViewModel.abilityList.collectAsState()
     val experiences by skillsViewModel.experienceList.collectAsState()
-    val role = if (student != null) stringResource(R.string.student) else stringResource(R.string.adminastror)
+    val role = if (user != null) stringResource(R.string.student) else stringResource(R.string.adminastror)
 
     MainLayout(
         paddingValues = paddingValues,
@@ -72,7 +72,7 @@ fun SkillsScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = student?.user?.firstName + " " + (student?.user?.lastName ?: ""),
+                    text = user?.firstName + " " + (user?.lastName ?: ""),
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -130,19 +130,12 @@ fun SkillsScreen(
                         color = Color.Gray
                     )
                 } else {
-                    val groupedExperiences = experiences
-                        .sortedByDescending { it.year }
-                        .groupBy { it.year }
-
-
-                    groupedExperiences.forEach { (_, exps) ->
-                        exps.forEach { experience ->
-                            ExperienceCard(
-                                experience = experience,
-                                companyName = experience.company.name.toString()
-                            )
-                            Spacer(modifier = Modifier.height(12.dp))
-                        }
+                    experiences.forEach { experience ->
+                        ExperienceCard(
+                            experience = experience,
+                            companyName = experience.company
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
                     }
                 }
             }
@@ -173,7 +166,7 @@ fun ExperienceCard(
                     style = MaterialTheme.typography.titleSmall
                 )
                 Text(
-                    text = experience.year.toString(),
+                    text = experience.timeline.toString(),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.outline
                 )

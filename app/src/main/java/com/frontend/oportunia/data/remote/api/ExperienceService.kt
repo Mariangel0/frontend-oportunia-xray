@@ -22,8 +22,8 @@ public interface ExperienceService {
     @POST("experiences")
     suspend fun createExperience(@Body ability: ExperienceDto): Response<ExperienceDto>
 
-    @GET("experiences")
-    suspend fun getExperiencesByStudentId(@Query("studentId.id") studentId: Long): Response<List<ExperienceDto>>
+    @GET("experiences/student/{userId}")
+    suspend fun getExperiencesByStudentId(@Path("userId") userId: Long): Response<List<ExperienceDto>>
 
     @PUT("experiences/{id}")
     suspend fun updateExperience(

@@ -5,6 +5,7 @@ import com.frontend.oportunia.data.mapper.AuthMapper
 import com.frontend.oportunia.data.remote.api.AuthService
 import com.frontend.oportunia.domain.model.AuthResult
 import com.frontend.oportunia.domain.model.Credentials
+import com.frontend.oportunia.domain.model.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
@@ -13,15 +14,8 @@ import javax.inject.Inject
 class AuthRemoteDataSource @Inject constructor(
     private val authService: AuthService
 ) {
-    /**
-     * Authenticates a user with provided credentials
-     *
-     * @param credentials The user credentials
-     * @return [Result] containing [AuthResult] if successful, or an exception if failed
-     */
     suspend fun login(credentials: Credentials): Result<AuthResult> = withContext(Dispatchers.IO) {
         try {
-            // Convert credentials and log the request payload for debugging
             val requestDto = AuthMapper.credentialsToDto(credentials)
             Log.d(
                 "AuthRemoteDataSource",
@@ -31,7 +25,6 @@ class AuthRemoteDataSource @Inject constructor(
             val response = authService.login(requestDto)
 
             if (response.isSuccessful) {
-                // Extract the token from the Authorization header
                 val authHeader = response.headers()["Authorization"]
 
                 if (!authHeader.isNullOrBlank()) {
@@ -47,7 +40,6 @@ class AuthRemoteDataSource @Inject constructor(
                     )
                 }
 
-                // Fallback to response body if header is not present
                 val body = response.body()
                 return@withContext if (body != null) {
                     Log.d("AuthRemoteDataSource", "Login successful with response body: $body")
@@ -61,7 +53,6 @@ class AuthRemoteDataSource @Inject constructor(
                 }
             } else {
                 val errorBody = response.errorBody()?.string()
-                // Specific error handling based on HTTP status code
                 val errorMessage = when (response.code()) {
                     403 -> "Invalid username or password"
                     401 -> "Unauthorized access"
@@ -76,6 +67,8 @@ class AuthRemoteDataSource @Inject constructor(
                 )
                 return@withContext Result.failure(Exception(errorMessage))
             }
+
+
         } catch (e: Exception) {
             Log.e("AuthRemoteDataSource", "Login exception: ${e.message}", e)
             return@withContext Result.failure(e)
@@ -90,6 +83,9 @@ class AuthRemoteDataSource @Inject constructor(
     suspend fun logout(): Result<Unit> = safeApiCall {
         authService.logout()
     }
+
+
+
 
     /**
      * Helper function to handle API calls safely.

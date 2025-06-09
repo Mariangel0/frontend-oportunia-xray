@@ -1,12 +1,15 @@
 package com.frontend.oportunia.domain.model
 
+import java.util.Date
+
 data class User(
     val id: Long,
-    val createDate: String,
-    val email: String,
-    val enabled: Boolean,
+    val createDate: Date? = null,
+    val email: String? = null,
+    val enabled: Boolean? = null,
     val firstName: String,
     val lastName: String,
-    val password: String,
-    val tokenExpired: Boolean
+    val password: String? = null,
+    val tokenExpired: Boolean? = null,
+    val roles: List<Role>? = null
 )

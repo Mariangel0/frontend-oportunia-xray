@@ -30,14 +30,22 @@ class CompanyReviewRepositoryImpl @Inject constructor(
         }
 
     override suspend fun findCompanyReviewsByCompanyId(companyId: Long): Result<List<CompanyReview>> {
+        return dataSource.getReviewsByCompanyId(companyId).map { reviewDtos ->
+            companyReviewMapper.mapToDomainList(reviewDtos)
+        }
+    }
+
+    override suspend fun createCompanyReview(companyReview: CompanyReview): Result<CompanyReview> {
+        val reviewDto =  companyReviewMapper.mapToDto(companyReview)
         return try {
-            dataSource.getReviewsByCompanyId(companyId).map { reviewDtos ->
-                companyReviewMapper.mapToDomainList(reviewDtos)
+            val response = dataSource.createReview(reviewDto)
+            if (response.isSuccessful && response.body() != null) {
+                Result.success(companyReviewMapper.mapToDomain(response.body()!!))
+            } else {
+                Result.failure(Exception("Error en la creación de la review: ${response.code()} ${response.message()}"))
             }
-        } catch (e: UnknownHostException) {
-            Result.failure(Exception("Network error: Cannot connect to server. Please check your internet connection."))
         } catch (e: Exception) {
-            Result.failure(Exception("Error fetching tasks: ${e.message}"))
+            Result.failure(e)
         }
     }
 

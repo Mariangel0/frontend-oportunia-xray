@@ -1,6 +1,7 @@
 package com.frontend.oportunia.data.mapper
 
 import com.frontend.oportunia.data.remote.dto.StudentDto
+import com.frontend.oportunia.data.remote.dto.StudentRDto
 import com.frontend.oportunia.domain.model.Student
 import javax.inject.Inject
 
@@ -10,7 +11,8 @@ class StudentMapper @Inject constructor(
 
     fun mapToDomain(dto: StudentDto): Student {
         return Student(
-            user = userMapper.mapToDomain(dto.user),
+            user = dto.user?.let { userMapper.mapToDomain(it)},
+            id = dto.id,
             description = dto.description,
             premium = dto.premium,
             linkedinUrl = dto.linkedinUrl,
@@ -20,21 +22,37 @@ class StudentMapper @Inject constructor(
         )
     }
 
+    fun mapToDomainRDto(dto: StudentRDto): Student {
+        return Student(
+            id = dto.id,
+            user = dto.user.let { userMapper.mapToDomainRDto(it) }
+            )
+    }
+
     fun mapToDomainList(studentDto: List<StudentDto>): List<Student> {
         return studentDto.map { mapToDomain(it) }
     }
 
     fun mapToDto(domain: Student): StudentDto {
         return StudentDto(
-            user = userMapper.mapToDto(domain.user),
+            user = domain.user?.let { userMapper.mapToDto(it) },
+            id = domain.id,
             description = domain.description,
             premium = domain.premium,
             linkedinUrl = domain.linkedinUrl,
             githubUrl = domain.githubUrl,
             bornDate = domain.bornDate,
-            location = domain.location
+            location = domain.location,
         )
     }
+
+    fun mapToDtoRDto(domain: Student): StudentRDto {
+        return StudentRDto(
+            id = domain.id,
+            user = userMapper.mapToDtoRDto(domain.user!!)
+        )
+    }
+
 
     fun mapToDtoList(students: List<Student>): List<StudentDto> {
         return students.map { mapToDto(it) }

@@ -9,9 +9,9 @@ class CompanyReviewMapper  @Inject constructor(
 ) {
     fun mapToDomain(dto: CompanyReviewDto): CompanyReview {
         return CompanyReview(
-            id = dto.id,
-            studentId = studentMapper.mapToDomain(dto.studentId),
-            companyId = companyMapper.mapToDomain(dto.companyId),
+         //   id = dto.id,
+            student = studentMapper.mapToDomainRDto(dto.student),
+            company =  dto.company,
             rating = dto.rating,
             comment = dto.comment,
             createdAt = dto.createdAt
@@ -24,9 +24,9 @@ class CompanyReviewMapper  @Inject constructor(
 
     fun mapToDto(domain: CompanyReview): CompanyReviewDto {
         return CompanyReviewDto(
-            id = domain.id,
-            studentId = studentMapper.mapToDto(domain.studentId),
-            companyId = companyMapper.mapToDto(domain.companyId),
+            //id = domain.id,
+            student = studentMapper.mapToDtoRDto(domain.student),
+            company = domain.company,
             rating = domain.rating,
             comment = domain.comment,
             createdAt = domain.createdAt

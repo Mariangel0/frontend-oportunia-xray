@@ -47,8 +47,8 @@ fun MenuScreen(
     loginViewModel: LoginViewModel
 ) {
 
-    val student by loginViewModel.loggedStudent.collectAsState()
-    val username = student?.user?.firstName ?: "Estudiante"
+    val user by loginViewModel.loggedUser.collectAsState()
+    val username = user?.firstName ?: "Usuario"
 
     Column(modifier = Modifier.fillMaxSize()) {
         MainLayout(
@@ -56,9 +56,9 @@ fun MenuScreen(
             headerType = HeaderType.WELCOME,
             username = username,
         ) {
-            DailyQuizAlert(navController = navController, studentId = student?.user?.id ?: 1)
+            DailyQuizAlert(navController = navController, studentId = user?.id ?: 1)
             StreakCalendar()
-            Learning(navController = navController, studentId = student?.user?.id ?: -1L)
+            Learning(navController = navController, studentId = user?.id ?: -1L)
             CompaniesCarousel(companyViewModel = companyViewModel, navController = navController)
         }
     }
