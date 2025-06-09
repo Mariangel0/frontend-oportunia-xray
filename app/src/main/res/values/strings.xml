@@ -131,5 +131,15 @@
 
     <!--  Quiz Screen  -->
     <string name="next">Siguiente</string>
-
+    <string name="finish">Finalizar</string>
+    <string name="quiz_title">Quiz</string>
+    <string name="quiz_no_questions">No hay preguntas cargadas.</string>
+    <string name="quiz_correct">Correcta</string>
+    <string name="quiz_incorrect">Incorrecta</string>
+    <string name="quiz_topic_label">Tema del Quiz</string>
+    <string name="quiz_difficulty_label">Dificultad</string>
+    <string name="quiz_start">Comenzar Quiz</string>
+    <string name="answered">Respondida</string>
+    <string name="topic">Preguntas para preparse para una entrevista</string>
+    <string name="difficulty">Medium</string>
 </resources>

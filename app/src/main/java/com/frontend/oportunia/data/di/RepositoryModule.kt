@@ -6,6 +6,7 @@ import com.frontend.oportunia.data.repository.CompanyRepositoryImpl
 import com.frontend.oportunia.data.repository.CompanyReviewRepositoryImpl
 import com.frontend.oportunia.data.repository.ExperienceRepositoryImpl
 import com.frontend.oportunia.data.repository.InterviewRepositoryImpl
+import com.frontend.oportunia.data.repository.QuizRepositoryImpl
 import com.frontend.oportunia.data.repository.StudentRepositoryImpl
 import com.frontend.oportunia.data.repository.UserRepositoryImpl
 import com.frontend.oportunia.domain.repository.AbilityRepository
@@ -14,6 +15,7 @@ import com.frontend.oportunia.domain.repository.CompanyRepository
 import com.frontend.oportunia.domain.repository.CompanyReviewRepository
 import com.frontend.oportunia.domain.repository.ExperienceRepository
 import com.frontend.oportunia.domain.repository.InterviewRepository
+import com.frontend.oportunia.domain.repository.QuizRepository
 import com.frontend.oportunia.domain.repository.StudentRepository
 import com.frontend.oportunia.domain.repository.UserRepository
 import dagger.Binds
@@ -75,5 +77,11 @@ abstract class RepositoryModule {
     abstract fun bindInterviewRepository(
         interviewRepositoryImpl: InterviewRepositoryImpl
     ): InterviewRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindQuizRepository(
+        quizRepositoryImpl: QuizRepositoryImpl
+    ): QuizRepository
 
 }

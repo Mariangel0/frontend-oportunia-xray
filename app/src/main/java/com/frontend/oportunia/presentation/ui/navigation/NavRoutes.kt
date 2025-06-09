@@ -54,8 +54,12 @@ sealed class NavRoutes {
         fun createRoute(studentId: Long) = "interview_chat/$studentId"
     }
 
+
     data object QuizScreen : NavRoutes() {
-        const val ROUTE = "quiz"
+        const val ROUTE = "quiz/{studentId}"
+        const val ARG_QU_ID = "studentId"
+
+        fun createRoute(studentId: Long) = "quiz/$studentId"
     }
 
 }

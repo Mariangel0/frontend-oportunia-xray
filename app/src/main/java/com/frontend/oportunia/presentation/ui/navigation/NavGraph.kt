@@ -24,6 +24,7 @@ import com.frontend.oportunia.presentation.viewmodel.AdviceViewModel
 import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
 import com.frontend.oportunia.presentation.viewmodel.InterviewViewModel
 import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
+import com.frontend.oportunia.presentation.viewmodel.QuizViewModel
 import com.frontend.oportunia.presentation.viewmodel.RegisterViewModel
 import com.frontend.oportunia.presentation.viewmodel.SkillsViewModel
 
@@ -37,7 +38,8 @@ fun NavGraph(
     registerViewModel: RegisterViewModel,
     skillsViewModel: SkillsViewModel,
     adviceViewModel: AdviceViewModel,
-    interviewViewModel: InterviewViewModel
+    interviewViewModel: InterviewViewModel,
+    quizViewModel: QuizViewModel
 ) {
     NavHost(navController, startDestination = NavRoutes.MainPage.ROUTE) {
 
@@ -144,9 +146,21 @@ fun NavGraph(
             )
         }
 
-        composable(NavRoutes.QuizScreen.ROUTE) {
-            QuizScreen(navController, paddingValues)
+        composable(
+            route = NavRoutes.QuizScreen.ROUTE,
+            arguments = listOf(navArgument(NavRoutes.QuizScreen.ARG_QU_ID) {
+                type = NavType.LongType
+            })
+        ) { backStackEntry ->
+            val stdId = backStackEntry.arguments?.getLong(NavRoutes.QuizScreen.ARG_QU_ID) ?: 0L
+            QuizScreen(
+                navController = navController,
+                paddingValues = paddingValues,
+                quizViewModel = quizViewModel,
+                studentId = stdId
+            )
         }
+
     }
 }
 

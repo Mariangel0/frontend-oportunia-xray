@@ -20,6 +20,7 @@ import com.frontend.oportunia.presentation.viewmodel.AdviceViewModel
 import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
 import com.frontend.oportunia.presentation.viewmodel.InterviewViewModel
 import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
+import com.frontend.oportunia.presentation.viewmodel.QuizViewModel
 import com.frontend.oportunia.presentation.viewmodel.RegisterViewModel
 import com.frontend.oportunia.presentation.viewmodel.SkillsViewModel
 
@@ -44,12 +45,14 @@ class MainActivity : ComponentActivity() {
 
     private val interviewViewModel: InterviewViewModel by viewModels ()
 
+    private val quizViewModel: QuizViewModel by viewModels ()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             OportunIATheme {
-                Main(companyViewModel, loginViewModel, registerViewModel, skillViewModel, adviceViewModel, interviewViewModel)
+                Main(companyViewModel, loginViewModel, registerViewModel, skillViewModel, adviceViewModel, interviewViewModel, quizViewModel)
             }
         }
     }
@@ -59,7 +62,7 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, registerViewModel: RegisterViewModel, skillViewModel: SkillsViewModel, adviceViewModel: AdviceViewModel, interviewViewModel: InterviewViewModel) {
+fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, registerViewModel: RegisterViewModel, skillViewModel: SkillsViewModel, adviceViewModel: AdviceViewModel, interviewViewModel: InterviewViewModel, quizViewModel: QuizViewModel) {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
@@ -84,7 +87,8 @@ fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, reg
             registerViewModel = registerViewModel,
             skillsViewModel = skillViewModel,
             adviceViewModel = adviceViewModel,
-            interviewViewModel = interviewViewModel
+            interviewViewModel = interviewViewModel,
+            quizViewModel = quizViewModel
         )
     }
 }

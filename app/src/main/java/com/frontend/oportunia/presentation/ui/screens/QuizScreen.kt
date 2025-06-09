@@ -4,8 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,31 +24,53 @@ import com.frontend.oportunia.presentation.ui.components.AcceptButton
 import com.frontend.oportunia.presentation.ui.components.HeaderType
 import com.frontend.oportunia.presentation.ui.layout.MainLayout
 import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
+import com.frontend.oportunia.presentation.viewmodel.QuizViewModel
+
 
 @Composable
 fun QuizScreen(
     navController: NavController,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    quizViewModel: QuizViewModel,
+    studentId: Long
 ) {
-    var selectedAnswer by remember { mutableStateOf<Int?>(null) }
-    var currentQuestion by remember { mutableStateOf(1) }
-    val totalQuestions = 5
+    LaunchedEffect(studentId) {
+        if (quizViewModel.questions.value.isEmpty()) {
+            quizViewModel.initializeQuiz(
+                userId = studentId,
+                topic = "Preguntas de entrevista",
+                difficulty = "medium"
+            )
+        }
+    }
 
-    // Datos de ejemplo - deberías reemplazar con tu ViewModel
-    val question = "¿Cuál es la capital de Francia?"
-    val answers = listOf(
-        "Madrid",
-        "Londres",
-        "París",
-        "Roma"
-    )
+    val questions by quizViewModel.questions.collectAsState()
+    val currentIndex by quizViewModel.currentIndex.collectAsState()
+    val evaluations by quizViewModel.evaluations.collectAsState()
+    val isLoading by quizViewModel.isLoading.collectAsState()
+
+    if (questions.isEmpty() && isLoading) {
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+        return
+    }
+
+    val currentQuestion = questions.getOrNull(currentIndex) ?: return
+    val evaluation = evaluations[currentQuestion.question]
+    val isAnswered = evaluation != null
+    evaluation?.selectedOption
+
+    var localSelected by remember { mutableStateOf<String?>(null) }
 
     MainLayout(
         paddingValues = paddingValues,
         headerType = HeaderType.BACK,
-        title = "Quiz",
+        title = stringResource(R.string.quiz_title),
         onBackClick = { navController.navigateUp() }
     ) {
+
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -54,67 +79,97 @@ fun QuizScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            // Indicador de progreso
-            QuizProgressIndicator(
-                currentQuestion = currentQuestion,
-                totalQuestions = totalQuestions
+            InteractiveQuizProgressIndicator(
+                currentQuestion = currentIndex + 1,
+                totalQuestions = 5,
+                evaluations = evaluations,
+                onQuestionClick = { questionIndex ->
+                    quizViewModel.goToQuestion(questionIndex)
+                    localSelected = null
+                }
             )
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
-            // Pregunta
             Text(
-                text = question,
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Medium,
+                text = currentQuestion.question,
+                style = MaterialTheme.typography.titleSmall,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSecondaryContainer
             )
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-            // Respuestas
-            Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                answers.forEachIndexed { index, answer ->
-                    QuizAnswerOption(
-                        text = answer,
-                        isSelected = selectedAnswer == index,
-                        onClick = { selectedAnswer = index }
-                    )
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                currentQuestion.options.forEach { option ->
+                    val backgroundColor = when {
+                        evaluation == null -> null
+                        evaluation.selectedOption == option && evaluation.isCorrect -> Color(0xFF4CAF50)
+                        evaluation.selectedOption == option && !evaluation.isCorrect -> Color(0xFFF44336)
+                        !evaluation.isCorrect && evaluation.correctAnswer == option -> Color(0xFF4CAF50)
+                        else -> null
+                    }
+
+                    if (backgroundColor != null) {
+                        QuizColoredAnswerOption(
+                            text = option,
+                            backgroundColor = backgroundColor,
+                            onClick = { }
+                        )
+                    } else {
+                        QuizAnswerOption(
+                            text = option,
+                            isSelected = localSelected == option,
+                            onClick = {
+                                if (!isAnswered) {
+                                    localSelected = option
+                                    quizViewModel.answerQuestion(studentId, option)
+                                }
+                            }
+                        )
+                    }
                 }
             }
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(15.dp))
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 12.dp)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 AcceptButton(
-                    text = stringResource(R.string.next),
-                    enabled = true,
-                    onClick = { }
+                    text = if (currentIndex == 4)
+                        stringResource(R.string.finish)
+                    else
+                        stringResource(R.string.next),
+                    enabled = isAnswered,
+                    onClick = {
+                        if (currentIndex == 4) {
+                            navController.navigateUp()
+                        } else {
+                            localSelected = null
+                            quizViewModel.nextQuestion(studentId)
+                        }
+                    }
                 )
             }
         }
     }
 }
 
+
+
+
 @Composable
-private fun QuizProgressIndicator(
+private fun InteractiveQuizProgressIndicator(
     currentQuestion: Int,
-    totalQuestions: Int
+    totalQuestions: Int,
+    evaluations: Map<String, Any>,
+    onQuestionClick: (Int) -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
             text = "$currentQuestion/$totalQuestions",
@@ -123,14 +178,66 @@ private fun QuizProgressIndicator(
             color = MaterialTheme.colorScheme.onBackground
         )
 
-        LinearProgressIndicator(
-            progress = { currentQuestion.toFloat() / totalQuestions },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(8.dp),
-            color = MaterialTheme.colorScheme.primary,
-            trackColor = MaterialTheme.colorScheme.primaryContainer
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            for (i in 1..totalQuestions) {
+                val index = i - 1
+                val isAnswered = evaluations.values.elementAtOrNull(index) != null
+                val isCurrent = index == currentQuestion - 1
+                val isAccessible = isAnswered || isCurrent || index < currentQuestion - 1
+
+                Box(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clickable(enabled = isAccessible) {
+                            if (isAccessible) onQuestionClick(i - 1) // Convert to 0-based index
+                        }
+                        .background(
+                            color = when {
+                                isCurrent -> MaterialTheme.colorScheme.primary
+                                isAnswered -> MaterialTheme.colorScheme.tertiary
+                                else -> MaterialTheme.colorScheme.outline
+                            },
+                            shape = CircleShape
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (isAnswered && !isCurrent) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = stringResource(R.string.answered),
+                            tint = Color.White,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    } else {
+                        Text(
+                            text = "$i",
+                            color = Color.White,
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+
+                // Progress line between circles
+                if (i < totalQuestions) {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(2.dp)
+                            .background(
+                                color = if (i < currentQuestion)
+                                    MaterialTheme.colorScheme.primary
+                                else
+                                    MaterialTheme.colorScheme.outline
+                            )
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -163,7 +270,7 @@ private fun QuizAnswerOption(
         ) {
             Text(
                 text = text,
-                style = MaterialTheme.typography.labelLarge,
+                style = MaterialTheme.typography.bodyMedium,
                 color = if (isSelected)
                     MaterialTheme.colorScheme.onPrimaryContainer
                 else
@@ -200,10 +307,8 @@ private fun QuizColoredAnswerOption(
         ) {
             Text(
                 text = text,
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.bodyMedium,
                 color = Color.White,
-                fontWeight = FontWeight.Medium,
-                textAlign = TextAlign.Center
             )
         }
     }
