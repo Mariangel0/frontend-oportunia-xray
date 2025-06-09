@@ -13,10 +13,3 @@ data class CompanyDto(
     val mission: String?
 )
 
-
-data class CompanySDto(
-    val id: Long,
-    val name: String,
-    val description: String,
-    val rating: Float
-)

@@ -35,5 +35,19 @@ class CompanyReviewRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun createCompanyReview(companyReview: CompanyReview): Result<CompanyReview> {
+        val reviewDto =  companyReviewMapper.mapToDto(companyReview)
+        return try {
+            val response = dataSource.createReview(reviewDto)
+            if (response.isSuccessful && response.body() != null) {
+                Result.success(companyReviewMapper.mapToDomain(response.body()!!))
+            } else {
+                Result.failure(Exception("Error en la creación de la review: ${response.code()} ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
 
 }

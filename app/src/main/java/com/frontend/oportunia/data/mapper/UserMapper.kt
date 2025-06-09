@@ -1,6 +1,5 @@
 package com.frontend.oportunia.data.mapper
 
-import com.frontend.oportunia.data.remote.dto.CompanySDto
 import com.frontend.oportunia.data.remote.dto.UserDto
 import com.frontend.oportunia.data.remote.dto.UserRDto
 import com.frontend.oportunia.domain.model.Company

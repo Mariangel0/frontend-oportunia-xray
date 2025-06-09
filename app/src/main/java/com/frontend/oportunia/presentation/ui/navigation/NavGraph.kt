@@ -8,6 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.frontend.oportunia.presentation.ui.screens.AddReviewScreen
 import com.frontend.oportunia.presentation.ui.screens.AdviceScreen
 import com.frontend.oportunia.presentation.ui.screens.CompanyScreen
 import com.frontend.oportunia.presentation.ui.screens.CompanyTabsScreen
@@ -18,6 +19,7 @@ import com.frontend.oportunia.presentation.ui.screens.PerfilScreen
 import com.frontend.oportunia.presentation.ui.screens.RegisterScreen
 import com.frontend.oportunia.presentation.ui.screens.SkillsScreen
 import com.frontend.oportunia.presentation.viewmodel.AdviceViewModel
+import com.frontend.oportunia.presentation.viewmodel.CompanyReviewViewModel
 import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
 import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
 import com.frontend.oportunia.presentation.viewmodel.ProfileViewModel
@@ -34,7 +36,8 @@ fun NavGraph(
     registerViewModel: RegisterViewModel,
     skillsViewModel: SkillsViewModel,
     adviceViewModel: AdviceViewModel,
-    profileViewModel: ProfileViewModel
+    profileViewModel: ProfileViewModel,
+    reviewViewModel: CompanyReviewViewModel
 ) {
     NavHost(navController, startDestination = NavRoutes.MainPage.ROUTE) {
 
@@ -92,7 +95,23 @@ fun NavGraph(
                 companyId = compId,
                 companyViewModel = companyViewModel,
                 navController = navController,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
+                reviewViewModel = reviewViewModel,
+            )
+        }
+
+        composable(
+            route = NavRoutes.CompanyReview.ROUTE,
+            arguments = listOf(navArgument(NavRoutes.CompanyReview.ARG_COMP_ID) {
+                type = NavType.LongType
+            })
+        ){ backStackEntry ->
+            val compId = backStackEntry.arguments?.getLong(NavRoutes.CompanyReview.ARG_COMP_ID) ?: 0L
+            AddReviewScreen(
+                companyId = compId,
+                navController = navController,
+                paddingValues = paddingValues,
+                reviewViewModel = reviewViewModel
             )
         }
 

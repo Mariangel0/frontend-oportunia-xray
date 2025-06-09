@@ -40,6 +40,13 @@ sealed class NavRoutes {
         fun createRoute(studentId: Long) = "skills/$studentId"
     }
 
+    data object CompanyReview : NavRoutes() {
+        const val ROUTE = "companyReview/{companyId}"
+        const val ARG_COMP_ID = "companyId"
+
+        fun createRoute(companyId: Long) = "companyReview/$companyId"
+    }
+
 
 
 

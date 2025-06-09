@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -37,6 +38,8 @@ import com.frontend.oportunia.presentation.ui.layout.MainLayout
 import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
+import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
+import com.frontend.oportunia.presentation.viewmodel.CompanyReviewViewModel
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -55,11 +58,13 @@ fun CompanyTabsScreen(
     companyId: Long,
     companyViewModel: CompanyViewModel,
     navController: NavController,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    reviewViewModel: CompanyReviewViewModel
 ) {
-    val tabTitles = listOf("Reseñas", "Información")
+    val tabTitles = listOf("Reseñas", "Información", "Agregar Reseña")
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
+    // Carga company y reviews al inicio
     LaunchedEffect(companyId) {
         companyViewModel.loadCompanyById(companyId)
         companyViewModel.getReviewsForCompany(companyId)
@@ -69,18 +74,20 @@ fun CompanyTabsScreen(
 
     MainLayout(
         paddingValues = paddingValues,
-        headerType = HeaderType.BACK,
-        title = selectedCompany?.name ?: stringResource(id = R.string.reviews),
-        onBackClick = { navController.navigateUp() }
+        headerType    = HeaderType.BACK,
+        title         = selectedCompany?.name ?: stringResource(id = R.string.reviews),
+        onBackClick   = { navController.navigateUp() }
     ) {
         Column(modifier = Modifier.padding(24.dp)) {
-            // Tabs
             TabRow(selectedTabIndex = selectedTabIndex) {
                 tabTitles.forEachIndexed { index, title ->
                     Tab(
                         selected = selectedTabIndex == index,
-                        onClick = { selectedTabIndex = index },
-                        text = { Text(title) }
+                        onClick  = { selectedTabIndex = index },
+                        text     = {
+                            Text(title, style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer)
+                        }
                     )
                 }
             }
@@ -90,10 +97,27 @@ fun CompanyTabsScreen(
             when (selectedTabIndex) {
                 0 -> CompanyReviewsSection(companyViewModel)
                 1 -> CompanyInformationSection(companyViewModel)
+                2 -> AddReviewScreen(
+                    paddingValues = paddingValues,
+                    navController = navController,
+                    companyId     = companyId,
+                    reviewViewModel = reviewViewModel
+                )
             }
         }
     }
 }
+
+
+@Composable
+fun AddReviewButton(onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth().height(48.dp),
+        shape = MaterialTheme.shapes.medium
+    ) { Text("Agregar Reseña") }
+}
+
 
 
 @Composable
@@ -203,7 +227,7 @@ fun ReviewCard(review: CompanyReview) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    (review.studentId.user?.firstName + " " + review.studentId.user?.lastName), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSecondaryContainer) // nombre de la persona
+                    (review.student.user?.firstName + " " + review.student.user?.lastName), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSecondaryContainer) // nombre de la persona
                 Text(text = "Hace ${daysAgo(review.createdAt)} días", style = MaterialTheme.typography.bodySmall)
             }
 
