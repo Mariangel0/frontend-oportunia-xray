@@ -1,3 +1,4 @@
+
 package com.frontend.oportunia.presentation.ui.screens
 
 import android.content.Context
@@ -11,7 +12,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -28,12 +28,23 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.frontend.oportunia.presentation.ui.components.HeaderType
 import com.frontend.oportunia.presentation.ui.layout.MainLayout
-import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
-import com.example.oportunia.R
 import com.frontend.oportunia.presentation.viewmodel.ProfileViewModel
+import com.example.oportunia.R
 import java.time.LocalDate
 import java.time.Period
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
+import java.util.*
+
+
+data class ProfileUiState(
+    val firstName: String = "",
+    val lastName: String = "",
+    val description: String = "",
+    val location: String = "",
+    val birthDate: String = "",
+    val profileImageUri: Uri? = null
+)
 
 @Composable
 fun PerfilScreen(
@@ -44,15 +55,31 @@ fun PerfilScreen(
     val user by profileViewModel.currentUser.collectAsState()
     val student by profileViewModel.loggedStudent.collectAsState()
 
-    val firstName = user?.firstName ?: ""
-    val lastName = user?.lastName ?: ""
-    val description = student?.description ?: ""
+    var uiState by remember { mutableStateOf(ProfileUiState()) }
+    var isEditing by remember { mutableStateOf(false) }
+    var profileInitialized by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        profileViewModel.loadProfile()
+    }
+
+    LaunchedEffect(user, student) {
+        val u = user
+        val s = student
+        if (!profileInitialized && u != null && s != null) {
+            uiState = uiState.copy(
+                firstName = u.firstName,
+                lastName = u.lastName,
+                description = s.description ?: "",
+                location = s.location ?: "",
+                birthDate = s.bornDate ?: ""
+            )
+            profileInitialized = true
+        }
+    }
+
     val premium = student?.premium ?: false
-    val linkedinUrl = student?.linkedinUrl ?: ""
-    val githubUrl = student?.githubUrl ?: ""
-    val age = ageCal(student?.bornDate ?: "")
-    val location = student?.location ?: ""
-    var profileImageUri by remember { mutableStateOf<Uri?>(null) }
+    val age = ageCal(uiState.birthDate)
 
     MainLayout(
         paddingValues = paddingValues,
@@ -63,122 +90,148 @@ fun PerfilScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 24.dp)
-                .background(MaterialTheme.colorScheme.background),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+                .padding(horizontal = 24.dp, vertical = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            ProfileImageSection(uiState.profileImageUri) {
+                uiState = uiState.copy(profileImageUri = it)
+            }
+
             Spacer(modifier = Modifier.height(16.dp))
 
-            ProfileImageSection(profileImageUri) { profileImageUri = it }
+            ProfileNameSection(uiState, isEditing) { newState -> uiState = newState }
 
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = "$firstName $lastName",
-                style = MaterialTheme.typography.titleMedium
-            )
-
-            if (premium) {
-                Text(
-                    text = "★ Premium",
-                    color = Color(0xFFFFC107),
-                    style = MaterialTheme.typography.bodyMedium
+            if (!isEditing) {
+                ProfileSummarySection(uiState, age)
+                LinkedInAndGitHubIcons(
+                    linkedinUrl = student?.linkedinUrl ?: "",
+                    githubUrl = student?.githubUrl ?: ""
                 )
+                Spacer(modifier = Modifier.height(24.dp))
             }
-
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primary
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Text(
-                text = "Sobre mi",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            if (age != null || location.isNotBlank()) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    if (age != null) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.icon_birth),
-                                contentDescription = "Edad",
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(20.dp)
-                            )
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Text(
-                                text = "$age",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
-                        }
-                    }
-
-                    if (location.isNotBlank()) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.icon_location),
-                                contentDescription = "Ubicación",
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(20.dp)
-                            )
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Text(
-                                text = location,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(12.dp))
-            }
-
-            LinkedInAndGitHubIcons(
-                linkedinUrl = linkedinUrl,
-                githubUrl = githubUrl
-            )
 
             Button(
-                onClick = {},
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp),
+                onClick = {
+                    if (isEditing) {
+                        student?.let {
+                            profileViewModel.updateStudent(it.copy(
+                                description = uiState.description,
+                                location = uiState.location
+                            ))
+                        }
+                        user?.let {
+                            profileViewModel.updateUser(it.copy(
+                                firstName = uiState.firstName,
+                                lastName = uiState.lastName
+                            ))
+                        }
+                    }
+                    isEditing = !isEditing
+                },
+                modifier = Modifier.fillMaxWidth().height(48.dp),
                 shape = MaterialTheme.shapes.small,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary
                 )
             ) {
-                Text("Editar Perfil", color = Color.White)
+                Text(
+                    text = if (isEditing) "Guardar" else "Editar Perfil",
+                    color = Color.White
+                )
             }
-
-            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }
+
+@Composable
+fun ProfileNameSection(
+    uiState: ProfileUiState,
+    isEditing: Boolean,
+    onValueChange: (ProfileUiState) -> Unit
+) {
+    if (isEditing) {
+        ProfileTextField("Nombre", uiState.firstName) {
+            onValueChange(uiState.copy(firstName = it))
+        }
+        ProfileTextField("Apellido", uiState.lastName) {
+            onValueChange(uiState.copy(lastName = it))
+        }
+        ProfileTextField("Descripcion", uiState.description) {
+            onValueChange(uiState.copy(description = it))
+        }
+        ProfileTextField("Ciudad", uiState.location) {
+            onValueChange(uiState.copy(location = it))
+        }
+    } else {
+        Text(text = "${uiState.firstName} ${uiState.lastName}", style = MaterialTheme.typography.titleLarge)
+        Text(
+            text = uiState.description,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.primary
+        )
+    }
+}
+
+@Composable
+fun ProfileTextField(label: String, value: String, onValueChange: (String) -> Unit) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(label, color = MaterialTheme.colorScheme.primary) },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+            focusedLabelColor = MaterialTheme.colorScheme.primary,
+            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            cursorColor = MaterialTheme.colorScheme.primary
+        ),
+        textStyle = MaterialTheme.typography.bodyLarge,
+        singleLine = true
+    )
+}
+
+@Composable
+fun ProfileSummarySection(uiState: ProfileUiState, age: Int?) {
+    Spacer(modifier = Modifier.height(24.dp))
+    Text("Sobre mí", style = MaterialTheme.typography.titleMedium)
+    Spacer(modifier = Modifier.height(12.dp))
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        if (age != null) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    painter = painterResource(id = R.drawable.icon_birth),
+                    contentDescription = "Edad",
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(20.dp)
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text("$age años")
+            }
+            Spacer(modifier = Modifier.width(32.dp))
+        }
+        if (uiState.location.isNotBlank()) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    painter = painterResource(id = R.drawable.icon_location),
+                    contentDescription = "Ubicación",
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(20.dp)
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(uiState.location)
+            }
+        }
+    }
+    Spacer(modifier = Modifier.height(8.dp))
+}
+
 
 @Composable
 fun LinkedInAndGitHubIcons(linkedinUrl: String, githubUrl: String) {
@@ -190,8 +243,7 @@ fun LinkedInAndGitHubIcons(linkedinUrl: String, githubUrl: String) {
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         IconButton(
-            onClick = {},
-           // onClick = { openUrl(context, linkedinUrl) },
+            onClick = { openUrl(context, linkedinUrl) },
             modifier = Modifier.weight(1f)
         ) {
             Icon(
@@ -203,8 +255,7 @@ fun LinkedInAndGitHubIcons(linkedinUrl: String, githubUrl: String) {
         }
 
         IconButton(
-            onClick = {},
-            //onClick = {  openUrl(context, githubUrl) },
+            onClick = {  openUrl(context, githubUrl) },
             modifier = Modifier.weight(1f)
         ) {
             Icon(
@@ -255,12 +306,20 @@ fun openUrl(context: Context, url: String) {
     context.startActivity(intent)
 }
 
-fun ageCal(bornDate: String): Int? {
+fun ageCal(bornDate: String?): Int? {
+    if (bornDate.isNullOrBlank()) return null
+
     return try {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val fechaNacimiento = LocalDate.parse(bornDate.trim(), formatter)
-        val hoy = LocalDate.now()
-        Period.between(fechaNacimiento, hoy).years
+        val isoFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val javaToStringFormatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
+
+        val parsedDate = try {
+            LocalDate.parse(bornDate.trim(), isoFormatter)
+        } catch (e: DateTimeParseException) {
+            LocalDate.parse(bornDate.trim(), javaToStringFormatter)
+        }
+
+        Period.between(parsedDate, LocalDate.now()).years
     } catch (e: Exception) {
         null
     }

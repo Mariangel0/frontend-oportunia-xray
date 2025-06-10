@@ -89,11 +89,13 @@ fun NavGraph(
             AdviceScreen(navController, paddingValues, adviceViewModel)
         }
 
-
         composable(NavRoutes.Profile.ROUTE) {
-            PerfilScreen(navController, paddingValues, profileViewModel)
+            PerfilScreen(
+                navController = navController,
+                paddingValues = paddingValues,
+                profileViewModel = profileViewModel
+            )
         }
-
 
         composable(
             route = NavRoutes.CompanyDetail.ROUTE,

@@ -44,6 +44,7 @@ fun SkillsScreen(
     skillsViewModel: SkillsViewModel,
 ) {
     LaunchedEffect(studentId) {
+        skillsViewModel.getUser()
         skillsViewModel.getStudentById(studentId)
         skillsViewModel.getAbilitiesForStudent(studentId)
         skillsViewModel.getExperiencesForStudent(studentId)

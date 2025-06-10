@@ -47,6 +47,10 @@ fun MenuScreen(
     loginViewModel: LoginViewModel
 ) {
 
+    LaunchedEffect(Unit) {
+        loginViewModel.getUser()
+    }
+
     val user by loginViewModel.loggedUser.collectAsState()
     val username = user?.firstName ?: "Usuario"
 

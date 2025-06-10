@@ -158,5 +158,17 @@ class LoginViewModel @Inject constructor(
 
 
 
+    fun getUser() {
+        viewModelScope.launch {
+            authRepository.getCurrentUser()
+                .onSuccess { user ->
+                    _loggedUser.value = user
+                    Log.d("LoginViewModel", "User recargado: ${user?.firstName}")
+                }
+                .onFailure {
+                    Log.e("LoginViewModel", "Error al recargar el usuario: ${it.message}")
+                }
+        }
+    }
 
 }
