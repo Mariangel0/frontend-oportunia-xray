@@ -94,7 +94,7 @@ fun CurriculumScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Sube tu currículum para su análisis", style = MaterialTheme.typography.titleMedium)
+            Text("Sube tu currículum para su análisis", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
 
             FormatCard()
 
@@ -123,10 +123,17 @@ fun CurriculumScreen(
                     AnalysisButtons(
                         fileUri = fileUri,
                         onCloudAnalysisClick = {
-                            fileUri?.let {
-                                curriculumViewModel.uploadToTextract(it, studentId)
+                            if (fileUri != null) {
+                                try {
+                                    curriculumViewModel.uploadToTextract(fileUri!!, studentId)
+                                } catch (e: Exception) {
+                                    Toast.makeText(context, "Error subiendo archivo", Toast.LENGTH_SHORT).show()
+                                }
+                            } else {
+                                Toast.makeText(context, "Selecciona un archivo primero", Toast.LENGTH_SHORT).show()
                             }
-                        },
+                        }
+                        ,
                         onIAAnalysisClick = {
                             if (fileUri != null) {
                                 try {
@@ -179,7 +186,7 @@ fun FormatCard() {
             Icon(
                 imageVector = Icons.Default.Upload,
                 contentDescription = null,
-                tint = Color(0xFF512DA8),
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(30.dp)
             )
 
@@ -188,13 +195,13 @@ fun FormatCard() {
             Column {
                 Text(
                     text = "Ver formato oficial",
-                    color = Color(0xFF512DA8),
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 )
                 Text(
                     text = "Solo para análisis en la nube",
-                    color = Color(0xFF512DA8),
+                    color = MaterialTheme.colorScheme.primary,
                     fontSize = 13.sp
                 )
             }
@@ -220,8 +227,8 @@ fun FileUploadBox(
             contentAlignment = Alignment.Center
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Icon(Icons.Default.Upload, contentDescription = null, tint = Color(0xFF7C4DFF))
-                Text("Cargar currículum", color = Color(0xFF7C4DFF), fontWeight = FontWeight.Bold)
+                Icon(Icons.Default.Upload, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                Text("Cargar currículum", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
                 Text("Usa un archivo .pdf", fontSize = 12.sp)
             }
         }
@@ -255,7 +262,7 @@ fun AnalysisButtons(
         Button(
             onClick = onCloudAnalysisClick,
             modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7C4DFF)),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
             shape = RoundedCornerShape(12.dp)
         ) {
             Text("Análisis en la nube", color = Color.White)
@@ -264,7 +271,7 @@ fun AnalysisButtons(
         Button(
             onClick = onIAAnalysisClick,
             modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7C4DFF)),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
             shape = RoundedCornerShape(12.dp)
         ) {
             Text("Análisis con IA", color = Color.White)

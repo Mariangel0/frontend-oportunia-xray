@@ -47,20 +47,20 @@ fun CVAnalysisScreen(
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
                     }
-                    Text("Análisis de currículum", style = MaterialTheme.typography.titleMedium)
+                    Text("Análisis de currículum", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
                 }
 
                 Column(modifier = Modifier.padding(24.dp)) {
-                    Text("${score.toInt()}%", fontSize = 36.sp, color = Color(0xFF7C4DFF), fontWeight = FontWeight.Bold)
+                    Text("${score}%", fontSize = 36.sp, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
                     Text("DE 100%", fontSize = 16.sp, fontWeight = FontWeight.Medium)
                 }
 
                 Divider()
 
                 Text(
-                    text = "📝 Comentario general",
+                    text = "Comentario general",
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF7C4DFF),
+                    color = MaterialTheme.colorScheme.primary,
                     fontSize = 18.sp,
                     modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
                 )
@@ -73,9 +73,9 @@ fun CVAnalysisScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "📌 Recomendaciones",
+                    text = "Recomendaciones",
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF7C4DFF),
+                    color = MaterialTheme.colorScheme.primary,
                     fontSize = 18.sp,
                     modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
                 )
