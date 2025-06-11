@@ -27,7 +27,8 @@ import com.frontend.oportunia.presentation.viewmodel.QuizViewModel
 import com.frontend.oportunia.presentation.viewmodel.RegisterViewModel
 import com.frontend.oportunia.presentation.viewmodel.SkillsViewModel
 import com.frontend.oportunia.presentation.viewmodel.CurriculumViewModel
-
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -71,20 +72,36 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, registerViewModel: RegisterViewModel, skillViewModel: SkillsViewModel, adviceViewModel: AdviceViewModel, profileViewModel: ProfileViewModel, companyReviewViewModel: CompanyReviewViewModel, interviewViewModel: InterviewViewModel, quizViewModel: QuizViewModel, curriculumViewModel: CurriculumViewModel) {
+fun Main(
+    companyViewModel: CompanyViewModel,
+    loginViewModel: LoginViewModel,
+    registerViewModel: RegisterViewModel,
+    skillViewModel: SkillsViewModel,
+    adviceViewModel: AdviceViewModel,
+    profileViewModel: ProfileViewModel,
+    companyReviewViewModel: CompanyReviewViewModel,
+    interviewViewModel: InterviewViewModel,
+    quizViewModel: QuizViewModel,
+    curriculumViewModel: CurriculumViewModel
+) {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
+    val user by loginViewModel.loggedUser.collectAsState()
+    val isAdmin = user?.roles?.any { it.name == "ADMIN" } == true
 
     Scaffold(
         bottomBar = {
-            // Solo mostrar el BottomNavigationBar si la ruta no es una de las que no quieres mostrar la barra
             if (currentRoute !in listOf(
                     NavRoutes.Login.ROUTE,
                     NavRoutes.Register.ROUTE,
                     NavRoutes.MainPage.ROUTE
-                )) {
-                BottomNavigationBar(navController = navController)
+                )
+            ) {
+                BottomNavigationBar(
+                    navController = navController,
+                    isAdmin = isAdmin
+                )
             }
         }
     ) { paddingValues ->
@@ -104,7 +121,6 @@ fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, reg
         )
     }
 }
-
 
 //class MainActivity : ComponentActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {

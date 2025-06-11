@@ -53,7 +53,7 @@ fun SkillsScreen(
     val user by skillsViewModel.loggedUser.collectAsState()
     val abilities by skillsViewModel.abilityList.collectAsState()
     val experiences by skillsViewModel.experienceList.collectAsState()
-    val role = if (user != null) stringResource(R.string.student) else stringResource(R.string.adminastror)
+    val role = if (user != null) stringResource(R.string.student) else stringResource(R.string.administrador)
 
     MainLayout(
         paddingValues = paddingValues,

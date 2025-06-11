@@ -24,6 +24,7 @@ import com.frontend.oportunia.presentation.ui.screens.PerfilScreen
 import com.frontend.oportunia.presentation.ui.screens.QuizScreen
 import com.frontend.oportunia.presentation.ui.screens.RegisterScreen
 import com.frontend.oportunia.presentation.ui.screens.SkillsScreen
+import com.frontend.oportunia.presentation.ui.screens.admin.AdminMenuScreen
 import com.frontend.oportunia.presentation.viewmodel.AdviceViewModel
 import com.frontend.oportunia.presentation.viewmodel.CompanyReviewViewModel
 import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
@@ -59,18 +60,17 @@ fun NavGraph(
 
 
         composable(NavRoutes.Login.ROUTE) {
-            LoginScreen(paddingValues, loginViewModel, navController,
+            LoginScreen(
+                paddingValues = paddingValues,
+                viewModel = loginViewModel,
+                navController = navController,
                 onLoginSuccess = {
-                    navController.navigate(NavRoutes.Menu.ROUTE) {
-                        // Clear back stack so user can't navigate back to login screen
-                        popUpTo(NavRoutes.Login.ROUTE) { inclusive = true }
-                    }
+                    // Ya no navegues aquí. La navegación se hace dentro de LoginScreen.
                 }
             )
         }
 
-
-        composable(NavRoutes.Register.ROUTE) {
+                composable(NavRoutes.Register.ROUTE) {
             RegisterScreen(paddingValues, registerViewModel, navController)
         }
 
@@ -208,6 +208,14 @@ fun NavGraph(
             CVAnalysisScreen(
                 navController = navController,
                 viewModel = curriculumViewModel
+            )
+        }
+
+        composable(NavRoutes.AdminMenu.ROUTE) {
+            AdminMenuScreen(
+                navController = navController,
+                paddingValues = paddingValues,
+                viewModel = loginViewModel,
             )
         }
 

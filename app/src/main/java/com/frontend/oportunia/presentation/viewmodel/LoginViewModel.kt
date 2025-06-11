@@ -99,15 +99,17 @@ class LoginViewModel @Inject constructor(
 
             authRepository.login(username, password)
                 .onSuccess {
-                    _loginState.value = LoginState.Success
                     _isLoggedIn.value = true
                     authRepository.getCurrentUser()
                         .onSuccess { user ->
                             _loggedUser.value = user
                             Log.d("LoginViewModel", "User loaded: ${user?.firstName}")
+
+                            _loginState.value = LoginState.Success
                         }
                         .onFailure {
                             Log.e("LoginViewModel", "Failed to load current user after login: ${it.message}")
+                            _loginState.value = LoginState.Error("No se pudo obtener la información del usuario.")
                         }
 
                     Log.d("LoginViewModel", "Login successful for user: $username")
