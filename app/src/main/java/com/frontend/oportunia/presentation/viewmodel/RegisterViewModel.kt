@@ -5,10 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.frontend.oportunia.data.remote.dto.StudentDto
 import com.frontend.oportunia.data.remote.dto.UserDto
+import com.frontend.oportunia.domain.model.Privilege
 import com.frontend.oportunia.domain.model.Role
 import com.frontend.oportunia.domain.model.Student
 import com.frontend.oportunia.domain.model.User
 import com.frontend.oportunia.domain.repository.StudentRepository
+import com.frontend.oportunia.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,10 +23,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor (
-    private val repository: StudentRepository
+    private val repository: StudentRepository,
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
-    // Datos personales
     val name = MutableStateFlow("")
     val lastName = MutableStateFlow("")
     val email = MutableStateFlow("")
@@ -36,6 +38,8 @@ class RegisterViewModel @Inject constructor (
     val isWorking = MutableStateFlow(false)
     val company = MutableStateFlow("")
     val jobPosition = MutableStateFlow("")
+    val linkedinUrl = MutableStateFlow("")
+    val githubUrl = MutableStateFlow("")
 
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> get() = _error
@@ -92,9 +96,11 @@ class RegisterViewModel @Inject constructor (
             return
         }
 
-        val idR = (1..9999).random().toLong()
+        val ln = linkedinUrl.value?.takeIf { it.isNotBlank() } ?: ""
+        val gh = githubUrl.value?.takeIf { it.isNotBlank() } ?: ""
+
+
         val user = User(
-            id = idR,
             createDate = Date(),
             email = email.value,
             enabled = true,
@@ -105,18 +111,26 @@ class RegisterViewModel @Inject constructor (
             roles = listOf(
                 Role(
                     id = 1,
-                    name = "STUDENT"
+                    name = "USER",
+                    privileges  = listOf(
+                        Privilege(
+                            id = 1,
+                            name = "WRITE_PRIVILEGE"
+                        )
+                    )
+
+
                 )
             )
+
         )
         val formattedDate = birthDate.value?.let { convertMillisToDate(it) } ?: ""
         val student = Student(
-           // user = user,
-            id = idR,
+            user = user,
             description = "Nuevo estudiante",
             premium = false,
-            linkedinUrl = "",
-            githubUrl = "" ,
+            linkedinUrl = ln,
+            githubUrl = gh ,
             bornDate = formattedDate,
             location = "",
 
@@ -124,14 +138,27 @@ class RegisterViewModel @Inject constructor (
 
         viewModelScope.launch {
             try {
-                val result = repository.createStudent(student)
+                val result = userRepository.createUser(user)
+                println("AQUI TODO BIEN")
                 if (result.isSuccess) {
+                    println("AQUI TODO BIEN 2")
                     _error.value = null
-                    onSuccess()
+                    println("AQUI TODO BIEN 3")
+                    student.userId = result.getOrNull()?.id
+                    val result = repository.createStudent(student)
+                    println("AQUI TODO BIEN 4")
+                    if (result.isSuccess) {
+                        _error.value = null
+                        onSuccess()
+                    } else {
+                        _error.value = "register_failed"
+                    }
                 } else {
                     _error.value = "register_failed"
+
                 }
             } catch (e: Exception) {
+                e.printStackTrace()
                 _error.value = "network_error"
             }
         }

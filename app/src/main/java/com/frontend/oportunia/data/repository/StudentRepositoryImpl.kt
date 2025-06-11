@@ -37,15 +37,28 @@ class StudentRepositoryImpl @Inject constructor(
         }
 
     override suspend fun createStudent(student: Student): Result<Student> {
+        val TAG = "StudentRepository"
         val studentDto = studentMapper.mapToDto(student)
+
+        Log.d(TAG, "Intentando crear estudiante con DTO: $studentDto")
+
         return try {
             val response = dataSource.createStudent(studentDto)
-            if (response.isSuccessful && response.body() != null) {
-                Result.success(studentMapper.mapToDomain(response.body()!!))
+            Log.d(TAG, "Respuesta HTTP: ${response.code()} ${response.message()}")
+
+            val responseBody = response.body()
+            Log.d(TAG, "Cuerpo de la respuesta: $responseBody")
+
+            if (response.isSuccessful && responseBody != null) {
+                val studentDomain = studentMapper.mapToDomain(responseBody)
+                Log.d(TAG, "Estudiante creado exitosamente: $studentDomain")
+                Result.success(studentDomain)
             } else {
+                Log.e(TAG, "Error en la creación del estudiante: ${response.code()} ${response.message()}")
                 Result.failure(Exception("Error en la creación del estudiante: ${response.code()} ${response.message()}"))
             }
         } catch (e: Exception) {
+            Log.e(TAG, "Excepción durante la creación del estudiante", e)
             Result.failure(e)
         }
     }
@@ -61,7 +74,7 @@ class StudentRepositoryImpl @Inject constructor(
             val studentDto = studentMapper.mapToDto(student)
 
             // Llamar al data source
-            val response = dataSource.updateStudent(student.id, studentDto)
+            val response = dataSource.updateStudent(student.user?.id!!, studentDto)
 
             if (response.isSuccessful && response.body() != null) {
                 val updatedDto = response.body()!!

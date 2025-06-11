@@ -47,7 +47,7 @@ class ProfileViewModel @Inject constructor(
 
                     val isStudent = user?.roles?.any { it.name == "STUDENT" }
                     if (isStudent == true) {
-                        studentRepository.findStudentByUserId(user.id)
+                        studentRepository.findStudentByUserId(user.id!!)
                             .onSuccess { student ->
                                 _loggedStudent.value = student
                             }

@@ -1,5 +1,6 @@
 package com.frontend.oportunia.data.repository
 
+import android.util.Log
 import com.frontend.oportunia.data.datasource.UserDataSource
 import com.frontend.oportunia.data.mapper.UserMapper
 import com.frontend.oportunia.data.remote.dto.UserDto
@@ -46,6 +47,30 @@ class UserRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    override suspend fun createUser(user: User): Result<User> {
+        return try {
+            val userDto = userMapper.mapToDto(user)
+            val response = dataSource.createUser(userDto)
+            if (response.isSuccessful) {
+                val createdUserDto = response.body()
+                if (createdUserDto != null) {
+                    val createdUserDomain = userMapper.mapToDomain(createdUserDto)
+                    Result.success(createdUserDomain)
+                } else {
+                    Result.failure(Exception("Error creating user: Response body is null"))
+
+                }
+            } else {
+                Result.failure(Exception("Error creating user: ${response.code()} ${response.message()}"))
+            }
+        } catch (e: Exception) {
+
+            Log.e("UserRepository", "Error creating user", e)
+            Result.failure(e)
+        }
+
     }
 
 

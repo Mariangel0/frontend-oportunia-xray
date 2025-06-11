@@ -20,6 +20,7 @@ import com.frontend.oportunia.data.remote.api.UserService
 import com.frontend.oportunia.data.remote.dto.AbilityDto
 import com.frontend.oportunia.data.remote.dto.CompanyReviewDto
 import com.frontend.oportunia.data.remote.dto.ExperienceDto
+import com.frontend.oportunia.data.remote.dto.RoleDto
 import com.frontend.oportunia.data.remote.dto.StudentDto
 import com.frontend.oportunia.data.remote.dto.UserDto
 import com.frontend.oportunia.data.remote.interceptor.AuthInterceptor
@@ -27,6 +28,7 @@ import com.frontend.oportunia.data.remote.interceptor.ResponseInterceptor
 import com.frontend.oportunia.data.remote.serializer.AbilityDeserializer
 import com.frontend.oportunia.data.remote.serializer.CompanyReviewDeserializer
 import com.frontend.oportunia.data.remote.serializer.ExperienceDeserializer
+import com.frontend.oportunia.data.remote.serializer.RoleDeserializer
 import com.frontend.oportunia.data.remote.serializer.StudentDeserializer
 import com.frontend.oportunia.data.remote.serializer.UserDeserializer
 import okhttp3.OkHttpClient
@@ -76,6 +78,7 @@ object NetworkModule {
         .registerTypeAdapter(ExperienceDto::class.java, ExperienceDeserializer())
         .registerTypeAdapter(UserDto::class.java, UserDeserializer())
         .registerTypeAdapter(ExperienceDto::class.java, ExperienceDeserializer())
+        .registerTypeAdapter(RoleDto::class.java, RoleDeserializer())
         .setDateFormat(DATE_FORMAT)
         .create()
 

@@ -41,16 +41,17 @@ class StudentDeserializer : JsonDeserializer<StudentDto> {
         val userJson = jsonObject.get("user")
         val user = context.deserialize<UserDto>(userJson, UserDto::class.java)
 
+        val userId = jsonObject.get("userId").asLong
 
         return StudentDto(
             user = user,
-            id = id,
             description = description,
             premium = premium,
             linkedinUrl = linkedinUrl,
             githubUrl = githubUrl,
             bornDate = bornDate.toString(),
-            location = location
+            location = location,
+            userId = userId
         )
     }
 }

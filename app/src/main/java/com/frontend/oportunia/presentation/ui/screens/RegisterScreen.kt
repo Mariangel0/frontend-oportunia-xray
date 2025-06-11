@@ -53,6 +53,9 @@ fun RegisterScreen(
     val jobPosition by viewModel.jobPosition.collectAsState()
     val selectedImageUri by viewModel.selectedImageUri.collectAsState()
     val error by viewModel.error.collectAsState()
+    val githubUrl by viewModel.githubUrl.collectAsState()
+    val linkedinUrl by viewModel.linkedinUrl.collectAsState()
+
     val showDialog by viewModel.showErrorDialog.collectAsState()
 
 
@@ -179,6 +182,25 @@ fun RegisterScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
+                )
+            }
+
+            item {
+                LabeledTextField(
+                    label = stringResource(R.string.linkedin),
+                    value = linkedinUrl,
+                    placeholder = stringResource(R.string.linkedin_placeholder),
+                    onValueChange = { viewModel.linkedinUrl.value = it }
+                )
+
+            }
+
+            item {
+                LabeledTextField(
+                    label = stringResource(R.string.github),
+                    value = githubUrl,
+                    placeholder = stringResource(R.string.github_placeholder),
+                    onValueChange = { viewModel.githubUrl.value = it }
                 )
             }
 

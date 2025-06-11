@@ -6,11 +6,13 @@ import com.frontend.oportunia.domain.model.Role
 class RoleMapper {
     fun mapToDomain(dto: RoleDto): Role = Role(
         id = dto.id,
-        name = dto.name
+        name = dto.name,
+        privileges = dto.privileges.map { PrivilegeMapper().mapToDomain(it) }
     )
 
     fun mapToDto(domain: Role): RoleDto = RoleDto(
         id = domain.id,
-        name = domain.name
+        name = domain.name,
+        privileges = domain.privileges.map { PrivilegeMapper().mapToDto(it) }
     )
 }

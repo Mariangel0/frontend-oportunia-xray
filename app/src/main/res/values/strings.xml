@@ -43,6 +43,10 @@
     <string name="personal_data">Información Personal</string>
     <string name="laboral_data">Información Académica y Laboral</string>
     <string name="error_password_mismatch">Las contraseñas no coinciden.</string>
+    <string name="linkedin">LinkedIn</string>
+    <string name="linkedin_placeholder">Ingresa tu URL de LinkedIn</string>
+    <string name="github">GitHub</string>
+    <string name="github_placeholder">Ingresa tu URL de GitHub</string>
 
 
 
