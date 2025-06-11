@@ -59,14 +59,20 @@ fun MenuScreen(
             paddingValues = paddingValues,
             headerType = HeaderType.WELCOME,
             username = username,
+            onLogoutClick = {
+                loginViewModel.logout()
+                navController.navigate(NavRoutes.MainPage.ROUTE) {
+                    popUpTo(0) { inclusive = true }
+                }
+            }
         ) {
             DailyQuizAlert(navController = navController, studentId = user?.id ?: 1)
             StreakCalendar()
             Learning(navController = navController, studentId = user?.id ?: -1L)
             CompaniesCarousel(companyViewModel = companyViewModel, navController = navController)
+         }
         }
     }
-}
 
 @Composable
 fun Learning(navController: NavController, studentId: Long) {

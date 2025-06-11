@@ -85,21 +85,17 @@ class LoginViewModel @Inject constructor(
             _isLoading.value = true
             _loginState.value = LoginState.Loading
 
-
-            // Validate inputs before attempting network call
             if (!isValidEmail(username)) {
-                _loginState.value = LoginState.Error("Invalid email format")
+                _loginState.value = LoginState.Error("El correo electrónico no tiene un formato válido.")
                 _isLoading.value = false
                 return@launch
             }
-
 
             if (password.length < 5) {
-                _loginState.value = LoginState.Error("Password must be at least 5 characters")
+                _loginState.value = LoginState.Error("La contraseña debe tener al menos 5 caracteres.")
                 _isLoading.value = false
                 return@launch
             }
-
 
             authRepository.login(username, password)
                 .onSuccess {
@@ -116,13 +112,22 @@ class LoginViewModel @Inject constructor(
 
                     Log.d("LoginViewModel", "Login successful for user: $username")
                 }
+                .onFailure { exception ->
+                    Log.e("LoginViewModel", "Login failed: ${exception.message}")
 
+                    val message = when {
+                        exception.message?.contains("Unauthorized", ignoreCase = true) == true ||
+                                exception.message?.contains("401") == true -> "Correo o contraseña incorrectos."
+                        exception.message?.contains("timeout", ignoreCase = true) == true -> "Error de conexión. Inténtalo de nuevo."
+                        else -> "No se pudo iniciar sesión. Intenta más tarde."
+                    }
 
+                    _loginState.value = LoginState.Error(message)
+                }
 
             _isLoading.value = false
         }
     }
-
 
     private fun isValidEmail(email: String): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
