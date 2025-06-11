@@ -6,3 +6,4 @@ data class InterviewDto(
     val date: String,
     val result: String
 )
+

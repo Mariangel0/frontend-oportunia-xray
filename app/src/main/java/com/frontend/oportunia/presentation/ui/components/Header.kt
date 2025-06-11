@@ -8,10 +8,11 @@ fun Header(
     title: String = "",
     username: String = "",
     onBackClick: () -> Unit = {},
+    onLogoutClick: () -> Unit = {}
 ) {
     when (type) {
         HeaderType.BACK -> HeaderWithBackButton(title, onBackClick)
-        HeaderType.WELCOME -> HeaderWelcome(username)
+        HeaderType.WELCOME -> HeaderWelcome(username,  onLogoutClick)
         HeaderType.NONE -> {}
     }
 }

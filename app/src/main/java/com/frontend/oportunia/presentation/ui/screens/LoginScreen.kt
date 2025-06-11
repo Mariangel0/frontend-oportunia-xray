@@ -63,9 +63,15 @@ fun LoginScreen(
 
     LaunchedEffect(loginState) {
         if (loginState is LoginState.Success) {
-            navController.navigate(NavRoutes.Menu.ROUTE) {
+            val user = viewModel.loggedUser.value
+            val isAdmin = user?.roles?.any { it.name == "ADMIN" } == true
+
+            navController.navigate(
+                if (isAdmin) NavRoutes.AdminMenu.ROUTE else NavRoutes.Menu.ROUTE
+            ) {
                 popUpTo(0) { inclusive = true }
             }
+
             onLoginSuccess()
         }
     }
@@ -166,6 +172,7 @@ fun LoginScreen(
                         .padding(horizontal = 16.dp)
                 )
             }
+
 
 
             Spacer(modifier = Modifier.height(48.dp))

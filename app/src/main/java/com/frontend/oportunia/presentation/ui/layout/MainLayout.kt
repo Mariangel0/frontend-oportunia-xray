@@ -1,11 +1,6 @@
 package com.frontend.oportunia.presentation.ui.layout
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -21,6 +16,8 @@ fun MainLayout(
     title: String = "",
     username: String = "",
     onBackClick: () -> Unit = {},
+    onLogoutClick: () -> Unit = {},
+
     content: @Composable () -> Unit
 ) {
     Surface(
@@ -28,14 +25,14 @@ fun MainLayout(
         color = MaterialTheme.colorScheme.background
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         ) {
             Header(
                 type = headerType,
                 title = title,
                 username = username,
                 onBackClick = onBackClick,
+                onLogoutClick = onLogoutClick
             )
 
             Spacer(modifier = Modifier.height(8.dp))

@@ -21,35 +21,41 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.oportunia.R
 import com.frontend.oportunia.presentation.ui.components.HeaderType
 import com.frontend.oportunia.presentation.ui.layout.MainLayout
+import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
+import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
 
 @Composable
 fun AdminMenuScreen(
+    navController: NavController,
     paddingValues: PaddingValues,
-   // loginViewModel: LoginViewModel
-) {
-  //  val admin by loginViewModel.loggedStudent.collectAsState()
+    viewModel: LoginViewModel,
+    ) {
+
+    //val admin by loginViewModel.loggedUser.collectAsState()
     val username =  "Administrador"
 
-    Column(
-
-        modifier = Modifier.fillMaxSize()
-            .padding(paddingValues)
-            .padding(horizontal = 16.dp)
-            .background(MaterialTheme.colorScheme.background)
-        ) {
+    Column(modifier = Modifier.fillMaxSize()) {
         MainLayout(
             paddingValues = paddingValues,
             headerType = HeaderType.WELCOME,
-            username = username, //Falta mejorar el header
+            username = username,
+            onLogoutClick = {
+                viewModel.logout()
+                navController.navigate(NavRoutes.MainPage.ROUTE) {
+                    popUpTo(0) { inclusive = true }
+                }
+            }
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -57,7 +63,7 @@ fun AdminMenuScreen(
                 icon = painterResource(id = R.drawable.icon_companies),
                 title = stringResource(id = R.string.btn_admin_companies),
                 description = stringResource(id = R.string.description_admin_companies),
-                onClick = { /* Acción */ }
+                onClick = { navController.navigate(NavRoutes.ManageCompanies.ROUTE) }
             )
 
             Spacer(modifier = Modifier.height(12.dp))

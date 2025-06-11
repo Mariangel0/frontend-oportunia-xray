@@ -22,20 +22,24 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.frontend.oportunia.presentation.ui.navigation.BottomNavItem
 
 @Composable
-fun BottomNavigationBar(navController: NavController) {
+fun BottomNavigationBar(
+    navController: NavController,
+    isAdmin: Boolean
+) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+
+    val items = if (isAdmin) BottomNavItem.adminItems() else BottomNavItem.items()
 
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
         modifier = Modifier.fillMaxWidth(),
     ) {
-        BottomNavItem.items().forEach { item ->
+        items.forEach { item ->
             val isSelected = currentDestination?.hierarchy?.any {
                 it.route == item.route
             } ?: false
 
-            // Get string resource outside of the semantics block
             val itemTitle = stringResource(id = item.title)
             val itemDescription = if (isSelected) {
                 "$itemTitle, selected"
@@ -72,5 +76,4 @@ fun BottomNavigationBar(navController: NavController) {
             )
         }
     }
-
 }

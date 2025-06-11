@@ -40,6 +40,27 @@ sealed class NavRoutes {
         fun createRoute(studentId: Long) = "skills/$studentId"
     }
 
+    data object CurriculumScreen : NavRoutes() {
+        const val ROUTE = "curriculum/{studentId}"
+        const val ARG_STD_ID = "studentId"
+
+        fun createRoute(studentId: Long) = "curriculum/$studentId"
+    }
+
+    data object InterviewScreen : NavRoutes() {
+        const val ROUTE = "interview/{studentId}"
+        const val ARG_INT_ID = "studentId"
+
+        fun createRoute(studentId: Long) = "interview/$studentId"
+    }
+
+    data object InterviewChat : NavRoutes() {
+        const val ROUTE = "interview_chat/{studentId}"
+        const val ARG_INC_ID = "studentId"
+        fun createRoute(studentId: Long) = "interview_chat/$studentId"
+    }
+
+
     data object CompanyReview : NavRoutes() {
         const val ROUTE = "companyReview/{companyId}"
         const val ARG_COMP_ID = "companyId"
@@ -47,8 +68,23 @@ sealed class NavRoutes {
         fun createRoute(companyId: Long) = "companyReview/$companyId"
     }
 
+    data object QuizScreen : NavRoutes() {
+        const val ROUTE = "quiz/{studentId}"
+        const val ARG_QU_ID = "studentId"
 
+        fun createRoute(studentId: Long) = "quiz/$studentId"
+    }
 
+    data object CVAnalysis : NavRoutes() {
+        const val ROUTE = "cv_analysis"
+    }
 
+    data object AdminMenu : NavRoutes() {
+        const val ROUTE = "adminMenu"
+    }
+
+    data object ManageCompanies : NavRoutes() {
+        const val ROUTE = "manageCompanies"
+    }
 
 }

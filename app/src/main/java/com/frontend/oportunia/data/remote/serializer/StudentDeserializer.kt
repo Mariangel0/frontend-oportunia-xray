@@ -33,9 +33,7 @@ class StudentDeserializer : JsonDeserializer<StudentDto> {
         val premium = jsonObject.get("premium")?.asBoolean ?: false
         val linkedinUrl = jsonObject.get("linkedinUrl")?.asString ?: ""
         val githubUrl = jsonObject.get("githubUrl")?.asString ?: ""
-        val bornDate = jsonObject.get("bornDate")?.let {
-            context.deserialize<Date>(it, Date::class.java)
-        } ?: Date()
+        val bornDate = jsonObject.get("bornDate")?.asString ?: ""
         val location = jsonObject.get("location")?.asString ?: ""
 
         val userJson = jsonObject.get("user")
@@ -43,15 +41,16 @@ class StudentDeserializer : JsonDeserializer<StudentDto> {
 
         val userId = jsonObject.get("userId").asLong
 
+
         return StudentDto(
             user = user,
             description = description,
             premium = premium,
             linkedinUrl = linkedinUrl,
             githubUrl = githubUrl,
-            bornDate = bornDate.toString(),
-            location = location,
-            userId = userId
+            userId = userId,
+            bornDate = bornDate,
+            location = location
         )
     }
 }

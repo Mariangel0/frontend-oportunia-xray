@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -38,15 +37,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.oportunia.R
 import com.frontend.oportunia.presentation.ui.components.HeaderType
 import com.frontend.oportunia.presentation.ui.layout.MainLayout
 
 
 @Composable
-fun AgregarEmpresaScreen(
-    paddingValues: PaddingValues,
-    // navController: NavController
+fun ManageCompaniesScreen(
+    navController: NavController,
+    paddingValues: PaddingValues
 ) {
     var nombre by remember { mutableStateOf("") }
     var descripcion by remember { mutableStateOf("") }
@@ -58,7 +58,7 @@ fun AgregarEmpresaScreen(
         paddingValues = paddingValues,
         headerType = HeaderType.BACK,
         title = stringResource(R.string.add_company),
-        onBackClick = { /* navController.navigateUp() */ }
+        onBackClick = { navController.navigateUp() }
     ) {
         LazyColumn(
             modifier = Modifier

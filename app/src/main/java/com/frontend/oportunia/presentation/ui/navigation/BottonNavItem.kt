@@ -14,11 +14,19 @@ sealed class BottomNavItem(
         R.string.menu,
         R.drawable.icon_menu
     )
+
+    data object AdminMenuScreen : BottomNavItem(
+        NavRoutes.AdminMenu.ROUTE,
+        R.string.administrador,
+        R.drawable.icon_menu
+    )
+
     data object AdviceScreen : BottomNavItem(
         NavRoutes.AdviceList.ROUTE,
         R.string.advice,
         R.drawable.icon_advice
     )
+
     data object ProfileScreen : BottomNavItem(
         NavRoutes.Profile.ROUTE,
         R.string.profile,
@@ -27,8 +35,13 @@ sealed class BottomNavItem(
 
     companion object {
         /**
-         * Returns a list of all bottom navigation items to be displayed in the navigation bar.
+         * Ítems para usuarios normales
          */
         fun items() = listOf(MenuScreen, AdviceScreen, ProfileScreen)
+
+        /**
+         * Ítems para administradores
+         */
+        fun adminItems() = listOf(AdminMenuScreen, ProfileScreen)
     }
 }

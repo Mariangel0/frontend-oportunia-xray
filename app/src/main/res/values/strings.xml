@@ -60,10 +60,11 @@
     <string name="search_placeholder">Buscar Empresa</string>
     <string name="profile">Perfil</string>
     <string name="student">Estudiante</string>
-    <string name="adminastror">Administrador</string>
+    <string name="administrador">Administrador</string>
 
     <string name="advice">Consejos</string>
     <string name="menu">Menu</string>
+    <string name="curriculum">Curriculum</string>
 
 
     <!--  CompanyDetailScreen -->
@@ -112,7 +113,38 @@
     <string name="upload_logo">Cargar logo</string>
     <string name="company_logo">Logo de la empresa</string>
 
+    <!--  Interview Screen  -->
+    <string name="interview_menu">Iniciar Entrevista</string>
+    <string name="interview_with_oportunia">Entrevista con OportunIA</string>
+    <string name="job_position_to_apply">Puesto a aplicar</string>
+    <string name="enter_job_position">Ingrese el puesto</string>
+    <string name="company_to_apply">Empresa a aplicar</string>
+    <string name="select_company">Seleccione una empresa</string>
+    <string name="interview_type">Tipo de entrevista</string>
+    <string name="technical_interview">Técnica</string>
+    <string name="general_interview">General</string>
+    <string name="behavioral_interview">Conductual</string>
+    <string name="start_interview">Empezar</string>
+    <string name="interview_chat">Entrevista Chat</string>
+    <string name="type_your_message">Escribe tu mensaje</string>
+    <string name="send">Enviar</string>
+    <string name="interview_intro_template">¡Hola! Soy tu asistente de entrevistas, OportunIA. Estamos simulando una entrevista para el puesto de {jobPosition} en {companyName}. Este será un proceso de entrevista {interviewType}. ¿Estás listo para comenzar?</string>
+    <string name="no_model_response">Sin respuesta del modelo.</string>
+    <string name="network_error_template">Error de red: %1$s</string>
+    <string name="start_ai_interview">Inicia con la primera pregunta para el usuario de una nueva entrevista.</string>
 
 
-
+    <!--  Quiz Screen  -->
+    <string name="next">Siguiente</string>
+    <string name="finish">Finalizar</string>
+    <string name="quiz_title">Quiz</string>
+    <string name="quiz_no_questions">No hay preguntas cargadas.</string>
+    <string name="quiz_correct">Correcta</string>
+    <string name="quiz_incorrect">Incorrecta</string>
+    <string name="quiz_topic_label">Tema del Quiz</string>
+    <string name="quiz_difficulty_label">Dificultad</string>
+    <string name="quiz_start">Comenzar Quiz</string>
+    <string name="answered">Respondida</string>
+    <string name="topic">Preguntas para preparse para una entrevista</string>
+    <string name="difficulty">Medium</string>
 </resources>

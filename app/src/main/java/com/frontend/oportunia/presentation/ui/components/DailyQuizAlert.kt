@@ -16,13 +16,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.oportunia.R
-
-
+import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
 
 
 @Composable
-fun DailyQuizAlert(onClick: () -> Unit) {
+fun DailyQuizAlert(navController: NavController, studentId: Long) {
     Card(
         modifier = Modifier.padding(horizontal = 25.dp, vertical = 20.dp).fillMaxWidth(),
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primaryContainer),
@@ -38,7 +38,8 @@ fun DailyQuizAlert(onClick: () -> Unit) {
             Text(text = stringResource(id = R.string.daily_quiz), style = MaterialTheme.typography.bodyMedium)
         }
         Row(modifier = Modifier.align(Alignment.End).padding(bottom = 10.dp, top = 10.dp, start = 16.dp, end = 16.dp)) {
-            Button(onClick = onClick, shape = MaterialTheme.shapes.small,) {
+            Button(onClick = { navController.navigate(NavRoutes.QuizScreen.createRoute(studentId))}
+                , shape = MaterialTheme.shapes.small,) {
                 Text(text = stringResource(id = R.string.button_Start))
             }
         }

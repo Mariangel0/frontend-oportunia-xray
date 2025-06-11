@@ -25,5 +25,6 @@ class InterviewDeserializer : JsonDeserializer<InterviewDto> {
         val result = jsonObject.get("result").asString
 
         return InterviewDto(id, studentId, date.toString(), result)
+
     }
 }

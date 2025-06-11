@@ -1,6 +1,7 @@
 package com.frontend.oportunia
 
 
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,16 +15,20 @@ import com.frontend.oportunia.presentation.ui.components.BottomNavigationBar
 import com.frontend.oportunia.presentation.ui.navigation.NavGraph
 import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
 import com.frontend.oportunia.presentation.ui.screens.admin.AdminMenuScreen
-import com.frontend.oportunia.presentation.ui.screens.admin.AgregarEmpresaScreen
+import com.frontend.oportunia.presentation.ui.screens.admin.ManageCompaniesScreen
 import com.frontend.oportunia.presentation.ui.theme.OportunIATheme
 import com.frontend.oportunia.presentation.viewmodel.AdviceViewModel
 import com.frontend.oportunia.presentation.viewmodel.CompanyReviewViewModel
 import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
+import com.frontend.oportunia.presentation.viewmodel.InterviewViewModel
 import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
 import com.frontend.oportunia.presentation.viewmodel.ProfileViewModel
+import com.frontend.oportunia.presentation.viewmodel.QuizViewModel
 import com.frontend.oportunia.presentation.viewmodel.RegisterViewModel
 import com.frontend.oportunia.presentation.viewmodel.SkillsViewModel
-
+import com.frontend.oportunia.presentation.viewmodel.CurriculumViewModel
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -43,6 +48,12 @@ class MainActivity : ComponentActivity() {
 
     private val adviceViewModel: AdviceViewModel by viewModels ()
 
+    private val curriculumViewModel: CurriculumViewModel by viewModels ()
+
+    private val interviewViewModel: InterviewViewModel by viewModels ()
+
+    private val quizViewModel: QuizViewModel by viewModels ()
+
     private val profileViewModel: ProfileViewModel by viewModels ()
 
     private val companyReviewViewModel: CompanyReviewViewModel by viewModels ()
@@ -51,7 +62,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             OportunIATheme {
-                Main(companyViewModel, loginViewModel, registerViewModel, skillViewModel, adviceViewModel, profileViewModel, companyReviewViewModel)
+                Main(companyViewModel, loginViewModel, registerViewModel, skillViewModel, adviceViewModel, profileViewModel, companyReviewViewModel, interviewViewModel, quizViewModel, curriculumViewModel)
             }
         }
     }
@@ -61,20 +72,36 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, registerViewModel: RegisterViewModel, skillViewModel: SkillsViewModel, adviceViewModel: AdviceViewModel, profileViewModel: ProfileViewModel, companyReviewViewModel: CompanyReviewViewModel) {
+fun Main(
+    companyViewModel: CompanyViewModel,
+    loginViewModel: LoginViewModel,
+    registerViewModel: RegisterViewModel,
+    skillViewModel: SkillsViewModel,
+    adviceViewModel: AdviceViewModel,
+    profileViewModel: ProfileViewModel,
+    companyReviewViewModel: CompanyReviewViewModel,
+    interviewViewModel: InterviewViewModel,
+    quizViewModel: QuizViewModel,
+    curriculumViewModel: CurriculumViewModel
+) {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
+    val user by loginViewModel.loggedUser.collectAsState()
+    val isAdmin = user?.roles?.any { it.name == "ADMIN" } == true
 
     Scaffold(
         bottomBar = {
-            // Solo mostrar el BottomNavigationBar si la ruta no es una de las que no quieres mostrar la barra
             if (currentRoute !in listOf(
                     NavRoutes.Login.ROUTE,
                     NavRoutes.Register.ROUTE,
                     NavRoutes.MainPage.ROUTE
-                )) {
-                BottomNavigationBar(navController = navController)
+                )
+            ) {
+                BottomNavigationBar(
+                    navController = navController,
+                    isAdmin = isAdmin
+                )
             }
         }
     ) { paddingValues ->
@@ -87,11 +114,13 @@ fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, reg
             skillsViewModel = skillViewModel,
             adviceViewModel = adviceViewModel,
             profileViewModel = profileViewModel,
-            reviewViewModel = companyReviewViewModel
+            reviewViewModel = companyReviewViewModel,
+            interviewViewModel = interviewViewModel,
+            quizViewModel = quizViewModel,
+            curriculumViewModel = curriculumViewModel
         )
     }
 }
-
 
 //class MainActivity : ComponentActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {
