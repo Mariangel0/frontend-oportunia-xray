@@ -15,7 +15,7 @@ import com.frontend.oportunia.presentation.ui.components.BottomNavigationBar
 import com.frontend.oportunia.presentation.ui.navigation.NavGraph
 import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
 import com.frontend.oportunia.presentation.ui.screens.admin.AdminMenuScreen
-import com.frontend.oportunia.presentation.ui.screens.admin.AgregarEmpresaScreen
+import com.frontend.oportunia.presentation.ui.screens.admin.ManageCompaniesScreen
 import com.frontend.oportunia.presentation.ui.theme.OportunIATheme
 import com.frontend.oportunia.presentation.viewmodel.AdviceViewModel
 import com.frontend.oportunia.presentation.viewmodel.CompanyReviewViewModel

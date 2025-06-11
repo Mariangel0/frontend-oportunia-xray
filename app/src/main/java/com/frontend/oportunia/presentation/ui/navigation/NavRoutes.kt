@@ -83,4 +83,8 @@ sealed class NavRoutes {
         const val ROUTE = "adminMenu"
     }
 
+    data object ManageCompanies : NavRoutes() {
+        const val ROUTE = "manageCompanies"
+    }
+
 }

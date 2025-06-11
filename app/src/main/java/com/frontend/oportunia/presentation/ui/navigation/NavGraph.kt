@@ -25,6 +25,7 @@ import com.frontend.oportunia.presentation.ui.screens.QuizScreen
 import com.frontend.oportunia.presentation.ui.screens.RegisterScreen
 import com.frontend.oportunia.presentation.ui.screens.SkillsScreen
 import com.frontend.oportunia.presentation.ui.screens.admin.AdminMenuScreen
+import com.frontend.oportunia.presentation.ui.screens.admin.ManageCompaniesScreen
 import com.frontend.oportunia.presentation.viewmodel.AdviceViewModel
 import com.frontend.oportunia.presentation.viewmodel.CompanyReviewViewModel
 import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
@@ -216,6 +217,13 @@ fun NavGraph(
                 navController = navController,
                 paddingValues = paddingValues,
                 viewModel = loginViewModel,
+            )
+        }
+
+        composable(NavRoutes.ManageCompanies.ROUTE) {
+            ManageCompaniesScreen(
+                navController = navController,
+                paddingValues = paddingValues
             )
         }
 

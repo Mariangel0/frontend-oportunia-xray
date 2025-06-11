@@ -63,7 +63,7 @@ fun AdminMenuScreen(
                 icon = painterResource(id = R.drawable.icon_companies),
                 title = stringResource(id = R.string.btn_admin_companies),
                 description = stringResource(id = R.string.description_admin_companies),
-                onClick = { /* Acción */ }
+                onClick = { navController.navigate(NavRoutes.ManageCompanies.ROUTE) }
             )
 
             Spacer(modifier = Modifier.height(12.dp))
