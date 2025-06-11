@@ -128,14 +128,14 @@ fun PerfilScreen(
                     }
                     isEditing = !isEditing
                 },
-                modifier = Modifier.fillMaxWidth().height(48.dp),
+                modifier = Modifier.fillMaxWidth().height(40.dp).width(200.dp),
                 shape = MaterialTheme.shapes.small,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary
                 )
             ) {
                 Text(
-                    text = if (isEditing) "Guardar" else "Editar Perfil",
+                    text = if (isEditing) "Guardar" else "Editar",
                     color = Color.White
                 )
             }
@@ -212,7 +212,7 @@ fun ProfileSummarySection(uiState: ProfileUiState, age: Int?) {
                     modifier = Modifier.size(20.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
-                Text("$age años")
+                Text("$age")
             }
             Spacer(modifier = Modifier.width(32.dp))
         }
@@ -250,7 +250,7 @@ fun LinkedInAndGitHubIcons(linkedinUrl: String, githubUrl: String) {
                 painter = painterResource(id = R.drawable.icon_linkedin),
                 contentDescription = "LinkedIn",
                 tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(28.dp)
+                modifier = Modifier.size(20.dp)
             )
         }
 
@@ -262,7 +262,7 @@ fun LinkedInAndGitHubIcons(linkedinUrl: String, githubUrl: String) {
                 painter = painterResource(id = R.drawable.icon_github),
                 contentDescription = "GitHub",
                 tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(28.dp)
+                modifier = Modifier.size(20.dp)
             )
         }
     }
