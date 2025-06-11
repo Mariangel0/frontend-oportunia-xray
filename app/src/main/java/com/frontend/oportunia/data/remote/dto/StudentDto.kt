@@ -12,5 +12,6 @@ data class StudentDto(
 )
 
 data class StudentRDto(
+    val id: Long?,
     val user: UserRDto,
 )

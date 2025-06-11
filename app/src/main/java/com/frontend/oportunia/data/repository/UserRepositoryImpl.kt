@@ -90,7 +90,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun updateUser(user: User): Result<User> {
         return try {
             val userDto = userMapper.mapToDto(user)
-            val response = dataSource.updateUser(user.id, userDto)
+            val response = dataSource.updateUser(user.id!!, userDto)
             if (response.isSuccessful) {
                 val updatedUser = userMapper.mapToDomain(response.body()!!)
                 Result.success(updatedUser)
