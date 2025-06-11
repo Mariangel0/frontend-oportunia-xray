@@ -8,41 +8,45 @@ import com.frontend.oportunia.domain.model.Education
 import com.frontend.oportunia.domain.repository.EducationRepository
 import kotlinx.coroutines.flow.first
 import java.io.IOException
+import java.net.UnknownHostException
+import javax.inject.Inject
 
-class EducationRepositoryImpl(
+class EducationRepositoryImpl @Inject constructor(
     private val dataSource: EducationDataSource,
     private val educationMapper: EducationMapper
 ) : EducationRepository {
 
-    companion object {
-        private const val TAG = "EducationRepository"
+    override suspend fun findAllEducations(): Result<List<Education>> {
+        return try {
+            dataSource.getAllEducations().map { educationDtos ->
+                educationMapper.mapToDomainList(educationDtos)
+            }
+        } catch (e: UnknownHostException) {
+            Result.failure(Exception("Network error: Cannot connect to server. Please check your internet connection."))
+        } catch (e: Exception) {
+            Result.failure(Exception("Error fetching tasks: ${e.message}"))
+        }
     }
 
-    override suspend fun findAllEducations(): Result<List<Education>> = runCatching {
-        dataSource.getEducations().first().map { educationDto ->
+    override suspend fun createEducation(education: Education): Result<Education> {
+        val educationDto = educationMapper.mapToDto(education)
+        return try {
+            val response = dataSource.createEducation(educationDto)
+            if (response.isSuccessful && response.body() != null) {
+                Result.success(educationMapper.mapToDomain(response.body()!!))
+            } else {
+                Result.failure(Exception("Error en la creación de la educación: ${response.code()} ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+            }
+    }
+
+    override suspend fun findEducationById(educationId: Long): Result<Education> {
+        return dataSource.getEducationById(educationId).map { educationDto ->
             educationMapper.mapToDomain(educationDto)
         }
-    }.recoverCatching { throwable ->
-        Log.e(TAG, "Failed to fetch educations", throwable)
-
-        when (throwable) {
-            is IOException -> throw DomainError.NetworkError("Failed to fetch educations")
-            is IllegalArgumentException -> throw DomainError.MappingError("Error mapping educations")
-            is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError("An unknown error occurred")
-        }
     }
 
-    override suspend fun findEducationById(educationId: Long): Result<Education> = runCatching {
-        val educationDto = dataSource.getEducationById(educationId) ?: throw DomainError.EducationError("Education not found")
-        educationMapper.mapToDomain(educationDto)
-    }.recoverCatching { throwable ->
-        Log.e(TAG, "Failed to fetch education with ID: $educationId", throwable)
-        when (throwable) {
-            is IOException -> throw DomainError.NetworkError("Failed to fetch education")
-            is IllegalArgumentException -> throw DomainError.MappingError("Error mapping education")
-            is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError("An unknown error occurred")
-        }
-    }
+
 }

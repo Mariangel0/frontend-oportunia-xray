@@ -3,8 +3,6 @@ package com.frontend.oportunia.presentation.viewmodel
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.frontend.oportunia.data.remote.dto.StudentDto
-import com.frontend.oportunia.data.remote.dto.UserDto
 import com.frontend.oportunia.domain.model.Privilege
 import com.frontend.oportunia.domain.model.Role
 import com.frontend.oportunia.domain.model.Student
@@ -16,7 +14,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
@@ -41,26 +38,66 @@ class RegisterViewModel @Inject constructor (
     val linkedinUrl = MutableStateFlow("")
     val githubUrl = MutableStateFlow("")
 
+
+
+    data class EducationEntry(
+        var degree: String = "",
+        var institution: String = "",
+        var graduationYear: String = ""
+    )
+
+    data class ExperienceEntry(
+        var company: String = "",
+        var role: String = "",
+        var timeline: String = ""
+    )
+
+    val educationList = MutableStateFlow<List<EducationEntry>>(emptyList())
+    val experienceList = MutableStateFlow<List<ExperienceEntry>>(emptyList())
+
+    fun addEducationEntry() {
+        educationList.value = educationList.value + EducationEntry()
+    }
+
+    fun updateEducationEntry(index: Int, field: String, value: String) {
+        val updated = educationList.value.toMutableList()
+        val entry = updated[index]
+        when (field) {
+            "degree" -> entry.degree = value
+            "institution" -> entry.institution = value
+            "graduationYear" -> entry.graduationYear = value
+        }
+        educationList.value = updated
+    }
+
+    fun removeEducationEntry(index: Int) {
+        educationList.value = educationList.value.toMutableList().apply { removeAt(index) }
+    }
+
+    fun addExperienceEntry() {
+        experienceList.value = experienceList.value + ExperienceEntry()
+    }
+
+    fun updateExperienceEntry(index: Int, field: String, value: String) {
+        val updated = experienceList.value.toMutableList()
+        val entry = updated[index]
+        when (field) {
+            "company" -> entry.company = value
+            "role" -> entry.role = value
+            "timeline" -> entry.timeline = value
+        }
+        experienceList.value = updated
+    }
+
+    fun removeExperienceEntry(index: Int) {
+        experienceList.value = experienceList.value.toMutableList().apply { removeAt(index) }
+    }
+
+
+
+
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> get() = _error
-
-    fun addEducation() {
-        education.value = education.value + ""
-    }
-
-    fun updateEducation(index: Int, value: String) {
-        val updated = education.value.toMutableList().apply {
-            this[index] = value
-        }
-        education.value = updated
-    }
-
-    fun removeEducation(index: Int) {
-        val updated = education.value.toMutableList().apply {
-            removeAt(index)
-        }
-        education.value = updated
-    }
 
     fun onImageSelected(uri: Uri?) {
         selectedImageUri.value = uri
@@ -98,6 +135,8 @@ class RegisterViewModel @Inject constructor (
 
         val ln = linkedinUrl.value?.takeIf { it.isNotBlank() } ?: ""
         val gh = githubUrl.value?.takeIf { it.isNotBlank() } ?: ""
+
+
 
 
         val user = User(

@@ -14,6 +14,10 @@ class EducationMapper(
         year = dto.year
     )
 
+    fun mapToDomainList(dtoList: List<EducationDto>): List<Education> = dtoList.map { mapToDomain(it) }
+
+
+
     fun mapToDto(domain: Education): EducationDto = EducationDto(
         id = domain.id,
         studentId = studentMapper.mapToDto(domain.studentId),
@@ -21,4 +25,7 @@ class EducationMapper(
         institution = domain.institution,
         year = domain.year
     )
+
+    fun mapToDtoList(domainList: List<Education>): List<EducationDto> = domainList.map { mapToDto(it) }
+
 }

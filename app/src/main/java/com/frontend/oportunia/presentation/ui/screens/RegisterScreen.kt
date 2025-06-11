@@ -55,8 +55,9 @@ fun RegisterScreen(
     val error by viewModel.error.collectAsState()
     val githubUrl by viewModel.githubUrl.collectAsState()
     val linkedinUrl by viewModel.linkedinUrl.collectAsState()
-
+    val educationList by viewModel.educationList.collectAsState()
     val showDialog by viewModel.showErrorDialog.collectAsState()
+    val experienceList by viewModel.experienceList.collectAsState()
 
 
     val imagePickerLauncher = rememberLauncherForActivityResult(
@@ -208,44 +209,28 @@ fun RegisterScreen(
                 TitleSection(title = stringResource(R.string.laboral_data))
             }
 
-            item {
-                Text(
-                    stringResource(R.string.education),
-                    fontSize = 16.sp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                )
-            }
 
-            itemsIndexed(education) { index, value ->
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    OutlinedTextField(
-                        value = value,
-                        onValueChange = { viewModel.updateEducation(index, it) },
-                        placeholder = { Text(stringResource(R.string.degree_placeholder)) },
-                        modifier = Modifier
-                            .fillMaxWidth(0.90f)
-                            .padding(horizontal = 16.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = MaterialTheme.colorScheme.primary,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.secondary
-                        )
-                    )
-                    IconButton(
-                        onClick = { viewModel.removeEducation(index) },
-                        modifier = Modifier
-                            .align(Alignment.CenterEnd)
-                            .padding(end = 16.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Close,
-                            contentDescription = "Eliminar título educativo"
-                        )
+
+
+            item {
+                TitleSection(title = "Educación")
+            }
+            itemsIndexed(educationList) { index, entry ->
+                Column(Modifier.padding(horizontal = 16.dp)) {
+                    LabeledTextField("Título", entry.degree, "", onValueChange = {
+                        viewModel.updateEducationEntry(index, "degree", it)
+                    })
+                    LabeledTextField("Institución", entry.institution, "", onValueChange = {
+                        viewModel.updateEducationEntry(index, "institution", it)
+                    })
+                    LabeledTextField("Año de graduación", entry.graduationYear, "", onValueChange = {
+                        viewModel.updateEducationEntry(index, "graduationYear", it)
+                    })
+                    IconButton(onClick = { viewModel.removeEducationEntry(index) }) {
+                        Icon(Icons.Default.Close, contentDescription = "Eliminar educación")
                     }
                 }
             }
-
             item {
                 Row(
                     modifier = Modifier
@@ -253,57 +238,53 @@ fun RegisterScreen(
                         .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    IconButton(onClick = { viewModel.addEducation() }) {
+                    IconButton(onClick = { viewModel.addEducationEntry() }) {
                         Icon(
                             imageVector = Icons.Default.Add,
-                            contentDescription = "Agregar título educativo",
+                            contentDescription = "Agregar educación",
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }
-                    Text(
-                        text = stringResource(R.string.add_degree),
-                        color = MaterialTheme.colorScheme.primary
-                    )
+                    Text(text = "Agregar educación", color = MaterialTheme.colorScheme.primary)
                 }
             }
-
+            item {
+                TitleSection(title = "Experiencia laboral")
+            }
+            itemsIndexed(experienceList) { index, entry ->
+                Column(Modifier.padding(horizontal = 16.dp)) {
+                    LabeledTextField("Empresa", entry.company, "", onValueChange = {
+                        viewModel.updateExperienceEntry(index, "company", it)
+                    })
+                    LabeledTextField("Rol", entry.role, "", onValueChange = {
+                        viewModel.updateExperienceEntry(index, "role", it)
+                    })
+                    LabeledTextField("Línea de tiempo", entry.timeline, "Ej: 2020 - 2023", onValueChange = {
+                        viewModel.updateExperienceEntry(index, "timeline", it)
+                    })
+                    IconButton(onClick = { viewModel.removeExperienceEntry(index) }) {
+                        Icon(Icons.Default.Close, contentDescription = "Eliminar experiencia")
+                    }
+                }
+            }
             item {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(stringResource(R.string.have_job))
-                    Switch(
-                        checked = isWorking,
-                        onCheckedChange = { viewModel.isWorking.value = it },
-                        colors = SwitchDefaults.colors(
-                            checkedThumbColor = MaterialTheme.colorScheme.primary
+                    IconButton(onClick = { viewModel.addExperienceEntry() }) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Agregar experiencia",
+                            tint = MaterialTheme.colorScheme.primary
                         )
-                    )
+                    }
+                    Text(text = "Agregar experiencia", color = MaterialTheme.colorScheme.primary)
                 }
             }
 
-            if (isWorking) {
-                item {
-                    LabeledTextField(
-                        label = stringResource(R.string.company),
-                        value = company,
-                        placeholder = stringResource(R.string.company_placeholder),
-                        onValueChange = { viewModel.company.value = it }
-                    )
-                }
-                item {
-                    LabeledTextField(
-                        label = stringResource(R.string.job_position),
-                        value = jobPosition,
-                        placeholder = stringResource(R.string.job_position_placeholder),
-                        onValueChange = { viewModel.jobPosition.value = it }
-                    )
-                }
-            }
             item {
                 errorMessage?.let {
                     Text(
@@ -340,6 +321,8 @@ fun RegisterScreen(
                 }
                 Spacer(modifier = Modifier.height(24.dp))
             }
+
+
         }
 
     }
