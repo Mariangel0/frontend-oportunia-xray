@@ -57,6 +57,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.text.font.FontWeight
 
 @Composable
 fun ManageCompaniesScreen(
@@ -65,15 +66,15 @@ fun ManageCompaniesScreen(
     companyViewModel: CompanyViewModel
 ) {
     val formState by companyViewModel.formState.collectAsState()
-    val snackbarHostState = remember { SnackbarHostState() }
-    val coroutineScope = rememberCoroutineScope()
+    val showDialog = remember { mutableStateOf(false) }
 
-    if (formState.success) {
-        LaunchedEffect(true) {
-            coroutineScope.launch {
-                snackbarHostState.showSnackbar("Empresa creada exitosamente")
-            }
-            delay(1500)
+    if (formState.success && !showDialog.value) {
+        showDialog.value = true
+    }
+
+    if (showDialog.value) {
+        CompanyCreatedDialog {
+            showDialog.value = false
             companyViewModel.resetForm()
             navController.navigateUp()
         }
@@ -85,137 +86,132 @@ fun ManageCompaniesScreen(
         title = stringResource(R.string.add_company),
         onBackClick = { navController.navigateUp() }
     ) {
-        Scaffold(
-            snackbarHost = { SnackbarHost(snackbarHostState) }
-        ) { innerPadding ->
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .navigationBarsPadding()
-                    .imePadding(),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                item { TitleSection(title = stringResource(R.string.company)) }
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .navigationBarsPadding()
+                .imePadding(),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            item { TitleSection(title = stringResource(R.string.company)) }
 
-                item {
-                    LabeledTextField(
-                        label = stringResource(R.string.name_company),
-                        value = formState.name,
-                        placeholder = stringResource(R.string.name_company_placeholder),
-                        onValueChange = { newValue -> companyViewModel.onFieldChange { it.copy(name = newValue) } }
-                    )
-                }
-
-                item {
-                    LabeledTextField(
-                        label = stringResource(R.string.description_company),
-                        value = formState.description,
-                        placeholder = stringResource(R.string.description_company_placeholder),
-                        onValueChange = { newValue -> companyViewModel.onFieldChange { it.copy(description = newValue) } }
-                    )
-                }
-
-                item {
-                    DropdownSectorField(
-                        label = "Sector",
-                        options = listOf("Tecnología", "Educación", "Salud"),
-                        selected = formState.type,
-                        onSelected = { newValue -> companyViewModel.onFieldChange { it.copy(type = newValue) } }
-                    )
-                }
-
-                item {
-                    LabeledTextField(
-                        label = stringResource(R.string.location_company),
-                        value = formState.location,
-                        placeholder = stringResource(R.string.location_company_placeholder),
-                        onValueChange = { newValue -> companyViewModel.onFieldChange { it.copy(location = newValue) } }
-                    )
-                }
-
-                item {
-                    LabeledTextField(
-                        label = "Número de empleados",
-                        value = formState.employees,
-                        placeholder = "Ej. 150",
-                        onValueChange = { newValue -> companyViewModel.onFieldChange { it.copy(employees = newValue) } }
-                    )
-                }
-
-                item {
-                    LabeledTextField(
-                        label = "Sitio web",
-                        value = formState.websiteUrl,
-                        placeholder = "https://ejemplo.com",
-                        onValueChange = { newValue -> companyViewModel.onFieldChange { it.copy(websiteUrl = newValue) } }
-                    )
-                }
-
-                item {
-                    LabeledTextField(
-                        label = "Visión",
-                        value = formState.vision,
-                        placeholder = "Describe la visión de la empresa",
-                        onValueChange = { newValue -> companyViewModel.onFieldChange { it.copy(vision = newValue) } }
-                    )
-                }
-
-                item {
-                    LabeledTextField(
-                        label = "Misión",
-                        value = formState.mission,
-                        placeholder = "Describe la misión de la empresa",
-                        onValueChange = { newValue -> companyViewModel.onFieldChange { it.copy(mission = newValue) } }
-                    )
-                }
-
-                item {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        OutlinedButton(
-                            onClick = { navController.navigateUp() },
-                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-                            shape = RoundedCornerShape(6.dp),
-                            modifier = Modifier
-                                .weight(1f)
-                                .height(52.dp),
-                            colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary)
-                        ) {
-                            Text(stringResource(R.string.cancel_button))
-                        }
-
-                        Spacer(modifier = Modifier.width(16.dp))
-
-                        Button(
-                            onClick = { companyViewModel.createCompany() },
-                            shape = RoundedCornerShape(6.dp),
-                            modifier = Modifier
-                                .weight(1f)
-                                .height(52.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-                        ) {
-                            Text(stringResource(R.string.add_company_button), color = Color.White)
-                        }
-                    }
-                }
-
-                formState.errorMessage?.let { error ->
-                    item {
-                        Text(
-                            text = error,
-                            color = Color.Red,
-                            modifier = Modifier.padding(start = 16.dp, top = 8.dp)
-                        )
-                    }
-                }
-
-                item { Spacer(modifier = Modifier.height(100.dp)) }
+            item {
+                LabeledTextField(
+                    label = stringResource(R.string.name_company),
+                    value = formState.name,
+                    placeholder = stringResource(R.string.name_company_placeholder),
+                    onValueChange = { newValue -> companyViewModel.onFieldChange { it.copy(name = newValue) } }
+                )
             }
+
+            item {
+                LabeledTextField(
+                    label = stringResource(R.string.description_company),
+                    value = formState.description,
+                    placeholder = stringResource(R.string.description_company_placeholder),
+                    onValueChange = { newValue -> companyViewModel.onFieldChange { it.copy(description = newValue) } }
+                )
+            }
+
+            item {
+                DropdownSectorField(
+                    label = "Sector",
+                    options = listOf("Tecnología", "Educación", "Salud"),
+                    selected = formState.type,
+                    onSelected = { newValue -> companyViewModel.onFieldChange { it.copy(type = newValue) } }
+                )
+            }
+
+            item {
+                LabeledTextField(
+                    label = stringResource(R.string.location_company),
+                    value = formState.location,
+                    placeholder = stringResource(R.string.location_company_placeholder),
+                    onValueChange = { newValue -> companyViewModel.onFieldChange { it.copy(location = newValue) } }
+                )
+            }
+
+            item {
+                LabeledTextField(
+                    label = "Número de empleados",
+                    value = formState.employees,
+                    placeholder = "Ej. 150",
+                    onValueChange = { newValue -> companyViewModel.onFieldChange { it.copy(employees = newValue) } }
+                )
+            }
+
+            item {
+                LabeledTextField(
+                    label = "Sitio web",
+                    value = formState.websiteUrl,
+                    placeholder = "https://ejemplo.com",
+                    onValueChange = { newValue -> companyViewModel.onFieldChange { it.copy(websiteUrl = newValue) } }
+                )
+            }
+
+            item {
+                LabeledTextField(
+                    label = "Visión",
+                    value = formState.vision,
+                    placeholder = "Describe la visión de la empresa",
+                    onValueChange = { newValue -> companyViewModel.onFieldChange { it.copy(vision = newValue) } }
+                )
+            }
+
+            item {
+                LabeledTextField(
+                    label = "Misión",
+                    value = formState.mission,
+                    placeholder = "Describe la misión de la empresa",
+                    onValueChange = { newValue -> companyViewModel.onFieldChange { it.copy(mission = newValue) } }
+                )
+            }
+
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    OutlinedButton(
+                        onClick = { navController.navigateUp() },
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+                        shape = RoundedCornerShape(6.dp),
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(52.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary)
+                    ) {
+                        Text(stringResource(R.string.cancel_button))
+                    }
+
+                    Spacer(modifier = Modifier.width(16.dp))
+
+                    Button(
+                        onClick = { companyViewModel.createCompany() },
+                        shape = RoundedCornerShape(6.dp),
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(52.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                    ) {
+                        Text(stringResource(R.string.add_company_button), color = Color.White)
+                    }
+                }
+            }
+
+            formState.errorMessage?.let { error ->
+                item {
+                    Text(
+                        text = error,
+                        color = Color.Red,
+                        modifier = Modifier.padding(start = 16.dp, top = 8.dp)
+                    )
+                }
+            }
+
+            item { Spacer(modifier = Modifier.height(100.dp)) }
         }
     }
 }
@@ -306,3 +302,41 @@ fun DropdownSectorField(
         }
     }
 }
+
+@Composable
+fun CompanyCreatedDialog(onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            Button(
+                onClick = onDismiss,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = Color.White
+                ),
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            ) {
+                Text("Aceptar", fontWeight = FontWeight.SemiBold)
+            }
+        },
+        title = {
+            Text(
+                text = "Empresa creada",
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+        },
+        text = {
+            Column {
+                Text("La empresa ha sido registrada exitosamente.")
+                Text("Ya está disponible en el sistema.")
+            }
+        },
+        shape = RoundedCornerShape(20.dp),
+        containerColor = MaterialTheme.colorScheme.surfaceVariant
+    )
+}
+

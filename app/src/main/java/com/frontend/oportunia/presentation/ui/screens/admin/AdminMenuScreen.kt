@@ -72,28 +72,11 @@ fun AdminMenuScreen(
                 icon =  painterResource(id = R.drawable.icon_users),
                 title = stringResource(id = R.string.btn_admin_users),
                 description = stringResource(id = R.string.description_admin_users),
-                onClick = { /* Acción */ }
+                onClick = { navController.navigate(NavRoutes.UserScreen.ROUTE) }
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Text(
-                text =  stringResource(id = R.string.activities),
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                StatCard(title =  stringResource(id = R.string.card_title_companies), value = "1")
-                StatCard(title = stringResource(id = R.string.card_title_users), value = "1")
-            }
-
-            Spacer(modifier = Modifier.weight(1f))
         }
     }
 }

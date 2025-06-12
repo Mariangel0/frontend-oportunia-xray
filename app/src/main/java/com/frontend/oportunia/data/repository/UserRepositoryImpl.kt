@@ -102,4 +102,17 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun deleteUser(id: Long): Result<Unit> {
+        return try {
+            val response = dataSource.deleteUser(id)
+            if (response.isSuccessful) {
+                Result.success(Unit)
+            } else {
+                Result.failure(Exception("Error deleting user: ${response.code()} ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
 }

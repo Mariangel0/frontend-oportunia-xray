@@ -29,6 +29,7 @@ import com.frontend.oportunia.presentation.viewmodel.SkillsViewModel
 import com.frontend.oportunia.presentation.viewmodel.CurriculumViewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import com.frontend.oportunia.presentation.viewmodel.UserViewModel
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -58,11 +59,13 @@ class MainActivity : ComponentActivity() {
 
     private val companyReviewViewModel: CompanyReviewViewModel by viewModels ()
 
+    private val userViewModel: UserViewModel by viewModels ()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             OportunIATheme {
-                Main(companyViewModel, loginViewModel, registerViewModel, skillViewModel, adviceViewModel, profileViewModel, companyReviewViewModel, interviewViewModel, quizViewModel, curriculumViewModel)
+                Main(companyViewModel, loginViewModel, registerViewModel, skillViewModel, adviceViewModel, profileViewModel, companyReviewViewModel, interviewViewModel, quizViewModel, curriculumViewModel, userViewModel)
             }
         }
     }
@@ -82,7 +85,8 @@ fun Main(
     companyReviewViewModel: CompanyReviewViewModel,
     interviewViewModel: InterviewViewModel,
     quizViewModel: QuizViewModel,
-    curriculumViewModel: CurriculumViewModel
+    curriculumViewModel: CurriculumViewModel,
+    userViewModel: UserViewModel
 ) {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
@@ -117,7 +121,8 @@ fun Main(
             reviewViewModel = companyReviewViewModel,
             interviewViewModel = interviewViewModel,
             quizViewModel = quizViewModel,
-            curriculumViewModel = curriculumViewModel
+            curriculumViewModel = curriculumViewModel,
+            userViewModel = userViewModel
         )
     }
 }

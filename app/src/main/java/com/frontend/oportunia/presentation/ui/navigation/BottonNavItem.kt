@@ -17,7 +17,7 @@ sealed class BottomNavItem(
 
     data object AdminMenuScreen : BottomNavItem(
         NavRoutes.AdminMenu.ROUTE,
-        R.string.administrador,
+        R.string.menu,
         R.drawable.icon_menu
     )
 

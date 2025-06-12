@@ -26,6 +26,7 @@ import com.frontend.oportunia.presentation.ui.screens.RegisterScreen
 import com.frontend.oportunia.presentation.ui.screens.SkillsScreen
 import com.frontend.oportunia.presentation.ui.screens.admin.AdminMenuScreen
 import com.frontend.oportunia.presentation.ui.screens.admin.ManageCompaniesScreen
+import com.frontend.oportunia.presentation.ui.screens.admin.UserListScreen
 import com.frontend.oportunia.presentation.viewmodel.AdviceViewModel
 import com.frontend.oportunia.presentation.viewmodel.CompanyReviewViewModel
 import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
@@ -35,6 +36,7 @@ import com.frontend.oportunia.presentation.viewmodel.ProfileViewModel
 import com.frontend.oportunia.presentation.viewmodel.QuizViewModel
 import com.frontend.oportunia.presentation.viewmodel.RegisterViewModel
 import com.frontend.oportunia.presentation.viewmodel.SkillsViewModel
+import com.frontend.oportunia.presentation.viewmodel.UserViewModel
 
 
 @Composable
@@ -50,7 +52,8 @@ fun NavGraph(
     reviewViewModel: CompanyReviewViewModel,
     curriculumViewModel: CurriculumViewModel,
     interviewViewModel: InterviewViewModel,
-    quizViewModel: QuizViewModel
+    quizViewModel: QuizViewModel,
+    userViewModel: UserViewModel
 ) {
     NavHost(navController, startDestination = NavRoutes.MainPage.ROUTE) {
 
@@ -225,6 +228,14 @@ fun NavGraph(
                 navController = navController,
                 paddingValues = paddingValues,
                 companyViewModel = companyViewModel,
+            )
+        }
+
+        composable(NavRoutes.UserScreen.ROUTE) {
+            UserListScreen(
+                navController = navController,
+                paddingValues = paddingValues,
+                userViewModel = userViewModel
             )
         }
 

@@ -128,6 +128,7 @@
     <string name="upload_logo">Cargar logo</string>
     <string name="company_logo">Logo de la empresa</string>
 
+
     <!--  Interview Screen  -->
     <string name="interview_menu">Iniciar Entrevista</string>
     <string name="interview_with_oportunia">Entrevista con OportunIA</string>
@@ -162,4 +163,8 @@
     <string name="answered">Respondida</string>
     <string name="topic">Preguntas para preparse para una entrevista</string>
     <string name="difficulty">Medium</string>
+
+
+    <string name="users">Usuarios</string>"
+
 </resources>
