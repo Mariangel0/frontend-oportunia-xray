@@ -16,7 +16,6 @@ class StudentDeserializer : JsonDeserializer<StudentDto> {
         typeOfT: Type,
         context: JsonDeserializationContext
     ): StudentDto {
-        // Manejo de JSON: si es un array, tomamos el primer objeto
         val jsonObject = when {
             json.isJsonObject -> json.asJsonObject
             json.isJsonArray -> {
@@ -28,16 +27,16 @@ class StudentDeserializer : JsonDeserializer<StudentDto> {
         }
         val id = jsonObject.get("id").asLong
 
-        //val user = context.deserialize<UserDto>(jsonObject.get("user"), UserDto::class.java)
-        val description = jsonObject.get("description")?.asString ?: ""
-        val premium = jsonObject.get("premium")?.asBoolean ?: false
-        val linkedinUrl = jsonObject.get("linkedinUrl")?.asString ?: ""
-        val githubUrl = jsonObject.get("githubUrl")?.asString ?: ""
-        val bornDate = jsonObject.get("bornDate")?.asString ?: ""
-        val location = jsonObject.get("location")?.asString ?: ""
+        val description = jsonObject.get("description")?.asString
+        val premium     = jsonObject.get("premiun")?.asBoolean // << nota, corregido más abajo
+        val linkedinUrl = jsonObject.get("linkedinUrl")?.asString
+        val githubUrl   = jsonObject.get("githubUrl")?.asString
+        val bornDate    = jsonObject.get("bornDate")?.asString
+        val location    = jsonObject.get("location")?.asString
 
-        val userJson = jsonObject.get("user")
-        val user = context.deserialize<UserDto>(userJson, UserDto::class.java)
+        val user = jsonObject.get("user")?.let {
+            context.deserialize<UserDto>(it, UserDto::class.java)
+        }
 
         val userId = if (jsonObject.has("userId") && !jsonObject.get("userId").isJsonNull) {
             jsonObject.get("userId").asLong
@@ -46,17 +45,16 @@ class StudentDeserializer : JsonDeserializer<StudentDto> {
         }
 
 
-
         return StudentDto(
             id = id,
             user = user,
+            userId      = userId,
             description = description,
-            premium = premium,
+            premium     = premium,
             linkedinUrl = linkedinUrl,
-            githubUrl = githubUrl,
-            userId = userId,
-            bornDate = bornDate,
-            location = location
+            githubUrl   = githubUrl,
+            bornDate    = bornDate,
+            location    = location
         )
     }
 }

@@ -106,7 +106,9 @@ fun CompanyScreen( paddingValues: PaddingValues,
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(companyList) { company ->
                     CompanyItem(company){
-                        navController.navigate(NavRoutes.CompanyDetail.createRoute(company.id))
+                        company.id?.let { id ->
+                            navController.navigate(NavRoutes.CompanyDetail.createRoute(id))
+                        }
                     }
                 }
             }

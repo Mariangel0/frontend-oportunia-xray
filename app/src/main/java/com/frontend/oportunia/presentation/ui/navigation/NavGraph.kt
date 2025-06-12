@@ -223,7 +223,8 @@ fun NavGraph(
         composable(NavRoutes.ManageCompanies.ROUTE) {
             ManageCompaniesScreen(
                 navController = navController,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
+                companyViewModel = companyViewModel,
             )
         }
 

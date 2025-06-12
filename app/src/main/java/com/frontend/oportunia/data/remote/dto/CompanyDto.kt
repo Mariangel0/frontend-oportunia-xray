@@ -1,7 +1,7 @@
 package com.frontend.oportunia.data.remote.dto
 
 data class CompanyDto(
-    val id: Long,
+    val id: Long? = null,
     val name: String,
     val description: String,
     val rating: Float,

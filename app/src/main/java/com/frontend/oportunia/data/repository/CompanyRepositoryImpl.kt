@@ -42,6 +42,23 @@ class CompanyRepositoryImpl  @Inject constructor (
             Result.failure(Exception("Error fetching tasks: ${e.message}"))
         }
     }
+
+    override suspend fun createCompany(company: Company): Result<Company> {
+        return try {
+            val dto = companyMapper.mapToDto(company)
+            val response = dataSource.createCompany(dto)
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    Result.success(companyMapper.mapToDomain(it))
+                } ?: Result.failure(Exception("Response body is null"))
+            } else {
+                val errorBody = response.errorBody()?.string()
+                Result.failure(Exception("Error ${response.code()}: $errorBody"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }
 
 
