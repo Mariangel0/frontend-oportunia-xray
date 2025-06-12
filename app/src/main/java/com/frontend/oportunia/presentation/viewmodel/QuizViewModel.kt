@@ -18,7 +18,6 @@ import javax.inject.Inject
 @HiltViewModel
 class QuizViewModel @Inject constructor(
     private val quizRepository: QuizRepository,
-    private val streakViewModel: StreakViewModel
 ) : ViewModel() {
 
     private val _questions = MutableStateFlow<List<MCQuestion>>(emptyList())
@@ -125,9 +124,7 @@ class QuizViewModel @Inject constructor(
 
     fun markQuizCompleted(studentId: Long) {
         viewModelScope.launch {
-            quizRepository.markQuizCompleted(studentId).onSuccess {
-                streakViewModel.loadStreak(studentId)
-            }
+            quizRepository.markQuizCompleted(studentId)
         }
     }
 }

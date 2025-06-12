@@ -209,6 +209,7 @@ fun NavGraph(
                 navController = navController,
                 paddingValues = paddingValues,
                 quizViewModel = quizViewModel,
+                streakViewModel = streakViewModel,
                 studentId = stdId
             )
         }

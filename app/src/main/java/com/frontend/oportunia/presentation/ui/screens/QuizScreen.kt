@@ -46,6 +46,7 @@ import com.example.oportunia.R
 import com.frontend.oportunia.presentation.ui.components.HeaderType
 import com.frontend.oportunia.presentation.ui.layout.MainLayout
 import com.frontend.oportunia.presentation.viewmodel.QuizViewModel
+import com.frontend.oportunia.presentation.viewmodel.StreakViewModel
 
 
 @Composable
@@ -53,6 +54,7 @@ fun QuizScreen(
     navController: NavController,
     paddingValues: PaddingValues,
     quizViewModel: QuizViewModel,
+    streakViewModel: StreakViewModel,
     studentId: Long
 ) {
     LaunchedEffect(studentId) {
@@ -169,6 +171,7 @@ fun QuizScreen(
                     onClick = {
                         if (currentIndex == 4) {
                             quizViewModel.markQuizCompleted(studentId)
+                            streakViewModel.loadStreak(studentId)
                             navController.navigateUp()
                         } else {
                             localSelected = null

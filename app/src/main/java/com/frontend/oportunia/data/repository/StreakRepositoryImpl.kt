@@ -10,8 +10,9 @@ import com.frontend.oportunia.domain.repository.StreakRepository
 import kotlinx.coroutines.flow.first
 import java.io.IOException
 import java.net.UnknownHostException
+import javax.inject.Inject
 
-class StreakRepositoryImpl(
+class StreakRepositoryImpl @Inject constructor (
     private val dataSource: StreakDataSource,
     private val streakMapper: StreakMapper
 ) : StreakRepository {

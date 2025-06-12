@@ -7,6 +7,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.ZoneId
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,10 +22,14 @@ class StreakViewModel @Inject constructor(
     fun loadStreak(studentId: Long) {
         viewModelScope.launch {
             streakRepository.getStreak(studentId).onSuccess { streak ->
-                val today = java.time.LocalDate.now()
-                val lastActivity = streak.lastActivity.toInstant()?.atZone(java.time.ZoneId.systemDefault())?.toLocalDate()
+                val systemZone = ZoneId.systemDefault() // asegura consistencia
+                val today = LocalDate.now(systemZone)
 
-                _hasCompletedToday.value = lastActivity == today
+                val lastActivityDate = streak.lastActivity.toInstant()
+                    .atZone(systemZone)
+                    .toLocalDate()
+
+                _hasCompletedToday.value = lastActivityDate.isEqual(today)
             }.onFailure {
                 _hasCompletedToday.value = false
             }

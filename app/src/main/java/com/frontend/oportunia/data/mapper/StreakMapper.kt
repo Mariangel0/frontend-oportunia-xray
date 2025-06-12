@@ -4,8 +4,9 @@ import com.frontend.oportunia.data.remote.dto.AbilityDto
 import com.frontend.oportunia.data.remote.dto.StreakDto
 import com.frontend.oportunia.domain.model.Ability
 import com.frontend.oportunia.domain.model.Streak
+import javax.inject.Inject
 
-class StreakMapper(
+class StreakMapper @Inject constructor (
     private val studentMapper: StudentMapper
 ) {
     fun mapToDomain(dto: StreakDto): Streak = Streak(

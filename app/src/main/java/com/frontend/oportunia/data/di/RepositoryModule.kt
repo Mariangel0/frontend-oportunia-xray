@@ -9,6 +9,7 @@ import com.frontend.oportunia.data.repository.ExperienceRepositoryImpl
 import com.frontend.oportunia.data.repository.IAAnalysisRepositoryImpl
 import com.frontend.oportunia.data.repository.InterviewRepositoryImpl
 import com.frontend.oportunia.data.repository.QuizRepositoryImpl
+import com.frontend.oportunia.data.repository.StreakRepositoryImpl
 import com.frontend.oportunia.data.repository.StudentRepositoryImpl
 import com.frontend.oportunia.data.repository.UserRepositoryImpl
 import com.frontend.oportunia.domain.repository.AbilityRepository
@@ -25,7 +26,6 @@ import com.frontend.oportunia.domain.repository.StudentRepository
 import com.frontend.oportunia.domain.repository.UserRepository
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
@@ -103,7 +103,7 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindStrealRepository(
-        streakRepository: StreakRepository
+    abstract fun bindStreakRepository(
+        streakRepositoryImpl: StreakRepositoryImpl
     ): StreakRepository
 }
