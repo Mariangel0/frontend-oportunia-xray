@@ -17,7 +17,7 @@ class StudentMapper @Inject constructor(
             premium = dto.premium,
             linkedinUrl = dto.linkedinUrl,
             githubUrl = dto.githubUrl,
-            bornDate = dto.bornDate ,
+            bornDate = dto.bornDate,
             location = dto.location,
             userId = dto.userId
         )

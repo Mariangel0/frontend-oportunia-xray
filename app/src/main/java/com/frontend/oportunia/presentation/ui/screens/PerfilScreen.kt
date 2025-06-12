@@ -114,10 +114,16 @@ fun PerfilScreen(
                 onClick = {
                     if (isEditing) {
                         student?.let {
-                            profileViewModel.updateStudent(it.copy(
-                                description = uiState.description,
-                                location = uiState.location
-                            ))
+                            profileViewModel.updateStudent(
+                                it.copy(
+                                    id = it.id,                          // 🔑 Asegura que el ID no se pierda
+                                    user = it.user,                      // 🔑 Necesario si el backend lo requiere
+                                    userId = it.userId,
+                                    description = uiState.description,
+                                    location = uiState.location,
+                                    bornDate = uiState.birthDate
+                                )
+                            )
                         }
                         user?.let {
                             profileViewModel.updateUser(it.copy(

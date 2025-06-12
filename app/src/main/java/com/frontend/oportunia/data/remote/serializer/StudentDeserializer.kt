@@ -46,8 +46,8 @@ class StudentDeserializer : JsonDeserializer<StudentDto> {
 
 
         return StudentDto(
-            id = id,
-            user = user,
+            id          = id, // ✅ ahora sí se asigna
+            user        = user,
             userId      = userId,
             description = description,
             premium     = premium,
