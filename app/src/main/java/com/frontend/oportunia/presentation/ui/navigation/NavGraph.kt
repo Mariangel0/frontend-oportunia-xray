@@ -217,7 +217,8 @@ fun NavGraph(
         composable(NavRoutes.CVAnalysis.ROUTE) {
             CVAnalysisScreen(
                 navController = navController,
-                viewModel = curriculumViewModel
+                viewModel = curriculumViewModel,
+                paddingValues = paddingValues
             )
         }
 

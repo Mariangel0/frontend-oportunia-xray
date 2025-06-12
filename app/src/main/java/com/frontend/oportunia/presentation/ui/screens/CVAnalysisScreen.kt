@@ -22,7 +22,8 @@ import com.frontend.oportunia.presentation.viewmodel.AnalysisState
 @Composable
 fun CVAnalysisScreen(
     navController: NavController,
-    viewModel: CurriculumViewModel
+    viewModel: CurriculumViewModel,
+    paddingValues: PaddingValues
 ) {
     val state by viewModel.analysisState.collectAsState()
 
@@ -35,8 +36,10 @@ fun CVAnalysisScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(paddingValues)
                     .background(Color.White)
             ) {
+                // Header fijo
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -47,47 +50,61 @@ fun CVAnalysisScreen(
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
                     }
-                    Text("Análisis de currículum", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
+                    Text(
+                        "Análisis de currículum",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
                 }
 
-                Column(modifier = Modifier.padding(24.dp)) {
-                    Text("${score}%", fontSize = 36.sp, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
-                    Text("DE 100%", fontSize = 16.sp, fontWeight = FontWeight.Medium)
-                }
-
-                Divider()
-
-                Text(
-                    text = "Comentario general",
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontSize = 18.sp,
-                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
-                )
-                Text(
-                    text = comentarios,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(horizontal = 24.dp)
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text(
-                    text = "Recomendaciones",
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontSize = 18.sp,
-                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
-                )
-
+                // Contenido con scroll
                 LazyColumn(
-                    modifier = Modifier
-                        .padding(horizontal = 24.dp)
-                        .weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    modifier = Modifier.weight(1f),
+                    contentPadding = PaddingValues(bottom = 24.dp)
                 ) {
+                    item {
+                        Column(modifier = Modifier.padding(24.dp)) {
+                            Text(
+                                "${score}%",
+                                fontSize = 36.sp,
+                                color = MaterialTheme.colorScheme.primary,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text("DE 100%", fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                        }
+
+                        Divider()
+
+                        Text(
+                            text = "Comentario general",
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontSize = 18.sp,
+                            modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
+                        )
+                        Text(
+                            text = comentarios,
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.padding(horizontal = 24.dp)
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Text(
+                            text = "Recomendaciones",
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontSize = 18.sp,
+                            modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
+                        )
+                    }
+
                     items(recomendaciones) { recomendacion ->
-                        Row(verticalAlignment = Alignment.Top) {
+                        Row(
+                            modifier = Modifier
+                                .padding(horizontal = 24.dp, vertical = 4.dp),
+                            verticalAlignment = Alignment.Top
+                        ) {
                             Icon(
                                 imageVector = Icons.Default.Check,
                                 contentDescription = null,
@@ -99,24 +116,27 @@ fun CVAnalysisScreen(
                             Text(text = recomendacion, style = MaterialTheme.typography.bodyMedium)
                         }
                     }
-                }
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color(0xFFEDE7F6))
-                        .padding(24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text("¿Quieres ver todos los problemas de tu currículum?", fontWeight = FontWeight.SemiBold)
-                    Button(
-                        onClick = {  },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 8.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7C4DFF))
-                    ) {
-                        Text("Mejorar plan", color = Color.White)
+                    // ✅ Footer como parte del contenido scrollable
+                    item {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(Color(0xFFEDE7F6))
+                                .padding(24.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text("¿Quieres ver todos los problemas de tu currículum?", fontWeight = FontWeight.SemiBold)
+                            Button(
+                                onClick = { /* Acción para mejorar plan */ },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 3.dp),
+                                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7C4DFF))
+                            ) {
+                                Text("Mejorar plan", color = Color.White)
+                            }
+                        }
                     }
                 }
             }

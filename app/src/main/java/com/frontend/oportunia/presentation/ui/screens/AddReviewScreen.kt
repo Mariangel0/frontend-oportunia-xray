@@ -29,6 +29,7 @@ fun AddReviewScreen(
     val rating  by reviewViewModel.rating.collectAsState()
     val errorMsg by reviewViewModel.error.collectAsState()
     val showError by reviewViewModel.showErrorDialog.collectAsState()
+    val showSuccess by reviewViewModel.showSuccessDialog.collectAsState()
 
     Surface(
         modifier = Modifier
@@ -115,5 +116,22 @@ fun AddReviewScreen(
             title = { Text("Error") },
             text = { Text(errorMsg ?: "Ha ocurrido un error") }
         )
+
     }
+
+
+
+    if (showSuccess) {
+        AlertDialog(
+            onDismissRequest = { reviewViewModel.clearSuccess() },
+            confirmButton = {
+                TextButton(onClick = { reviewViewModel.clearSuccess() }) {
+                    Text("OK")
+                }
+            },
+            title = { Text("¡Gracias!") },
+            text = { Text("Tu reseña se ha enviado correctamente.") }
+        )
+    }
+
 }

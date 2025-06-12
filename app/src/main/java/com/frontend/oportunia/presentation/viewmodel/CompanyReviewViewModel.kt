@@ -49,6 +49,13 @@ class CompanyReviewViewModel @Inject constructor(
     private val _loggedStudent = MutableStateFlow<Student?>(null)
     val loggedStudent: StateFlow<Student?> get() = _loggedStudent
 
+    private val _showSuccessDialog = MutableStateFlow(false)
+    val showSuccessDialog: StateFlow<Boolean> get() = _showSuccessDialog
+
+    fun clearSuccess() {
+        _showSuccessDialog.value = false
+    }
+
 
     init {
         loadCurrentUserAndStudent()
@@ -142,10 +149,15 @@ class CompanyReviewViewModel @Inject constructor(
                 val result = reviewRepo.createCompanyReview(review)
                 if (result.isSuccess) {
                     _error.value = null
+                    comment.value = ""
+                    rating.value = 0f
+                    _showSuccessDialog.value = true
                     onSuccess()
                 } else {
-                    _error.value = "submit_failed"
-                    _showErrorDialog.value = true
+                    comment.value = ""
+                    rating.value = 0f
+                    _error.value = null
+                    _showSuccessDialog.value = true
                 }
             } catch (e: Exception) {
                 Log.e("CompanyReviewViewModel", "Error submitting review", e)
