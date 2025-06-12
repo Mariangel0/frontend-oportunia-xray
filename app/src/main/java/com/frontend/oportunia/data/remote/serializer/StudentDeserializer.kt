@@ -41,6 +41,7 @@ class StudentDeserializer : JsonDeserializer<StudentDto> {
         val userId = jsonObject.get("userId")?.asLong
 
         return StudentDto(
+            id          = id, // ✅ ahora sí se asigna
             user        = user,
             userId      = userId,
             description = description,

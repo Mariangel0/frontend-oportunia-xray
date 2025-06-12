@@ -11,12 +11,13 @@ class StudentMapper @Inject constructor(
 
     fun mapToDomain(dto: StudentDto): Student {
         return Student(
+            id = dto.id, // ✅ AGREGAR ESTA LÍNEA
             user = dto.user?.let { userMapper.mapToDomain(it)},
             description = dto.description,
             premium = dto.premium,
             linkedinUrl = dto.linkedinUrl,
             githubUrl = dto.githubUrl,
-            bornDate = dto.bornDate ,
+            bornDate = dto.bornDate,
             location = dto.location,
             userId = dto.userId
         )
@@ -35,6 +36,7 @@ class StudentMapper @Inject constructor(
 
     fun mapToDto(domain: Student): StudentDto {
         return StudentDto(
+            id = domain.id, // ✅ incluir el id al hacer update
             user = domain.user?.let { userMapper.mapToDto(it) },
             description = domain.description,
             premium = domain.premium,
