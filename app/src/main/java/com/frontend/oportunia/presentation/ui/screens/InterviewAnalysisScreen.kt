@@ -17,20 +17,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -45,14 +39,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.oportunia.R
+import com.frontend.oportunia.presentation.ui.components.HeaderType
+import com.frontend.oportunia.presentation.ui.layout.MainLayout
 import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
 import com.frontend.oportunia.presentation.viewmodel.IAAnalysisViewModel
 import kotlin.math.roundToInt
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InterviewAnalysisScreen(
     navController: NavController,
+    paddingValues: PaddingValues,
     viewModel: IAAnalysisViewModel,
     interviewId: Long
 ) {
@@ -68,10 +64,14 @@ fun InterviewAnalysisScreen(
             LoadingScreen()
         }
         else -> {
-            AnalysisContent(
-                analysis = analysis,
-                onBackClick = { navController.navigate(NavRoutes.Menu.ROUTE)}
-            )
+            MainLayout(
+                paddingValues = paddingValues,
+                headerType = HeaderType.BACK,
+                title = stringResource(R.string.interview_analysis_title),
+                onBackClick = { navController.navigate(NavRoutes.Menu.ROUTE) }
+            ) {
+                AnalysisContent(analysis = analysis)
+            }
         }
     }
 }
@@ -102,70 +102,36 @@ private fun LoadingScreen() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AnalysisContent(
-    analysis: com.frontend.oportunia.domain.model.IAAnalysis,
-    onBackClick: () -> Unit
+    analysis: com.frontend.oportunia.domain.model.IAAnalysis
 ) {
     val score = analysis.score
     val comment = analysis.comment ?: stringResource(R.string.no_comment_available)
     val recommendations = parseRecommendations(analysis.recommendation)
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(24.dp),
+        contentPadding = PaddingValues(24.dp)
     ) {
-        // Top App Bar
-        TopAppBar(
-            title = {
-                Text(
-                    text = stringResource(R.string.interview_analysis_title),
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.SemiBold
-                    ),
-                    color = MaterialTheme.colorScheme.secondary
-                )
-            },
-            navigationIcon = {
-                IconButton(onClick = onBackClick) {
-                    Icon(
-                        Icons.Default.ArrowBack,
-                        contentDescription = stringResource(R.string.back_button),
-                        tint = MaterialTheme.colorScheme.secondary
-                    )
-                }
-            },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.onPrimaryContainer
-            )
-        )
 
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
-            contentPadding = PaddingValues(24.dp)
-        ) {
+        // Score Section
+        item {
+            ScoreCard(score = score.roundToInt())
+        }
 
-            // Score Section
-            item {
-                ScoreCard(score = score.roundToInt())
-            }
+        // Comment Section
+        item {
+            CommentCard(comment = comment)
+        }
 
-            // Comment Section
-            item {
-                CommentCard(comment = comment)
-            }
-
-            // Recommendations Section
-            item {
-                RecommendationsCard(recommendations = recommendations)
-            }
+        // Recommendations Section
+        item {
+            RecommendationsCard(recommendations = recommendations)
         }
     }
 }
-
 
 @Composable
 private fun ScoreCard(score: Int) {

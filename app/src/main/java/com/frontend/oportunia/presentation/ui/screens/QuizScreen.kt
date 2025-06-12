@@ -58,13 +58,12 @@ fun QuizScreen(
     studentId: Long
 ) {
     LaunchedEffect(studentId) {
-        if (quizViewModel.questions.value.isEmpty()) {
-            quizViewModel.initializeQuiz(
-                userId = studentId,
-                topic = "Preguntas de entrevista",
-                difficulty = "medium"
-            )
-        }
+        quizViewModel.resetQuiz()
+        quizViewModel.initializeQuiz(
+            userId = studentId,
+            topic = "Preguntas de entrevista",
+            difficulty = "medium"
+        )
     }
 
     val questions by quizViewModel.questions.collectAsState()

@@ -255,7 +255,8 @@ fun NavGraph(
             InterviewAnalysisScreen(
                 navController = navController,
                 viewModel = iAAnalysisViewModel,
-                interviewId = interviewId
+                interviewId = interviewId,
+                paddingValues = paddingValues
             )
         }
 
