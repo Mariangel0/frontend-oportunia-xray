@@ -66,7 +66,7 @@ fun PerfilScreen(
     LaunchedEffect(user, student) {
         val u = user
         val s = student
-        if (!profileInitialized && u != null && s != null) {
+        if ( u != null && s != null) {
             uiState = uiState.copy(
                 firstName = u.firstName,
                 lastName = u.lastName,
