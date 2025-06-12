@@ -10,5 +10,5 @@ interface UserRepository {
     suspend fun findUserById(userId: Long): Result<User>
     suspend fun getCurrentUser(): Result<User?>
     suspend fun updateUser(user: User): Result<User>
-
+    suspend fun deleteUser(id: Long): Result<Unit>
 }

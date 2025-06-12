@@ -87,4 +87,8 @@ sealed class NavRoutes {
         const val ROUTE = "manageCompanies"
     }
 
+    data object UserScreen : NavRoutes() {
+        const val ROUTE = "userScreen"
+    }
+
 }

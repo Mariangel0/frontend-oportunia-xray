@@ -72,7 +72,7 @@ fun AdminMenuScreen(
                 icon =  painterResource(id = R.drawable.icon_users),
                 title = stringResource(id = R.string.btn_admin_users),
                 description = stringResource(id = R.string.description_admin_users),
-                onClick = { /* Acción */ }
+                onClick = { navController.navigate(NavRoutes.UserScreen.ROUTE) }
             )
 
             Spacer(modifier = Modifier.height(24.dp))
