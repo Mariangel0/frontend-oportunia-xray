@@ -1,6 +1,7 @@
 package com.frontend.oportunia.data.remote.api
 
 import com.frontend.oportunia.data.remote.dto.ChatResponseDto
+import com.frontend.oportunia.data.remote.dto.InterviewChatResponseDto
 import com.frontend.oportunia.data.remote.dto.InterviewDto
 import com.frontend.oportunia.data.remote.dto.UserMessageDto
 import com.frontend.oportunia.data.remote.dto.UserTextPromptDto
@@ -17,13 +18,13 @@ interface InterviewService {
     suspend fun sendPrompt(
         @Path("studentId") studentId: Long,
         @Body prompt: UserTextPromptDto
-    ): ChatResponseDto
+    ): InterviewChatResponseDto
 
     @POST("api/ai/{studentId}/interview/continue")
     suspend fun continuePrompt(
         @Path("studentId") studentId: Long,
         @Body message: UserMessageDto
-    ): ChatResponseDto
+    ): InterviewChatResponseDto
 
     @GET("interviews")
     suspend fun getAllInterviews(): Response<List<InterviewDto>>

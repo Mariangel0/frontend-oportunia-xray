@@ -26,6 +26,7 @@ import com.example.oportunia.R
 import com.frontend.oportunia.domain.model.ChatMessage
 import com.frontend.oportunia.presentation.ui.components.HeaderType
 import com.frontend.oportunia.presentation.ui.layout.MainLayout
+import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
 import com.frontend.oportunia.presentation.viewmodel.InterviewViewModel
 import kotlinx.coroutines.launch
 import java.util.*
@@ -45,12 +46,22 @@ fun InterviewChatScreen(
     var messageText by remember { mutableStateOf("") }
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
+    val finalInterviewId by interviewViewModel.finalInterviewId.collectAsState()
+
+    var hasNavigated by remember { mutableStateOf(false) }
 
     LaunchedEffect(messages.size) {
-        if (messages.isNotEmpty()) {
+        if (messages.isNotEmpty() && !interviewViewModel.interviewFinished.value) {
             coroutineScope.launch {
                 listState.animateScrollToItem(messages.lastIndex)
             }
+        }
+    }
+
+    LaunchedEffect(finalInterviewId) {
+        if (finalInterviewId != null && !hasNavigated) {
+            hasNavigated = true
+            navController.navigate(NavRoutes.IAAnalysisScreen.createRoute(finalInterviewId!!))
         }
     }
 
@@ -94,6 +105,7 @@ fun InterviewChatScreen(
         }
     }
 }
+
 
 @Composable
 fun InterviewChatHeader(interviewType: String) {

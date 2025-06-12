@@ -44,8 +44,6 @@
     <string name="laboral_data">Información Académica y Laboral</string>
     <string name="error_password_mismatch">Las contraseñas no coinciden.</string>
 
-
-
     <string name="button_Start">Realizar</string>
     <string name="daily_quiz">¡Hoy no has realizado tu quiz diario!</string>
     <string name="streak">Racha</string>
@@ -62,12 +60,9 @@
     <string name="menu">Menu</string>
     <string name="curriculum">Curriculum</string>
 
-
     <!--  CompanyDetailScreen -->
     <string name="reviews">Reseñas</string>
     <string name="info">Información</string>
-
-
 
     <string name="advice_title">Prepárate antes de enviar tu solicitud</string>
     <string name="advice_subtitle">Encuentra recomendaciones prácticas para mejorar tu perfil profesional y tener éxito en tus entrevistas.</string>
@@ -88,12 +83,12 @@
     <string name="btn_admin">Gestionar</string>
     <string name="description_admin_companies">Agregar, editar o eliminar empresas</string>
     <string name="description_admin_users">Eliminar usuarios</string>
-    <string name="activities">Resumen de la actividad</string>"
+    <string name="activities">Resumen de la actividad</string>
     <string name="card_title_companies">Empresas</string>
     <string name="card_title_users">Usuarios activos</string>
 
     <!--  Admin Add Company Screen  -->
-    <string name="add_company">Agregar Empresa</string>"
+    <string name="add_company">Agregar Empresa</string>
     <string name="name_company">Agregar nombre de la empresa</string>
     <string name="name_company_placeholder">Ingrese el nombre de la empresa</string>
     <string name="description_company">Descripción</string>
@@ -129,6 +124,34 @@
     <string name="network_error_template">Error de red: %1$s</string>
     <string name="start_ai_interview">Inicia con la primera pregunta para el usuario de una nueva entrevista.</string>
 
+    <!--  Interview Analysis Screen  -->
+    <string name="interview_analysis_title">Análisis de entrevista</string>
+    <string name="back_button">Volver</string>
+    <string name="loading_analysis">Cargando análisis...</string>
+    <string name="candidate_info">Candidato</string>
+    <string name="analysis_completed">Análisis completado</string>
+    <string name="general_score_title">Puntuación General</string>
+    <string name="score_out_of_100">DE 100%</string>
+    <string name="general_comment_title">Comentario General</string>
+    <string name="recommendations_title">Recomendaciones</string>
+    <string name="no_comment_available">Sin comentario disponible</string>
+    <string name="analysis_loading_error">Error al cargar el análisis</string>
+    <string name="analysis_unexpected_error">Error inesperado al cargar el análisis</string>
+    <string name="analysis_network_error">Error de conexión. Verifica tu internet e intenta nuevamente.</string>
+    <string name="retry_button">Reintentar</string>
+    <string name="refresh_analysis">Actualizar análisis</string>
+    <string name="score_excellent">Excelente desempeño</string>
+    <string name="score_good">Buen desempeño</string>
+    <string name="score_needs_improvement">Necesita mejorar</string>
+    <string name="analysis_date">Fecha del análisis</string>
+    <string name="interview_duration">Duración de la entrevista</string>
+    <string name="areas_evaluated">Áreas evaluadas</string>
+    <string name="technical_skills">Habilidades técnicas</string>
+    <string name="communication_skills">Habilidades de comunicación</string>
+    <string name="problem_solving">Resolución de problemas</string>
+    <string name="leadership">Liderazgo</string>
+    <string name="teamwork">Trabajo en equipo</string>
+    <string name="adaptability">Adaptabilidad</string>
 
     <!--  Quiz Screen  -->
     <string name="next">Siguiente</string>
@@ -143,4 +166,17 @@
     <string name="answered">Respondida</string>
     <string name="topic">Preguntas para preparse para una entrevista</string>
     <string name="difficulty">Medium</string>
+
+    <!--  Common UI Strings  -->
+    <string name="error_generic">Ha ocurrido un error. Intenta nuevamente.</string>
+    <string name="success_generic">Operación completada exitosamente</string>
+    <string name="loading_generic">Cargando...</string>
+    <string name="empty_state_generic">No hay información disponible</string>
+    <string name="try_again">Intentar nuevamente</string>
+    <string name="close">Cerrar</string>
+    <string name="save">Guardar</string>
+    <string name="edit">Editar</string>
+    <string name="delete">Eliminar</string>
+    <string name="confirm">Confirmar</string>
+    <string name="cancel">Cancelar</string>
 </resources>

@@ -16,15 +16,17 @@ class InterviewDeserializer : JsonDeserializer<InterviewDto> {
         val jsonObject = json.asJsonObject
 
         val id = jsonObject.get("id").asLong
-        val studentId = context.deserialize<StudentDto>(jsonObject.get("studentId"), StudentDto::class.java)
+        val studentId = context.deserialize<StudentDto>(jsonObject.get("student"), StudentDto::class.java)
 
         val date = jsonObject.get("date")?.let {
             context.deserialize<Date>(it, Date::class.java)
         } ?: Date()
 
+        val jobPosition = jsonObject.get("jobPosition").asString
+        val type = jsonObject.get("type").asString
         val result = jsonObject.get("result").asString
 
-        return InterviewDto(id, studentId, date.toString(), result)
+        return InterviewDto(id,date.toString(), result, jobPosition, type, studentId)
 
     }
 }

@@ -27,6 +27,7 @@ import com.frontend.oportunia.presentation.viewmodel.QuizViewModel
 import com.frontend.oportunia.presentation.viewmodel.RegisterViewModel
 import com.frontend.oportunia.presentation.viewmodel.SkillsViewModel
 import com.frontend.oportunia.presentation.viewmodel.CurriculumViewModel
+import com.frontend.oportunia.presentation.viewmodel.IAAnalysisViewModel
 
 
 @AndroidEntryPoint
@@ -57,11 +58,13 @@ class MainActivity : ComponentActivity() {
 
     private val companyReviewViewModel: CompanyReviewViewModel by viewModels ()
 
+    private val iAAnalysisViewModel: IAAnalysisViewModel by viewModels ()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             OportunIATheme {
-                Main(companyViewModel, loginViewModel, registerViewModel, skillViewModel, adviceViewModel, profileViewModel, companyReviewViewModel, interviewViewModel, quizViewModel, curriculumViewModel)
+                Main(companyViewModel, loginViewModel, registerViewModel, skillViewModel, adviceViewModel, profileViewModel, companyReviewViewModel, interviewViewModel, quizViewModel, curriculumViewModel, iAAnalysisViewModel)
             }
         }
     }
@@ -71,7 +74,7 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, registerViewModel: RegisterViewModel, skillViewModel: SkillsViewModel, adviceViewModel: AdviceViewModel, profileViewModel: ProfileViewModel, companyReviewViewModel: CompanyReviewViewModel, interviewViewModel: InterviewViewModel, quizViewModel: QuizViewModel, curriculumViewModel: CurriculumViewModel) {
+fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, registerViewModel: RegisterViewModel, skillViewModel: SkillsViewModel, adviceViewModel: AdviceViewModel, profileViewModel: ProfileViewModel, companyReviewViewModel: CompanyReviewViewModel, interviewViewModel: InterviewViewModel, quizViewModel: QuizViewModel, curriculumViewModel: CurriculumViewModel, iAAnalysisViewModel: IAAnalysisViewModel) {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
@@ -100,7 +103,8 @@ fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, reg
             reviewViewModel = companyReviewViewModel,
             interviewViewModel = interviewViewModel,
             quizViewModel = quizViewModel,
-            curriculumViewModel = curriculumViewModel
+            curriculumViewModel = curriculumViewModel,
+            iAAnalysisViewModel = iAAnalysisViewModel
         )
     }
 }

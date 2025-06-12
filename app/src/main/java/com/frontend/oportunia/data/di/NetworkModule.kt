@@ -16,6 +16,7 @@ import dagger.hilt.components.SingletonComponent
 import com.frontend.oportunia.data.remote.api.CompanyService
 import com.frontend.oportunia.data.remote.api.CurriculumService
 import com.frontend.oportunia.data.remote.api.ExperienceService
+import com.frontend.oportunia.data.remote.api.IAAnalysisService
 import com.frontend.oportunia.data.remote.api.InterviewService
 import com.frontend.oportunia.data.remote.api.QuizService
 import com.frontend.oportunia.data.remote.api.StudentService
@@ -157,5 +158,10 @@ object NetworkModule {
     @Singleton
     fun provideQuizService(retrofit: Retrofit): QuizService =
         retrofit.create(QuizService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideIAAnalysisService(retrofit: Retrofit): IAAnalysisService =
+        retrofit.create(IAAnalysisService::class.java)
 }
 

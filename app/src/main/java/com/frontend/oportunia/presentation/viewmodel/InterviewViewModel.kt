@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.oportunia.R
 import com.frontend.oportunia.domain.model.ChatMessage
-import com.frontend.oportunia.domain.model.ChatResponse
+import com.frontend.oportunia.domain.model.InterviewChatResponse
 import com.frontend.oportunia.domain.model.User
 import com.frontend.oportunia.domain.repository.AuthRepository
 import com.frontend.oportunia.domain.repository.InterviewRepository
@@ -40,7 +40,11 @@ class InterviewViewModel @Inject constructor(
     var isLoading by mutableStateOf(false)
         private set
 
+    private val _interviewFinished = MutableStateFlow(false)
+    val interviewFinished: StateFlow<Boolean> get() = _interviewFinished
 
+    private val _finalInterviewId = MutableStateFlow<Long?>(null)
+    val finalInterviewId: StateFlow<Long?> get() = _finalInterviewId
 
     private var isFirstMessage = true
 
@@ -52,6 +56,8 @@ class InterviewViewModel @Inject constructor(
         isFirstMessage = true
         currentJobPosition = ""
         currentInterviewType = ""
+        _interviewFinished.value = false
+        _finalInterviewId.value = null
     }
 
     fun startInterview(
@@ -87,17 +93,24 @@ class InterviewViewModel @Inject constructor(
                     typeOfInterview = currentInterviewType
                 )
             } else {
-                Log.d("InterviewStart", "jobPosition: $currentJobPosition, type: $currentInterviewType")
                 interviewRepository.continueInterview(
                     studentId = studentId,
                     message = message
                 )
             }
 
-            result.onSuccess { response: ChatResponse ->
-                val reply = response.choices.firstOrNull()?.message?.content
+            result.onSuccess { response: InterviewChatResponse ->
+                val reply = response.choices?.firstOrNull()?.message?.content
                     ?: context.getString(R.string.no_model_response)
+
                 _messages.add(ChatMessage(UUID.randomUUID().toString(), reply, isFromUser = false))
+
+                // ✅ Navegar justo después de agregar el mensaje final
+                if (reply.contains("esta entrevista ha concluido", ignoreCase = true)) {
+                    _interviewFinished.value = true
+                    _finalInterviewId.value = response.interviewId
+                }
+
             }.onFailure { e ->
                 _messages.add(
                     ChatMessage(
