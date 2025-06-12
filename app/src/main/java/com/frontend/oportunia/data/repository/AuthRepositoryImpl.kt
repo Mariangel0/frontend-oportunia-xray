@@ -118,22 +118,30 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun getCurrentUser(): Result<User?> {
         return try {
-            val userDto = authPreferences.getSavedUser()
-            if (userDto != null) {
+            val response = userDataSource.getCurrentUser()
+            if (response.isSuccessful && response.body() != null) {
+                val userDto = response.body()!!
+                authPreferences.saveUser(userDto)
                 val user = userMapper.mapToDomain(userDto)
-                Log.d("AuthRepositoryImpl", "Current user: $user")
+                Log.d("AuthRepositoryImpl", "Fetched user from backend: ${user.email}")
                 Result.success(user)
             } else {
-                Log.d("AuthRepositoryImpl", "No current user found")
-                Result.success(null)
+                val localUserDto = authPreferences.getSavedUser()
+                if (localUserDto != null) {
+                    val user = userMapper.mapToDomain(localUserDto)
+                    Log.d("AuthRepositoryImpl", "Fetched user from local cache (fallback)")
+                    Result.success(user)
+                } else {
+                    Log.e("AuthRepositoryImpl", "No user available from backend or local")
+                    Result.success(null)
+                }
             }
-        }
-        catch (e: Exception) {
-            Log.e("AuthRepositoryImpl", "Get current user exception: ${e.message}", e)
+        } catch (e: Exception) {
+            Log.e("AuthRepositoryImpl", "Error fetching current user: ${e.message}", e)
             Result.failure(e)
         }
-
     }
+
 
 
 }

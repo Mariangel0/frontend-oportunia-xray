@@ -43,6 +43,10 @@
     <string name="personal_data">Información Personal</string>
     <string name="laboral_data">Información Académica y Laboral</string>
     <string name="error_password_mismatch">Las contraseñas no coinciden.</string>
+    <string name="linkedin">LinkedIn</string>
+    <string name="linkedin_placeholder">Ingresa tu URL de LinkedIn</string>
+    <string name="github">GitHub</string>
+    <string name="github_placeholder">Ingresa tu URL de GitHub</string>
 
     <string name="button_Start">Realizar</string>
     <string name="daily_quiz">¡Hoy no has realizado tu quiz diario!</string>
@@ -54,7 +58,7 @@
     <string name="search_placeholder">Buscar Empresa</string>
     <string name="profile">Perfil</string>
     <string name="student">Estudiante</string>
-    <string name="adminastror">Administrador</string>
+    <string name="administrador">Administrador</string>
 
     <string name="advice">Consejos</string>
     <string name="menu">Menu</string>
@@ -103,6 +107,7 @@
     <string name="cancel_button">Cancelar</string>
     <string name="upload_logo">Cargar logo</string>
     <string name="company_logo">Logo de la empresa</string>
+
 
     <!--  Interview Screen  -->
     <string name="interview_menu">Iniciar Entrevista</string>
@@ -166,6 +171,10 @@
     <string name="answered">Respondida</string>
     <string name="topic">Preguntas para preparse para una entrevista</string>
     <string name="difficulty">Medium</string>
+
+
+    <string name="users">Usuarios</string>"
+
 
     <!--  Common UI Strings  -->
     <string name="error_generic">Ha ocurrido un error. Intenta nuevamente.</string>

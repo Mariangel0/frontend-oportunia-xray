@@ -22,10 +22,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.oportunia.R
 import com.frontend.oportunia.presentation.ui.components.HeaderType
 import com.frontend.oportunia.presentation.ui.layout.MainLayout
 import com.frontend.oportunia.presentation.viewmodel.CurriculumViewModel
@@ -100,8 +102,8 @@ fun CurriculumScreen(
 
             Text(
                 "Nuestro sistema puede analizar tu currículum de dos formas:\n\n" +
-                        "• ☁️ Análisis en la nube: extrae tus habilidades, educación y experiencia para guardarlas automáticamente en tu perfil.\n\n" +
-                        "• 🤖 Análisis con IA: genera recomendaciones personalizadas para mejorar tu currículum.",
+                        "•Análisis en la nube: extrae tus habilidades, educación y experiencia para guardarlas automáticamente en tu perfil.\n\n" +
+                        "•Análisis con IA: genera recomendaciones personalizadas para mejorar tu currículum.",
                 style = MaterialTheme.typography.bodyMedium,
                 fontSize = 16.sp
             )
@@ -184,7 +186,7 @@ fun FormatCard() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                imageVector = Icons.Default.Upload,
+                painter = painterResource(id = R.drawable.icon_curriculum),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(30.dp)

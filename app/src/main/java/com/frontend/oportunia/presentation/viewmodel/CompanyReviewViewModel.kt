@@ -111,7 +111,7 @@ class CompanyReviewViewModel @Inject constructor(
                     comment   = comment.value,
                     rating    = rating.value,
                     createdAt = createdAt,
-                    student   = Student(id = loggedStudent.value!!.id, user = loggedUser.value),
+                    student   = Student(id = loggedUser.value?.id, user = loggedUser.value),
                     company   = companyId
                 )
 

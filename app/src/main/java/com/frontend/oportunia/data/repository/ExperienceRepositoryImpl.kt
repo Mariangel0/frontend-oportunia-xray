@@ -40,4 +40,17 @@ class ExperienceRepositoryImpl @Inject constructor (
             Result.failure(Exception("Error fetching tasks: ${e.message}"))
         }
     }
+    override suspend fun createExperience(experience: Experience): Result<Experience> {
+        val reviewDto =  experienceMapper.mapToDto(experience)
+        return try {
+            val response = dataSource.createExperience(reviewDto)
+            if (response.isSuccessful && response.body() != null) {
+                Result.success(experienceMapper.mapToDomain(response.body()!!))
+            } else {
+                Result.failure(Exception("Error en la creación de la experiencia: ${response.code()} ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

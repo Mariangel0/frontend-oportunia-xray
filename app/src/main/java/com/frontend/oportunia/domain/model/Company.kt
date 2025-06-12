@@ -1,7 +1,7 @@
 package com.frontend.oportunia.domain.model
 
 data class Company(
-    val id: Long,
+    val id: Long? = null,
     val name: String,
     val description: String,
     val rating: Float,

@@ -3,7 +3,7 @@ package com.frontend.oportunia.data.remote.dto
 import java.util.Date
 
 open class UserDto(
-    val id: Long,
+    val id: Long?,
     val createDate: Date?,
     val email: String?,
     val enabled: Boolean?,
@@ -15,7 +15,6 @@ open class UserDto(
 )
 
 open class UserRDto(
-    val id: Long,
     val firstName: String,
     val lastName: String,
 )

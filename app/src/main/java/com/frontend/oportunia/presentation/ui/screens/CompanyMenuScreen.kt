@@ -106,7 +106,9 @@ fun CompanyScreen( paddingValues: PaddingValues,
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(companyList) { company ->
                     CompanyItem(company){
-                        navController.navigate(NavRoutes.CompanyDetail.createRoute(company.id))
+                        company.id?.let { id ->
+                            navController.navigate(NavRoutes.CompanyDetail.createRoute(id))
+                        }
                     }
                 }
             }
@@ -117,6 +119,7 @@ fun CompanyScreen( paddingValues: PaddingValues,
 @Composable
 fun CompanyItem(company: Company, onClick: () -> Unit) {
     val starFilled = painterResource(id = R.drawable.icon_star_full)
+    val starHalf = painterResource(id = R.drawable.icon_star_half) // NUEVO
     val starBorder = painterResource(id = R.drawable.icon_star)
 
     Card(
@@ -128,21 +131,50 @@ fun CompanyItem(company: Company, onClick: () -> Unit) {
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         )
-
     ) {
         Column(
-            modifier = Modifier
-                .padding(16.dp)
+            modifier = Modifier.padding(16.dp)
         ) {
-            Text(text = company.name, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.secondary)
+            Text(
+                text = company.name,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.secondary
+            )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = company.description, style = MaterialTheme.typography.bodyMedium,color = MaterialTheme.colorScheme.onBackground )
+            Text(
+                text = company.description,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground
+            )
             Spacer(modifier = Modifier.height(8.dp))
+
+
             Row {
-                repeat(5) { index ->
+                val fullStars = company.rating.toInt()
+                val hasHalfStar = (company.rating % 1) >= 0.5
+
+                repeat(fullStars) {
                     Icon(
-                        painter = if (index < company.rating) starFilled else starBorder,
-                        contentDescription = "Star Rating",
+                        painter = starFilled,
+                        contentDescription = "Full Star",
+                        modifier = Modifier.size(20.dp),
+                        tint = MaterialTheme.colorScheme.secondary
+                    )
+                }
+
+                if (hasHalfStar) {
+                    Icon(
+                        painter = starHalf,
+                        contentDescription = "Half Star",
+                        modifier = Modifier.size(20.dp),
+                        tint = MaterialTheme.colorScheme.secondary
+                    )
+                }
+
+                repeat(5 - fullStars - if (hasHalfStar) 1 else 0) {
+                    Icon(
+                        painter = starBorder,
+                        contentDescription = "Empty Star",
                         modifier = Modifier.size(20.dp),
                         tint = MaterialTheme.colorScheme.secondary
                     )
@@ -151,5 +183,3 @@ fun CompanyItem(company: Company, onClick: () -> Unit) {
         }
     }
 }
-
-

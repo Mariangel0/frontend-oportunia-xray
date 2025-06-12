@@ -24,7 +24,6 @@ class UserMapper @Inject constructor(){
 
     fun mapToDomainRDto(dto: UserRDto): User {
         return User(
-            id = dto.id,
             firstName = dto.firstName,
             lastName = dto.lastName
         )
@@ -50,7 +49,6 @@ class UserMapper @Inject constructor(){
 
     fun mapToDtoRDto(domain: User): UserRDto {
         return UserRDto(
-            id = domain.id,
             firstName = domain.firstName,
             lastName = domain.lastName
         )

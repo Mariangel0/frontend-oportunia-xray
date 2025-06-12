@@ -19,6 +19,10 @@ class ExperienceDataSource @Inject constructor (
     suspend fun getExperiencesByStudentId(studentId: Long): Result<List<ExperienceDto>> = safeApiCall {
         experienceService.getExperiencesByStudentId(studentId)
     }
+    suspend fun createExperience(experienceDto: ExperienceDto): Response<ExperienceDto>  {
+        return experienceService.createExperience(experienceDto)
+    }
+
 
     private suspend fun <T> safeApiCall(apiCall: suspend () -> Response<T>): Result<T> = try {
         val response = apiCall()

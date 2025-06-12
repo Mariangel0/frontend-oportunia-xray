@@ -86,4 +86,16 @@ sealed class NavRoutes {
         fun createRoute(interviewId: Long) = "iaAnalyses/$interviewId"
     }
 
+    data object AdminMenu : NavRoutes() {
+        const val ROUTE = "adminMenu"
+    }
+
+    data object ManageCompanies : NavRoutes() {
+        const val ROUTE = "manageCompanies"
+    }
+
+    data object UserScreen : NavRoutes() {
+        const val ROUTE = "userScreen"
+    }
+
 }

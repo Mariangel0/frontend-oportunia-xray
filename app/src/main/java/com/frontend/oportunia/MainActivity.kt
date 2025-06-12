@@ -15,7 +15,7 @@ import com.frontend.oportunia.presentation.ui.components.BottomNavigationBar
 import com.frontend.oportunia.presentation.ui.navigation.NavGraph
 import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
 import com.frontend.oportunia.presentation.ui.screens.admin.AdminMenuScreen
-import com.frontend.oportunia.presentation.ui.screens.admin.AgregarEmpresaScreen
+import com.frontend.oportunia.presentation.ui.screens.admin.ManageCompaniesScreen
 import com.frontend.oportunia.presentation.ui.theme.OportunIATheme
 import com.frontend.oportunia.presentation.viewmodel.AdviceViewModel
 import com.frontend.oportunia.presentation.viewmodel.CompanyReviewViewModel
@@ -27,6 +27,9 @@ import com.frontend.oportunia.presentation.viewmodel.QuizViewModel
 import com.frontend.oportunia.presentation.viewmodel.RegisterViewModel
 import com.frontend.oportunia.presentation.viewmodel.SkillsViewModel
 import com.frontend.oportunia.presentation.viewmodel.CurriculumViewModel
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import com.frontend.oportunia.presentation.viewmodel.UserViewModel
 import com.frontend.oportunia.presentation.viewmodel.IAAnalysisViewModel
 
 
@@ -60,11 +63,13 @@ class MainActivity : ComponentActivity() {
 
     private val iAAnalysisViewModel: IAAnalysisViewModel by viewModels ()
 
+    private val userViewModel: UserViewModel by viewModels ()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             OportunIATheme {
-                Main(companyViewModel, loginViewModel, registerViewModel, skillViewModel, adviceViewModel, profileViewModel, companyReviewViewModel, interviewViewModel, quizViewModel, curriculumViewModel, iAAnalysisViewModel)
+                Main(companyViewModel, loginViewModel, registerViewModel, skillViewModel, adviceViewModel, profileViewModel, companyReviewViewModel, interviewViewModel, quizViewModel, curriculumViewModel, iAAnalysisViewModel, userViewModel)
             }
         }
     }
@@ -74,20 +79,38 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
+fun Main(
+    companyViewModel: CompanyViewModel,
+    loginViewModel: LoginViewModel,
+    registerViewModel: RegisterViewModel,
+    skillViewModel: SkillsViewModel,
+    adviceViewModel: AdviceViewModel,
+    profileViewModel: ProfileViewModel,
+    companyReviewViewModel: CompanyReviewViewModel,
+    interviewViewModel: InterviewViewModel,
+    quizViewModel: QuizViewModel,
+    curriculumViewModel: CurriculumViewModel,
+    userViewModel: UserViewModel
+) {
 fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, registerViewModel: RegisterViewModel, skillViewModel: SkillsViewModel, adviceViewModel: AdviceViewModel, profileViewModel: ProfileViewModel, companyReviewViewModel: CompanyReviewViewModel, interviewViewModel: InterviewViewModel, quizViewModel: QuizViewModel, curriculumViewModel: CurriculumViewModel, iAAnalysisViewModel: IAAnalysisViewModel) {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
+    val user by loginViewModel.loggedUser.collectAsState()
+    val isAdmin = user?.roles?.any { it.name == "ADMIN" } == true
 
     Scaffold(
         bottomBar = {
-            // Solo mostrar el BottomNavigationBar si la ruta no es una de las que no quieres mostrar la barra
             if (currentRoute !in listOf(
                     NavRoutes.Login.ROUTE,
                     NavRoutes.Register.ROUTE,
                     NavRoutes.MainPage.ROUTE
-                )) {
-                BottomNavigationBar(navController = navController)
+                )
+            ) {
+                BottomNavigationBar(
+                    navController = navController,
+                    isAdmin = isAdmin
+                )
             }
         }
     ) { paddingValues ->
@@ -105,10 +128,10 @@ fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, reg
             quizViewModel = quizViewModel,
             curriculumViewModel = curriculumViewModel,
             iAAnalysisViewModel = iAAnalysisViewModel
+            userViewModel = userViewModel
         )
     }
 }
-
 
 //class MainActivity : ComponentActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {
