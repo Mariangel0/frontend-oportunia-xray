@@ -15,6 +15,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import com.frontend.oportunia.data.remote.api.CompanyService
 import com.frontend.oportunia.data.remote.api.CurriculumService
+import com.frontend.oportunia.data.remote.api.EducationService
 import com.frontend.oportunia.data.remote.api.ExperienceService
 import com.frontend.oportunia.data.remote.api.InterviewService
 import com.frontend.oportunia.data.remote.api.QuizService
@@ -30,6 +31,7 @@ import com.frontend.oportunia.data.remote.interceptor.AuthInterceptor
 import com.frontend.oportunia.data.remote.interceptor.ResponseInterceptor
 import com.frontend.oportunia.data.remote.serializer.AbilityDeserializer
 import com.frontend.oportunia.data.remote.serializer.CompanyReviewDeserializer
+
 import com.frontend.oportunia.data.remote.serializer.ExperienceDeserializer
 import com.frontend.oportunia.data.remote.serializer.RoleDeserializer
 import com.frontend.oportunia.data.remote.serializer.StudentDeserializer
@@ -160,5 +162,11 @@ object NetworkModule {
     @Singleton
     fun provideQuizService(retrofit: Retrofit): QuizService =
         retrofit.create(QuizService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideEducationService(retrofit: Retrofit): EducationService =
+        retrofit.create(EducationService::class.java)
+
 }
 

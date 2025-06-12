@@ -12,10 +12,10 @@ class ExperienceMapper @Inject constructor (
     fun mapToDomain(dto: ExperienceDto): Experience {
         return Experience(
             id = dto.id,
-            studentId = studentMapper . mapToDomain (dto.studentId),
-            company = dto.company,
+            timeline = dto.timeline,
+            student = studentMapper . mapToDomain (dto.student),
             role = dto.role,
-            timeline = dto.timeline
+            company = dto.company,
         )
     }
 
@@ -27,10 +27,10 @@ class ExperienceMapper @Inject constructor (
     fun mapToDto(domain: Experience): ExperienceDto {
         return ExperienceDto(
             id = domain.id,
-            studentId = studentMapper.mapToDto(domain.studentId),
-            company = domain.company,
+            timeline = domain.timeline,
             role = domain.role,
-            timeline = domain.timeline
+            student = studentMapper.mapToDto(domain.student),
+            company = domain.company,
         )
     }
 

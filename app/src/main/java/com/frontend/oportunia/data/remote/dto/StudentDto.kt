@@ -1,6 +1,7 @@
 package com.frontend.oportunia.data.remote.dto
 
 data class StudentDto(
+    val id: Long?,
     val user: UserDto?,
     val description: String?,
     val premium: Boolean?,

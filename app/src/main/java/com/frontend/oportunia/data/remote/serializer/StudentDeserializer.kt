@@ -39,10 +39,16 @@ class StudentDeserializer : JsonDeserializer<StudentDto> {
         val userJson = jsonObject.get("user")
         val user = context.deserialize<UserDto>(userJson, UserDto::class.java)
 
-        val userId = jsonObject.get("userId").asLong
+        val userId = if (jsonObject.has("userId") && !jsonObject.get("userId").isJsonNull) {
+            jsonObject.get("userId").asLong
+        } else {
+            null
+        }
+
 
 
         return StudentDto(
+            id = id,
             user = user,
             description = description,
             premium = premium,
