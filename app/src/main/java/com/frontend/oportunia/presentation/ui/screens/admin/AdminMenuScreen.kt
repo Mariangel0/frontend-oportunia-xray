@@ -77,23 +77,6 @@ fun AdminMenuScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Text(
-                text =  stringResource(id = R.string.activities),
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                StatCard(title =  stringResource(id = R.string.card_title_companies), value = "1")
-                StatCard(title = stringResource(id = R.string.card_title_users), value = "1")
-            }
-
-            Spacer(modifier = Modifier.weight(1f))
         }
     }
 }

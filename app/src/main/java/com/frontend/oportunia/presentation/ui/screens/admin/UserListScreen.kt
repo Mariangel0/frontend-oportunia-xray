@@ -114,7 +114,7 @@ fun UserItem(user: User, onDelete: () -> Unit) {
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
-            title = { Text("Confirmar elminacion", color = MaterialTheme.colorScheme.primary) },
+            title = { Text("Confirmar eliminacion", color = MaterialTheme.colorScheme.primary) },
             text = { Text("¿Está seguro que desea eliminar a ${user.firstName} ${user.lastName}?") },
             confirmButton = {
                 TextButton(onClick = {
