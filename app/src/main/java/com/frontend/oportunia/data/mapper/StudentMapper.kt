@@ -49,9 +49,10 @@ class StudentMapper @Inject constructor(
     }
 
     fun mapToDtoRDto(domain: Student): StudentRDto {
+        val user = domain.user ?: throw IllegalStateException("Student.user es null al mapear a StudentRDto")
         return StudentRDto(
             id = domain.id,
-            user = userMapper.mapToDtoRDto(domain.user!!)
+            user = userMapper.mapToDtoRDto(user)
         )
     }
 

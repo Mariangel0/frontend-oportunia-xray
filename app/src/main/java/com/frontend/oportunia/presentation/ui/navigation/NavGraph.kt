@@ -55,6 +55,7 @@ fun NavGraph(
     curriculumViewModel: CurriculumViewModel,
     interviewViewModel: InterviewViewModel,
     quizViewModel: QuizViewModel,
+    userViewModel: UserViewModel,
     iAAnalysisViewModel: IAAnalysisViewModel
 ) {
     NavHost(navController, startDestination = NavRoutes.MainPage.ROUTE) {
