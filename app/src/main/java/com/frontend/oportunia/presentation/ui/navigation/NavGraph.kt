@@ -38,6 +38,7 @@ import com.frontend.oportunia.presentation.viewmodel.ProfileViewModel
 import com.frontend.oportunia.presentation.viewmodel.QuizViewModel
 import com.frontend.oportunia.presentation.viewmodel.RegisterViewModel
 import com.frontend.oportunia.presentation.viewmodel.SkillsViewModel
+import com.frontend.oportunia.presentation.viewmodel.StreakViewModel
 import com.frontend.oportunia.presentation.viewmodel.UserViewModel
 
 
@@ -56,7 +57,8 @@ fun NavGraph(
     interviewViewModel: InterviewViewModel,
     quizViewModel: QuizViewModel,
     userViewModel: UserViewModel,
-    iAAnalysisViewModel: IAAnalysisViewModel
+    iAAnalysisViewModel: IAAnalysisViewModel,
+    streakViewModel: StreakViewModel
 ) {
     NavHost(navController, startDestination = NavRoutes.MainPage.ROUTE) {
 
@@ -83,7 +85,7 @@ fun NavGraph(
 
 
         composable(NavRoutes.Menu.ROUTE) {
-            MenuScreen( companyViewModel, paddingValues, navController, loginViewModel)
+            MenuScreen( companyViewModel, paddingValues, navController, loginViewModel, streakViewModel)
         }
 
 

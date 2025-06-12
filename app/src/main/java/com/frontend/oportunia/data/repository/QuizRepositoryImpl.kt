@@ -36,6 +36,13 @@ class QuizRepositoryImpl @Inject constructor(
         throwDomainError(throwable, "evaluate quiz")
     }
 
+    override suspend fun markQuizCompleted(userId: Long): Result<Unit> = runCatching {
+        dataSource.markQuizCompleted(userId).getOrThrow()
+    }.recoverCatching { throwable ->
+        Log.e(TAG, "Failed to mark quiz as completed", throwable)
+        throwDomainError(throwable, "mark quiz as completed")
+    }
+
     private fun throwDomainError(throwable: Throwable, context: String): Nothing =
         when (throwable) {
             is IOException -> throw DomainError.NetworkError("Failed to $context")

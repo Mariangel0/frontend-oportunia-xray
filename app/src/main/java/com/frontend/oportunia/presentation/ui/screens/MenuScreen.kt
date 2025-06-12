@@ -37,6 +37,7 @@ import com.frontend.oportunia.presentation.ui.components.HeaderType
 import com.frontend.oportunia.presentation.ui.layout.MainLayout
 import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
 import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
+import com.frontend.oportunia.presentation.viewmodel.StreakViewModel
 
 
 @Composable
@@ -44,7 +45,8 @@ fun MenuScreen(
     companyViewModel: CompanyViewModel,
     paddingValues: PaddingValues,
     navController: NavController,
-    loginViewModel: LoginViewModel
+    loginViewModel: LoginViewModel,
+    streakViewModel: StreakViewModel
 ) {
 
     LaunchedEffect(Unit) {
@@ -53,6 +55,13 @@ fun MenuScreen(
 
     val user by loginViewModel.loggedUser.collectAsState()
     val username = user?.firstName ?: "Usuario"
+    val hasCompletedToday by streakViewModel.hasCompletedToday.collectAsState()
+
+    LaunchedEffect(user?.id) {
+        user?.id?.let { userId ->
+            streakViewModel.loadStreak(userId)
+        }
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
         MainLayout(
@@ -66,13 +75,17 @@ fun MenuScreen(
                 }
             }
         ) {
-            DailyQuizAlert(navController = navController, studentId = user?.id ?: 1)
+            // Solo mostrar el DailyQuizAlert si NO se ha completado hoy
+            if (!hasCompletedToday) {
+                DailyQuizAlert(navController = navController, studentId = user?.id ?: 1)
+            }
+
             StreakCalendar()
             Learning(navController = navController, studentId = user?.id ?: -1L)
             CompaniesCarousel(companyViewModel = companyViewModel, navController = navController)
-         }
         }
     }
+}
 
 @Composable
 fun Learning(navController: NavController, studentId: Long) {

@@ -19,10 +19,15 @@ class QuizDataSource @Inject constructor(
         quizService.evaluate(userId, answer)
     }
 
+    suspend fun markQuizCompleted(userId: Long): Result<Unit> = safeApiCall {
+        quizService.markQuizCompleted(userId)
+    }
+
     private suspend fun <T> safeApiCall(apiCall: suspend () -> T): Result<T> = try {
         val result = apiCall()
         Result.success(result)
     } catch (e: Exception) {
         Result.failure(e)
     }
+
 }

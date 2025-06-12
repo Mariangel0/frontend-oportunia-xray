@@ -31,6 +31,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.frontend.oportunia.presentation.viewmodel.UserViewModel
 import com.frontend.oportunia.presentation.viewmodel.IAAnalysisViewModel
+import com.frontend.oportunia.presentation.viewmodel.StreakViewModel
 
 
 @AndroidEntryPoint
@@ -65,11 +66,13 @@ class MainActivity : ComponentActivity() {
 
     private val userViewModel: UserViewModel by viewModels ()
 
+    private val streakViewModel: StreakViewModel by viewModels ()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             OportunIATheme {
-                Main(companyViewModel, loginViewModel, registerViewModel, skillViewModel, adviceViewModel, profileViewModel, companyReviewViewModel, interviewViewModel, quizViewModel, curriculumViewModel, userViewModel, iAAnalysisViewModel)
+                Main(companyViewModel, loginViewModel, registerViewModel, skillViewModel, adviceViewModel, profileViewModel, companyReviewViewModel, interviewViewModel, quizViewModel, curriculumViewModel, userViewModel, iAAnalysisViewModel, streakViewModel)
             }
         }
     }
@@ -91,7 +94,8 @@ fun Main(
     quizViewModel: QuizViewModel,
     curriculumViewModel: CurriculumViewModel,
     userViewModel: UserViewModel,
-    iAAnalysisViewModel: IAAnalysisViewModel
+    iAAnalysisViewModel: IAAnalysisViewModel,
+    streakViewModel: StreakViewModel
 ) {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
@@ -128,7 +132,8 @@ fun Main(
             quizViewModel = quizViewModel,
             curriculumViewModel = curriculumViewModel,
             userViewModel = userViewModel,
-            iAAnalysisViewModel = iAAnalysisViewModel
+            iAAnalysisViewModel = iAAnalysisViewModel,
+            streakViewModel = streakViewModel
         )
     }
 }

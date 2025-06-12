@@ -19,6 +19,7 @@ import com.frontend.oportunia.data.remote.api.ExperienceService
 import com.frontend.oportunia.data.remote.api.IAAnalysisService
 import com.frontend.oportunia.data.remote.api.InterviewService
 import com.frontend.oportunia.data.remote.api.QuizService
+import com.frontend.oportunia.data.remote.api.StreakService
 import com.frontend.oportunia.data.remote.api.StudentService
 import com.frontend.oportunia.data.remote.api.UserService
 import com.frontend.oportunia.data.remote.dto.AbilityDto
@@ -166,5 +167,10 @@ object NetworkModule {
     @Singleton
     fun provideIAAnalysisService(retrofit: Retrofit): IAAnalysisService =
         retrofit.create(IAAnalysisService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideStreakService(retrofit: Retrofit): StreakService =
+        retrofit.create(StreakService::class.java)
 }
 

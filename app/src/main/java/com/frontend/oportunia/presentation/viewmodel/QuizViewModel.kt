@@ -8,6 +8,7 @@ import com.frontend.oportunia.domain.model.MCEvaluation
 import com.frontend.oportunia.domain.model.MCQuestion
 import com.frontend.oportunia.domain.model.MCRequest
 import com.frontend.oportunia.domain.repository.QuizRepository
+import com.frontend.oportunia.domain.repository.StreakRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuizViewModel @Inject constructor(
-    private val quizRepository: QuizRepository
+    private val quizRepository: QuizRepository,
+    private val streakViewModel: StreakViewModel
 ) : ViewModel() {
 
     private val _questions = MutableStateFlow<List<MCQuestion>>(emptyList())
@@ -31,6 +33,9 @@ class QuizViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
+    private val _isLoadingNext = MutableStateFlow(false)
+    val isLoadingNext: StateFlow<Boolean> = _isLoadingNext
+
     private var topic: String? = null
     private var difficulty: String? = null
 
@@ -43,18 +48,33 @@ class QuizViewModel @Inject constructor(
         fetchNextQuestion(userId)
     }
 
-    private fun fetchNextQuestion(userId: Long) {
+    private fun fetchNextQuestion(userId: Long, isFromNextButton: Boolean = false) {
         val currentTopic = topic ?: return
         val currentDifficulty = difficulty ?: return
 
         viewModelScope.launch {
-            _isLoading.value = true
+            if (isFromNextButton) {
+                _isLoadingNext.value = true
+            } else {
+                _isLoading.value = true
+            }
+
             quizRepository.generateQuiz(userId, MCRequest(currentTopic, currentDifficulty)).onSuccess { question ->
                 _questions.value = _questions.value + question
+
+                // If this was called from next button, move to the next question after loading
+                if (isFromNextButton && _currentIndex.value < _questions.value.lastIndex) {
+                    _currentIndex.value += 1
+                }
             }.onFailure {
                 Log.e("QuizViewModel", "Error generating next question", it)
             }
-            _isLoading.value = false
+
+            if (isFromNextButton) {
+                _isLoadingNext.value = false
+            } else {
+                _isLoading.value = false
+            }
         }
     }
 
@@ -72,10 +92,12 @@ class QuizViewModel @Inject constructor(
     }
 
     fun nextQuestion(userId: Long) {
+        // Check if we need to fetch a new question
         if (_questions.value.size < 5 && _currentIndex.value == _questions.value.lastIndex) {
-            fetchNextQuestion(userId)
-        }
-        if (_currentIndex.value < _questions.value.lastIndex) {
+            // Fetch next question and it will automatically move to it
+            fetchNextQuestion(userId, isFromNextButton = true)
+        } else if (_currentIndex.value < _questions.value.lastIndex) {
+            // Just move to the next existing question
             _currentIndex.value += 1
         }
     }
@@ -84,6 +106,7 @@ class QuizViewModel @Inject constructor(
         _questions.value = emptyList()
         _evaluations.value = emptyMap()
         _currentIndex.value = 0
+        _isLoadingNext.value = false
         topic = null
         difficulty = null
     }
@@ -97,6 +120,14 @@ class QuizViewModel @Inject constructor(
     fun goToQuestion(index: Int) {
         if (index >= 0 && index < questions.value.size) {
             _currentIndex.value = index
+        }
+    }
+
+    fun markQuizCompleted(studentId: Long) {
+        viewModelScope.launch {
+            quizRepository.markQuizCompleted(studentId).onSuccess {
+                streakViewModel.loadStreak(studentId)
+            }
         }
     }
 }

@@ -2,15 +2,38 @@ package com.frontend.oportunia.presentation.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,10 +43,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.oportunia.R
-import com.frontend.oportunia.presentation.ui.components.AcceptButton
 import com.frontend.oportunia.presentation.ui.components.HeaderType
 import com.frontend.oportunia.presentation.ui.layout.MainLayout
-import com.frontend.oportunia.presentation.ui.navigation.NavRoutes
 import com.frontend.oportunia.presentation.viewmodel.QuizViewModel
 
 
@@ -48,6 +69,7 @@ fun QuizScreen(
     val currentIndex by quizViewModel.currentIndex.collectAsState()
     val evaluations by quizViewModel.evaluations.collectAsState()
     val isLoading by quizViewModel.isLoading.collectAsState()
+    val isLoadingNext by quizViewModel.isLoadingNext.collectAsState()
 
     if (questions.isEmpty() && isLoading) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -69,7 +91,6 @@ fun QuizScreen(
         title = stringResource(R.string.quiz_title),
         onBackClick = { navController.navigateUp() }
     ) {
-
 
         Column(
             modifier = Modifier
@@ -137,14 +158,17 @@ fun QuizScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                AcceptButton(
+                // Custom button that shows loading state
+                NextQuizButton(
                     text = if (currentIndex == 4)
                         stringResource(R.string.finish)
                     else
                         stringResource(R.string.next),
-                    enabled = isAnswered,
+                    enabled = isAnswered && !isLoadingNext,
+                    isLoading = isLoadingNext,
                     onClick = {
                         if (currentIndex == 4) {
+                            quizViewModel.markQuizCompleted(studentId)
                             navController.navigateUp()
                         } else {
                             localSelected = null
@@ -157,8 +181,50 @@ fun QuizScreen(
     }
 }
 
-
-
+@Composable
+private fun NextQuizButton(
+    text: String,
+    enabled: Boolean,
+    isLoading: Boolean,
+    onClick: () -> Unit
+) {
+    Button(
+        onClick = onClick,
+        enabled = enabled,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            disabledContainerColor = MaterialTheme.colorScheme.outline
+        ),
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        if (isLoading) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(16.dp),
+                    color = Color.White,
+                    strokeWidth = 2.dp
+                )
+                Text(
+                    text = stringResource(R.string.loading_generic), // You might need to add this string resource
+                    color = Color.White,
+                    style = MaterialTheme.typography.labelLarge
+                )
+            }
+        } else {
+            Text(
+                text = text,
+                color = if (enabled) Color.White else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                style = MaterialTheme.typography.labelLarge
+            )
+        }
+    }
+}
 
 @Composable
 private fun InteractiveQuizProgressIndicator(

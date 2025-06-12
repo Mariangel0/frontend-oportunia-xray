@@ -1,6 +1,8 @@
 package com.frontend.oportunia.data.mapper
 
+import com.frontend.oportunia.data.remote.dto.AbilityDto
 import com.frontend.oportunia.data.remote.dto.StreakDto
+import com.frontend.oportunia.domain.model.Ability
 import com.frontend.oportunia.domain.model.Streak
 
 class StreakMapper(
@@ -8,7 +10,7 @@ class StreakMapper(
 ) {
     fun mapToDomain(dto: StreakDto): Streak = Streak(
         id = dto.id,
-        studentId = studentMapper.mapToDomain(dto.studentId),
+        student = studentMapper.mapToDomain(dto.student),
         days = dto.days,
         lastActivity = dto.lastActivity,
         bestStreak = dto.bestStreak
@@ -16,9 +18,13 @@ class StreakMapper(
 
     fun mapToDto(domain: Streak): StreakDto = StreakDto(
         id = domain.id,
-        studentId = studentMapper.mapToDto(domain.studentId),
+        student = studentMapper.mapToDto(domain.student),
         days = domain.days,
         lastActivity = domain.lastActivity,
         bestStreak = domain.bestStreak
     )
+
+    fun mapToDomainList(StreakDto: List<StreakDto>): List<Streak> {
+        return StreakDto.map { mapToDomain(it) }
+    }
 }

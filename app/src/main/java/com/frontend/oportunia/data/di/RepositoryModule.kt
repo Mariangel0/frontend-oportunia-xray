@@ -20,6 +20,7 @@ import com.frontend.oportunia.domain.repository.ExperienceRepository
 import com.frontend.oportunia.domain.repository.IAAnalysisRepository
 import com.frontend.oportunia.domain.repository.InterviewRepository
 import com.frontend.oportunia.domain.repository.QuizRepository
+import com.frontend.oportunia.domain.repository.StreakRepository
 import com.frontend.oportunia.domain.repository.StudentRepository
 import com.frontend.oportunia.domain.repository.UserRepository
 import dagger.Binds
@@ -100,4 +101,9 @@ abstract class RepositoryModule {
         iaAnalysisRepositoryImpl:IAAnalysisRepositoryImpl
     ): IAAnalysisRepository
 
+    @Binds
+    @Singleton
+    abstract fun bindStrealRepository(
+        streakRepository: StreakRepository
+    ): StreakRepository
 }

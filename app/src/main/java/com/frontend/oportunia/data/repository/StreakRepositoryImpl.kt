@@ -4,10 +4,12 @@ import android.util.Log
 import com.frontend.oportunia.data.datasource.StreakDataSource
 import com.frontend.oportunia.data.mapper.StreakMapper
 import com.frontend.oportunia.domain.error.DomainError
+import com.frontend.oportunia.domain.model.Ability
 import com.frontend.oportunia.domain.model.Streak
 import com.frontend.oportunia.domain.repository.StreakRepository
 import kotlinx.coroutines.flow.first
 import java.io.IOException
+import java.net.UnknownHostException
 
 class StreakRepositoryImpl(
     private val dataSource: StreakDataSource,
@@ -18,26 +20,24 @@ class StreakRepositoryImpl(
         private const val TAG = "StreakRepository"
     }
 
-    override suspend fun findAllStreaks(): Result<List<Streak>> = runCatching {
-        dataSource.getStreaks().first().map { streakDto ->
-            streakMapper.mapToDomain(streakDto)
-        }
-    }.recoverCatching { throwable ->
-        Log.e(TAG, "Failed to fetch streaks", throwable)
-
-        when (throwable) {
-            is IOException -> throw DomainError.NetworkError("Failed to fetch streaks")
-            is IllegalArgumentException -> throw DomainError.MappingError("Error mapping streaks")
-            is DomainError -> throw throwable
-            else -> throw DomainError.UnknownError("An unknown error occurred")
+    override suspend fun findAllStreaks(): Result<List<Streak>> {
+        return try {
+            dataSource.getStreaks().map { streakDto ->
+                streakMapper.mapToDomainList(streakDto)
+            }
+        } catch (e: UnknownHostException) {
+            Result.failure(Exception("Network error: Cannot connect to server. Please check your internet connection."))
+        } catch (e: Exception) {
+            Result.failure(Exception("Error fetching tasks: ${e.message}"))
         }
     }
 
-    override suspend fun findStreakById(streakId: Long): Result<Streak> = runCatching {
-        val streakDto = dataSource.getStreakById(streakId) ?: throw DomainError.StreakError("Streak not found")
-        streakMapper.mapToDomain(streakDto)
+
+    override suspend fun getStreak(studentId: Long): Result<Streak> = runCatching {
+        val response = dataSource.getStreakByStudentId(studentId).getOrThrow()
+        streakMapper.mapToDomain(response)
     }.recoverCatching { throwable ->
-        Log.e(TAG, "Failed to fetch streak with ID: $streakId", throwable)
+        Log.e(TAG, "Failed to fetch streak for student $studentId", throwable)
         when (throwable) {
             is IOException -> throw DomainError.NetworkError("Failed to fetch streak")
             is IllegalArgumentException -> throw DomainError.MappingError("Error mapping streak")
@@ -45,4 +45,10 @@ class StreakRepositoryImpl(
             else -> throw DomainError.UnknownError("An unknown error occurred")
         }
     }
+
+    override suspend fun findStreakById(streakId: Long): Result<Streak> =
+        dataSource.getStreakById(streakId).map { reviewDto ->
+            streakMapper.mapToDomain(reviewDto)
+        }
 }
+
