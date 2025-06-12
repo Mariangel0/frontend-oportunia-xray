@@ -17,9 +17,7 @@ class AuthInterceptor @Inject constructor(
 
         // Skip authentication for login and registration endpoints
         if (originalRequest.url.encodedPath.contains("auth/login") ||
-            originalRequest.url.encodedPath.contains("auth/register") ||
-            originalRequest.url.encodedPath.contains("/users") ||
-            originalRequest.url.encodedPath.contains("/students")
+            originalRequest.url.encodedPath.contains("auth/register")
         ) {
             return chain.proceed(originalRequest)
         }
