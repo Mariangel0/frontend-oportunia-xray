@@ -30,6 +30,8 @@ import com.frontend.oportunia.presentation.viewmodel.CurriculumViewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.frontend.oportunia.presentation.viewmodel.UserViewModel
+import com.frontend.oportunia.presentation.viewmodel.IAAnalysisViewModel
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -59,12 +61,15 @@ class MainActivity : ComponentActivity() {
 
     private val companyReviewViewModel: CompanyReviewViewModel by viewModels ()
 
+    private val iAAnalysisViewModel: IAAnalysisViewModel by viewModels ()
+
     private val userViewModel: UserViewModel by viewModels ()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             OportunIATheme {
+                Main(companyViewModel, loginViewModel, registerViewModel, skillViewModel, adviceViewModel, profileViewModel, companyReviewViewModel, interviewViewModel, quizViewModel, curriculumViewModel, iAAnalysisViewModel)
                 Main(companyViewModel, loginViewModel, registerViewModel, skillViewModel, adviceViewModel, profileViewModel, companyReviewViewModel, interviewViewModel, quizViewModel, curriculumViewModel, userViewModel)
             }
         }
@@ -88,6 +93,7 @@ fun Main(
     curriculumViewModel: CurriculumViewModel,
     userViewModel: UserViewModel
 ) {
+fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, registerViewModel: RegisterViewModel, skillViewModel: SkillsViewModel, adviceViewModel: AdviceViewModel, profileViewModel: ProfileViewModel, companyReviewViewModel: CompanyReviewViewModel, interviewViewModel: InterviewViewModel, quizViewModel: QuizViewModel, curriculumViewModel: CurriculumViewModel, iAAnalysisViewModel: IAAnalysisViewModel) {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
@@ -122,7 +128,9 @@ fun Main(
             interviewViewModel = interviewViewModel,
             quizViewModel = quizViewModel,
             curriculumViewModel = curriculumViewModel,
-            userViewModel = userViewModel
+            userViewModel = userViewModel,
+            curriculumViewModel = curriculumViewModel,
+            iAAnalysisViewModel = iAAnalysisViewModel
         )
     }
 }

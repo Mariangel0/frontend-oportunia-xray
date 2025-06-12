@@ -1,27 +1,33 @@
 package com.frontend.oportunia.data.mapper
 
+import com.frontend.oportunia.data.remote.dto.AbilityDto
 import com.frontend.oportunia.data.remote.dto.IAAnalysisDto
+import com.frontend.oportunia.domain.model.Ability
 import com.frontend.oportunia.domain.model.IAAnalysis
+import javax.inject.Inject
 
-class IAAnalysisMapper(
+class IAAnalysisMapper @Inject constructor(
     private val interviewMapper: InterviewMapper,
-    private val curriculumMapper: CurriculumMapper
 ) {
     fun mapToDomain(dto: IAAnalysisDto): IAAnalysis = IAAnalysis(
         id = dto.id,
-        interviewId = interviewMapper.mapToDomain(dto.interviewId),
-        curriculumId = curriculumMapper.mapToDomain(dto.curriculumId),
-        recommendations = dto.recommendations,
+        recommendation = dto.recommendation,
+        comment = dto.comment,
         score = dto.score,
-        date = dto.date
+        date = dto.date,
+        interview = interviewMapper.mapToDomain(dto.interview),
     )
 
     fun mapToDto(domain: IAAnalysis): IAAnalysisDto = IAAnalysisDto(
         id = domain.id,
-        interviewId = interviewMapper.mapToDto(domain.interviewId),
-        curriculumId = curriculumMapper.mapToDto(domain.curriculumId),
-        recommendations = domain.recommendations,
+        recommendation = domain.recommendation,
+        comment = domain.comment,
         score = domain.score,
-        date = domain.date
+        date = domain.date,
+        interview = interviewMapper.mapToDto(domain.interview),
     )
+
+    fun mapToDomainList(analysisDto: List<IAAnalysisDto>): List<IAAnalysis> {
+        return analysisDto.map { mapToDomain(it) }
+    }
 }

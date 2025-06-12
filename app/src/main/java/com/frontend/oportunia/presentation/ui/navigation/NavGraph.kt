@@ -20,6 +20,7 @@ import com.frontend.oportunia.presentation.ui.screens.LoginScreen
 import com.frontend.oportunia.presentation.ui.screens.MainScreen
 import com.frontend.oportunia.presentation.ui.screens.MenuScreen
 import com.frontend.oportunia.presentation.ui.screens.CurriculumScreen
+import com.frontend.oportunia.presentation.ui.screens.InterviewAnalysisScreen
 import com.frontend.oportunia.presentation.ui.screens.PerfilScreen
 import com.frontend.oportunia.presentation.ui.screens.QuizScreen
 import com.frontend.oportunia.presentation.ui.screens.RegisterScreen
@@ -30,6 +31,7 @@ import com.frontend.oportunia.presentation.ui.screens.admin.UserListScreen
 import com.frontend.oportunia.presentation.viewmodel.AdviceViewModel
 import com.frontend.oportunia.presentation.viewmodel.CompanyReviewViewModel
 import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
+import com.frontend.oportunia.presentation.viewmodel.IAAnalysisViewModel
 import com.frontend.oportunia.presentation.viewmodel.InterviewViewModel
 import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
 import com.frontend.oportunia.presentation.viewmodel.ProfileViewModel
@@ -53,7 +55,7 @@ fun NavGraph(
     curriculumViewModel: CurriculumViewModel,
     interviewViewModel: InterviewViewModel,
     quizViewModel: QuizViewModel,
-    userViewModel: UserViewModel
+    iAAnalysisViewModel: IAAnalysisViewModel
 ) {
     NavHost(navController, startDestination = NavRoutes.MainPage.ROUTE) {
 
@@ -74,7 +76,7 @@ fun NavGraph(
             )
         }
 
-                composable(NavRoutes.Register.ROUTE) {
+        composable(NavRoutes.Register.ROUTE) {
             RegisterScreen(paddingValues, registerViewModel, navController)
         }
 
@@ -236,6 +238,20 @@ fun NavGraph(
                 navController = navController,
                 paddingValues = paddingValues,
                 userViewModel = userViewModel
+            )
+        }
+
+        composable(
+            route = NavRoutes.IAAnalysisScreen.ROUTE,
+            arguments = listOf(navArgument(NavRoutes.IAAnalysisScreen.ARG_IAA_ID) {
+                type = NavType.LongType
+            })
+        ) { backStackEntry ->
+            val interviewId = backStackEntry.arguments?.getLong(NavRoutes.IAAnalysisScreen.ARG_IAA_ID) ?: 0L
+            InterviewAnalysisScreen(
+                navController = navController,
+                viewModel = iAAnalysisViewModel,
+                interviewId = interviewId
             )
         }
 

@@ -2,6 +2,7 @@ package com.frontend.oportunia.data.datasource
 
 import com.frontend.oportunia.data.remote.api.InterviewService
 import com.frontend.oportunia.data.remote.dto.ChatResponseDto
+import com.frontend.oportunia.data.remote.dto.InterviewChatResponseDto
 import com.frontend.oportunia.data.remote.dto.InterviewDto
 import com.frontend.oportunia.data.remote.dto.UserMessageDto
 import com.frontend.oportunia.data.remote.dto.UserTextPromptDto
@@ -12,11 +13,11 @@ class InterviewDataSource @Inject constructor(
     private val interviewService: InterviewService
 ) {
 
-    suspend fun startInterview(studentId: Long, prompt: UserTextPromptDto): ChatResponseDto {
+    suspend fun startInterview(studentId: Long, prompt: UserTextPromptDto): InterviewChatResponseDto {
         return interviewService.sendPrompt(studentId, prompt)
     }
 
-    suspend fun continueInterview(studentId: Long, message: UserMessageDto): ChatResponseDto {
+    suspend fun continueInterview(studentId: Long, message: UserMessageDto): InterviewChatResponseDto {
         return interviewService.continuePrompt(studentId, message)
     }
 

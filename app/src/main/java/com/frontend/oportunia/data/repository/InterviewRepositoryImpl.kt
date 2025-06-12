@@ -8,6 +8,7 @@ import com.frontend.oportunia.data.remote.dto.UserTextPromptDto
 import com.frontend.oportunia.domain.error.DomainError
 import com.frontend.oportunia.domain.model.ChatResponse
 import com.frontend.oportunia.domain.model.Interview
+import com.frontend.oportunia.domain.model.InterviewChatResponse
 import com.frontend.oportunia.domain.repository.InterviewRepository
 import java.io.IOException
 import javax.inject.Inject
@@ -26,7 +27,7 @@ class InterviewRepositoryImpl @Inject constructor(
         message: String,
         jobPosition: String,
         typeOfInterview: String
-    ): Result<ChatResponse> = runCatching {
+    ): Result<InterviewChatResponse> = runCatching {
         val prompt = UserTextPromptDto(
             id = studentId,
             message = message,
@@ -43,7 +44,7 @@ class InterviewRepositoryImpl @Inject constructor(
     override suspend fun continueInterview(
         studentId: Long,
         message: String
-    ): Result<ChatResponse> = runCatching {
+    ): Result<InterviewChatResponse> = runCatching {
         val input = UserMessageDto(
             id = studentId,
             message = message
