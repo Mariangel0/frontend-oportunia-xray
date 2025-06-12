@@ -19,7 +19,11 @@ fun AddReviewScreen(
     companyId: Long,
     reviewViewModel: CompanyReviewViewModel
 ) {
-    // 1️⃣ Collect UI state from ViewModel
+    // 1️⃣ Collect UI state from ViewModel}
+    LaunchedEffect(Unit){
+        reviewViewModel.loadCurrentUserAndStudent()
+    }
+
     val user by reviewViewModel.loggedUser.collectAsState()
     val comment by reviewViewModel.comment.collectAsState()
     val rating  by reviewViewModel.rating.collectAsState()

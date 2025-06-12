@@ -21,6 +21,7 @@ class ExperienceDeserializer : JsonDeserializer<ExperienceDto> {
         val id = jsonObject.get("id").asLong
         val role = jsonObject.get("role").asString
 
+
         val timeline = if (
             jsonObject.has("timeline") &&
             !jsonObject.get("timeline").isJsonNull
@@ -45,7 +46,7 @@ class ExperienceDeserializer : JsonDeserializer<ExperienceDto> {
             id = id,
             timeline = timeline,
             role = role,
-            studentId = studentDto,
+            student = studentDto,
             company = companyName
         )
     }

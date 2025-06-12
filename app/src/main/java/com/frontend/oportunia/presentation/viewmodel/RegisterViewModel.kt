@@ -1,12 +1,21 @@
 package com.frontend.oportunia.presentation.viewmodel
 
 import android.net.Uri
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.frontend.oportunia.data.remote.dto.UserDto
+import com.frontend.oportunia.domain.model.Education
+import com.frontend.oportunia.domain.model.Experience
 import com.frontend.oportunia.domain.model.Privilege
 import com.frontend.oportunia.domain.model.Role
+import com.frontend.oportunia.domain.model.Streak
 import com.frontend.oportunia.domain.model.Student
 import com.frontend.oportunia.domain.model.User
+import com.frontend.oportunia.domain.repository.EducationRepository
+import com.frontend.oportunia.domain.repository.ExperienceRepository
+import com.frontend.oportunia.domain.repository.StreakRepository
 import com.frontend.oportunia.domain.repository.StudentRepository
 import com.frontend.oportunia.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,96 +28,110 @@ import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
-class RegisterViewModel @Inject constructor (
-    private val repository: StudentRepository,
-    private val userRepository: UserRepository
+class RegisterViewModel @Inject constructor(
+    private val studentRepository: StudentRepository,
+    private val userRepository: UserRepository,
+    private val educationRepository: EducationRepository,
+    private val experienceRepository: ExperienceRepository,
 ) : ViewModel() {
 
-    val name = MutableStateFlow("")
-    val lastName = MutableStateFlow("")
-    val email = MutableStateFlow("")
-    val password = MutableStateFlow("")
+    /* ───────────── DATOS BÁSICOS ───────────── */
+    val name            = MutableStateFlow("")
+    val lastName        = MutableStateFlow("")
+    val email           = MutableStateFlow("")
+    val password        = MutableStateFlow("")
     val confirmPassword = MutableStateFlow("")
-    val birthDate = MutableStateFlow<Long?>(null)
+    val birthDate       = MutableStateFlow<Long?>(null)
+
+    /* ───────────── ESTADO UI ───────────── */
     val selectedImageUri = MutableStateFlow<Uri?>(null)
+    val isWorking        = MutableStateFlow(false)
+    val company          = MutableStateFlow("")
+    val jobPosition      = MutableStateFlow("")
+    val githubUrl        = MutableStateFlow("")
+    val linkedinUrl      = MutableStateFlow("")
+
+    /* ───────────── ERRORES ───────────── */
+    private val _error           = MutableStateFlow<String?>(null)
+    val error: StateFlow<String?> get() = _error
+    val showErrorDialog          = MutableStateFlow(false)
+
+    /* ───────────── COMPATIBILIDAD ANTIGUA ─────────────
+       (si otras pantallas usan aún este flujo)            */
     val education = MutableStateFlow<List<String>>(emptyList())
-    val isWorking = MutableStateFlow(false)
-    val company = MutableStateFlow("")
-    val jobPosition = MutableStateFlow("")
-    val linkedinUrl = MutableStateFlow("")
-    val githubUrl = MutableStateFlow("")
 
-
-
+    /* ───────────── LISTAS OBSERVABLES ───────────── */
     data class EducationEntry(
-        var degree: String = "",
-        var institution: String = "",
-        var graduationYear: String = ""
+        val id: Long = System.nanoTime(),
+        val degree: String = "",
+        val institution: String = "",
+        val graduationYear: String = ""
     )
 
     data class ExperienceEntry(
-        var company: String = "",
-        var role: String = "",
-        var timeline: String = ""
+        val id: Long = System.nanoTime(),
+        val company: String = "",
+        val role: String = "",
+        val timeline: String = ""
     )
 
-    val educationList = MutableStateFlow<List<EducationEntry>>(emptyList())
-    val experienceList = MutableStateFlow<List<ExperienceEntry>>(emptyList())
+    val educationList : SnapshotStateList<EducationEntry>  = mutableStateListOf()
+    val experienceList: SnapshotStateList<ExperienceEntry> = mutableStateListOf()
 
+    /* ───────────── EDUCACIÓN ───────────── */
     fun addEducationEntry() {
-        educationList.value = educationList.value + EducationEntry()
+        educationList.add(EducationEntry())
     }
 
     fun updateEducationEntry(index: Int, field: String, value: String) {
-        val updated = educationList.value.toMutableList()
-        val entry = updated[index]
-        when (field) {
-            "degree" -> entry.degree = value
-            "institution" -> entry.institution = value
-            "graduationYear" -> entry.graduationYear = value
+        if (index !in educationList.indices) return
+        val entry = educationList[index]
+        educationList[index] = when (field) {
+            "degree"         -> entry.copy(degree = value)
+            "institution"    -> entry.copy(institution = value)
+            "graduationYear" -> entry.copy(graduationYear = value)
+            else             -> entry
         }
-        educationList.value = updated
     }
 
     fun removeEducationEntry(index: Int) {
-        educationList.value = educationList.value.toMutableList().apply { removeAt(index) }
+        if (index in educationList.indices) educationList.removeAt(index)
     }
 
+
+
+    /* ───────────── EXPERIENCIA ───────────── */
     fun addExperienceEntry() {
-        experienceList.value = experienceList.value + ExperienceEntry()
+        experienceList.add(ExperienceEntry())
     }
 
     fun updateExperienceEntry(index: Int, field: String, value: String) {
-        val updated = experienceList.value.toMutableList()
-        val entry = updated[index]
-        when (field) {
-            "company" -> entry.company = value
-            "role" -> entry.role = value
-            "timeline" -> entry.timeline = value
+        if (index !in experienceList.indices) return
+        val entry = experienceList[index]
+        experienceList[index] = when (field) {
+            "company"  -> entry.copy(company = value)
+            "role"     -> entry.copy(role     = value)
+            "timeline" -> entry.copy(timeline = value)
+            else       -> entry
         }
-        experienceList.value = updated
     }
+
+
 
     fun removeExperienceEntry(index: Int) {
-        experienceList.value = experienceList.value.toMutableList().apply { removeAt(index) }
+        if (index in experienceList.indices) experienceList.removeAt(index)
     }
 
-
-
-
-    private val _error = MutableStateFlow<String?>(null)
-    val error: StateFlow<String?> get() = _error
-
+    /* ───────────── UTILIDADES ───────────── */
     fun onImageSelected(uri: Uri?) {
         selectedImageUri.value = uri
     }
 
-    fun clearError() {
-        _error.value = null
+    private fun convertMillisToDate(millis: Long): String {
+        val formatter = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        return formatter.format(Date(millis))
     }
 
-    private val _showErrorDialog = MutableStateFlow(false)
-    val showErrorDialog: StateFlow<Boolean> get() = _showErrorDialog
 
     private fun isValidEmail(email: String): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
@@ -119,17 +142,22 @@ class RegisterViewModel @Inject constructor (
     fun registerStudent(onSuccess: () -> Unit) {
         if (name.value.isBlank() || lastName.value.isBlank() || email.value.isBlank() || password.value.isBlank() || confirmPassword.value.isBlank() || birthDate.value == null  ) {
             _error.value = "empty_fields"
+            showErrorDialog.value = true
+
             return
         }
 
         if (password.value != confirmPassword.value) {
             _error.value = "password_mismatch"
+            showErrorDialog.value = true
+
             return
         }
 
         if (!isValidEmail(email.value)) {
             _error.value = "invalid_email"
-            _showErrorDialog.value = true
+            showErrorDialog.value = true
+
             return
         }
 
@@ -164,30 +192,51 @@ class RegisterViewModel @Inject constructor (
 
         )
         val formattedDate = birthDate.value?.let { convertMillisToDate(it) } ?: ""
-        val student = Student(
-            user = user,
-            description = "Nuevo estudiante",
-            premium = false,
-            linkedinUrl = ln,
-            githubUrl = gh ,
-            bornDate = formattedDate,
-            location = "",
-
-        )
 
         viewModelScope.launch {
             try {
                 val result = userRepository.createUser(user)
-                println("AQUI TODO BIEN")
                 if (result.isSuccess) {
-                    println("AQUI TODO BIEN 2")
+                    val student = Student(
+                        description = "Nuevo estudiante",
+                        premium = false,
+                        linkedinUrl = ln,
+                        githubUrl = gh ,
+                        bornDate = formattedDate,
+                        location = "",
+                        user = result.getOrNull(),
+
+                        )
                     _error.value = null
-                    println("AQUI TODO BIEN 3")
-                    student.userId = result.getOrNull()?.id
-                    val result = repository.createStudent(student)
-                    println("AQUI TODO BIEN 4")
-                    if (result.isSuccess) {
+                    val result2 = studentRepository.createStudent(student)
+                    if (result2.isSuccess) {
                         _error.value = null
+
+                        println(result.getOrNull())
+                        educationList.forEach { edu ->
+                            println("Enviando educación → degree=${edu.degree}, institution=${edu.institution}, year=${edu.graduationYear}")
+                            educationRepository.createEducation(
+
+                                Education(
+                                    student = result2.getOrNull()?: return@launch,
+                                    name = edu.degree,
+                                    institution = edu.institution,
+                                    year = edu.graduationYear.toInt()
+                                )
+                            )
+                        }
+
+                        experienceList.forEach { exp ->
+                            experienceRepository.createExperience(
+                                Experience(
+                                    student = result2.getOrNull() ?: return@launch,
+                                    company = exp.company,
+                                    role = exp.role,
+                                    timeline = exp.timeline
+                                )
+                            )
+                        }
+
                         onSuccess()
                     } else {
                         _error.value = "register_failed"
@@ -205,9 +254,4 @@ class RegisterViewModel @Inject constructor (
 
 
 
-}
-
-fun convertMillisToDate(millis: Long): String {
-    val formatter = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
-    return formatter.format(Date(millis))
 }

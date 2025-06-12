@@ -51,9 +51,32 @@ class CompanyReviewViewModel @Inject constructor(
 
 
     init {
-        getUser()
-        getStudent()
+        loadCurrentUserAndStudent()
     }
+
+    fun loadCurrentUserAndStudent() {
+        viewModelScope.launch {
+            authRepository.getCurrentUser()
+                .onSuccess { user ->
+                    _loggedUser.value = user
+                    // ¡Aquí encadenas la llamada al studentRepository usando el user.id!
+                    user?.id?.let { uid ->
+                        studentRepository.findStudentByUserId(uid)
+                            .onSuccess { student ->
+                                _loggedStudent.value = student
+                                _username.value = user?.firstName // opcional
+                            }
+                            .onFailure {
+                                Log.e("CompanyReviewVM", "Error fetching student", it)
+                            }
+                    }
+                }
+                .onFailure {
+                    Log.e("CompanyReviewVM", "Error fetching user", it)
+                }
+        }
+    }
+
 
     fun getUser() {
         viewModelScope.launch {

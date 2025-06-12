@@ -5,6 +5,7 @@ import com.frontend.oportunia.data.datasource.StreakDataSource
 import com.frontend.oportunia.data.mapper.StreakMapper
 import com.frontend.oportunia.domain.error.DomainError
 import com.frontend.oportunia.domain.model.Ability
+import com.frontend.oportunia.domain.model.Education
 import com.frontend.oportunia.domain.model.Streak
 import com.frontend.oportunia.domain.repository.StreakRepository
 import kotlinx.coroutines.flow.first
@@ -19,6 +20,20 @@ class StreakRepositoryImpl @Inject constructor (
 
     companion object {
         private const val TAG = "StreakRepository"
+    }
+
+    override suspend fun createStreak(streak: Streak): Result<Streak> {
+        val streakDto = streakMapper.mapToDto(streak)
+        return try {
+            val response = dataSource.createStreak(streakDto)
+            if (response.isSuccessful && response.body() != null) {
+                Result.success(streakMapper.mapToDomain(response.body()!!))
+            } else {
+                Result.failure(Exception("Error en la creación de la educación: ${response.code()} ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     override suspend fun findAllStreaks(): Result<List<Streak>> {

@@ -70,11 +70,10 @@ class StudentRepositoryImpl @Inject constructor(
 
     override suspend fun updateStudent(student: Student): Result<Student> {
         return try {
-            // Mapear el dominio a DTO
             val studentDto = studentMapper.mapToDto(student)
 
-            // Llamar al data source
-            val response = dataSource.updateStudent(student.user?.id!!, studentDto)
+            val id = requireNotNull(student.id) { "El ID del estudiante es null. No se puede actualizar." }
+            val response = dataSource.updateStudent(id, studentDto)
 
             if (response.isSuccessful && response.body() != null) {
                 val updatedDto = response.body()!!

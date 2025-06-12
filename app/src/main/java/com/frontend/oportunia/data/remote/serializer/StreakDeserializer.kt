@@ -26,6 +26,6 @@ class StreakDeserializer : JsonDeserializer<StreakDto> {
         val days = jsonObject.get("days").asInt
         val bestStreak = jsonObject.get("bestStreak").asInt
 
-        return StreakDto(id, studentId, days, lastActivity, bestStreak)
+        return StreakDto(id, days, lastActivity, bestStreak, studentId)
     }
 }

@@ -66,7 +66,7 @@ fun PerfilScreen(
     LaunchedEffect(user, student) {
         val u = user
         val s = student
-        if (!profileInitialized && u != null && s != null) {
+        if ( u != null && s != null) {
             uiState = uiState.copy(
                 firstName = u.firstName,
                 lastName = u.lastName,
@@ -114,10 +114,15 @@ fun PerfilScreen(
                 onClick = {
                     if (isEditing) {
                         student?.let {
-                            profileViewModel.updateStudent(it.copy(
-                                description = uiState.description,
-                                location = uiState.location
-                            ))
+                            profileViewModel.updateStudent(
+                                it.copy(
+                                    id = it.id,                          // 🔑 Asegura que el ID no se pierda
+                                    user = it.user,                      // 🔑 Necesario si el backend lo requier
+                                    description = uiState.description,
+                                    location = uiState.location,
+                                    bornDate = uiState.birthDate
+                                )
+                            )
                         }
                         user?.let {
                             profileViewModel.updateUser(it.copy(

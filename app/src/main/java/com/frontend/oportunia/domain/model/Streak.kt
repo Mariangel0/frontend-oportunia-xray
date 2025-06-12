@@ -3,9 +3,9 @@ package com.frontend.oportunia.domain.model
 import java.util.Date
 
 data class Streak(
-    val id: Long,
-    val student: Student,
+    val id: Long? = null,
     val days: Int,
     val lastActivity: Date,
-    val bestStreak: Int
+    val bestStreak: Int,
+    val student: Student,
 )

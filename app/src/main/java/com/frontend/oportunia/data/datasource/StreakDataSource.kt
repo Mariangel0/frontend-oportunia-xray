@@ -1,6 +1,7 @@
 package com.frontend.oportunia.data.datasource
 
 import com.frontend.oportunia.data.remote.api.StreakService
+import com.frontend.oportunia.data.remote.dto.ExperienceDto
 import com.frontend.oportunia.data.remote.dto.StreakDto
 import retrofit2.Response
 import javax.inject.Inject
@@ -8,6 +9,10 @@ import javax.inject.Inject
 class StreakDataSource @Inject constructor (
     private val streakService: StreakService
 ) {
+
+    suspend fun createStreak(streakDto: StreakDto): Response<StreakDto>  {
+        return streakService.createStreak(streakDto)
+    }
 
     suspend fun getStreaks(): Result<List<StreakDto>> = safeApiCall {
         streakService.getAllStreaks()

@@ -47,6 +47,21 @@
     <string name="linkedin_placeholder">Ingresa tu URL de LinkedIn</string>
     <string name="github">GitHub</string>
     <string name="github_placeholder">Ingresa tu URL de GitHub</string>
+    <string name="work_experience">Experiencia Laboral</string>
+    <string name="add_experience">Agregar Experiencia Laboral</string>
+    <string name="add_education">Agregar Educación</string>
+    <string name="education_placeholder">Institución Educativa</string>
+    <string name="institution">Institución Educativa</string>
+    <string name="graduation_year_placeholder">Año de Graduación</string>
+    <string name="graduation_year">Año de Graduación</string>
+    <string name="timeline_placeholder">Ej: 2020 - 2023</string>
+    <string name="timeline">Tiempo</string>
+    <string name="role_placeholder">Puesto</string>
+    <string name="degree">Título Educativo</string>
+    <string name="role">Puesto</string>
+
+
+
 
     <string name="button_Start">Realizar</string>
     <string name="daily_quiz">¡Hoy no has realizado tu quiz diario!</string>

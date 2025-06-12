@@ -5,6 +5,7 @@ import com.frontend.oportunia.data.repository.AdviceRepositoryImpl
 import com.frontend.oportunia.data.repository.CompanyRepositoryImpl
 import com.frontend.oportunia.data.repository.CompanyReviewRepositoryImpl
 import com.frontend.oportunia.data.repository.CurriculumRepositoryImpl
+import com.frontend.oportunia.data.repository.EducationRepositoryImpl
 import com.frontend.oportunia.data.repository.ExperienceRepositoryImpl
 import com.frontend.oportunia.data.repository.IAAnalysisRepositoryImpl
 import com.frontend.oportunia.data.repository.InterviewRepositoryImpl
@@ -17,6 +18,7 @@ import com.frontend.oportunia.domain.repository.AdviceRepository
 import com.frontend.oportunia.domain.repository.CompanyRepository
 import com.frontend.oportunia.domain.repository.CompanyReviewRepository
 import com.frontend.oportunia.domain.repository.CurriculumRepository
+import com.frontend.oportunia.domain.repository.EducationRepository
 import com.frontend.oportunia.domain.repository.ExperienceRepository
 import com.frontend.oportunia.domain.repository.IAAnalysisRepository
 import com.frontend.oportunia.domain.repository.InterviewRepository
@@ -94,6 +96,12 @@ abstract class RepositoryModule {
     abstract fun bindCurriculumRepository(
         curriculumRepositoryImpl:CurriculumRepositoryImpl
     ): CurriculumRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindEducationRepository(
+        educationRepositoryImpl:EducationRepositoryImpl
+    ): EducationRepository
 
     @Binds
     @Singleton

@@ -1,7 +1,6 @@
 package com.frontend.oportunia.presentation.ui.navigation
 
 
-import com.frontend.oportunia.presentation.viewmodel.CurriculumViewModel
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -14,13 +13,13 @@ import com.frontend.oportunia.presentation.ui.screens.AdviceScreen
 import com.frontend.oportunia.presentation.ui.screens.CVAnalysisScreen
 import com.frontend.oportunia.presentation.ui.screens.CompanyScreen
 import com.frontend.oportunia.presentation.ui.screens.CompanyTabsScreen
+import com.frontend.oportunia.presentation.ui.screens.CurriculumScreen
+import com.frontend.oportunia.presentation.ui.screens.InterviewAnalysisScreen
 import com.frontend.oportunia.presentation.ui.screens.InterviewChatScreen
 import com.frontend.oportunia.presentation.ui.screens.InterviewMenuScreen
 import com.frontend.oportunia.presentation.ui.screens.LoginScreen
 import com.frontend.oportunia.presentation.ui.screens.MainScreen
 import com.frontend.oportunia.presentation.ui.screens.MenuScreen
-import com.frontend.oportunia.presentation.ui.screens.CurriculumScreen
-import com.frontend.oportunia.presentation.ui.screens.InterviewAnalysisScreen
 import com.frontend.oportunia.presentation.ui.screens.PerfilScreen
 import com.frontend.oportunia.presentation.ui.screens.QuizScreen
 import com.frontend.oportunia.presentation.ui.screens.RegisterScreen
@@ -31,6 +30,7 @@ import com.frontend.oportunia.presentation.ui.screens.admin.UserListScreen
 import com.frontend.oportunia.presentation.viewmodel.AdviceViewModel
 import com.frontend.oportunia.presentation.viewmodel.CompanyReviewViewModel
 import com.frontend.oportunia.presentation.viewmodel.CompanyViewModel
+import com.frontend.oportunia.presentation.viewmodel.CurriculumViewModel
 import com.frontend.oportunia.presentation.viewmodel.IAAnalysisViewModel
 import com.frontend.oportunia.presentation.viewmodel.InterviewViewModel
 import com.frontend.oportunia.presentation.viewmodel.LoginViewModel
@@ -218,6 +218,30 @@ fun NavGraph(
             CVAnalysisScreen(
                 navController = navController,
                 viewModel = curriculumViewModel
+            )
+        }
+
+        composable(NavRoutes.AdminMenu.ROUTE) {
+            AdminMenuScreen(
+                navController = navController,
+                paddingValues = paddingValues,
+                viewModel = loginViewModel,
+            )
+        }
+
+        composable(NavRoutes.ManageCompanies.ROUTE) {
+            ManageCompaniesScreen(
+                navController = navController,
+                paddingValues = paddingValues,
+                companyViewModel = companyViewModel,
+            )
+        }
+
+        composable(NavRoutes.UserScreen.ROUTE) {
+            UserListScreen(
+                navController = navController,
+                paddingValues = paddingValues,
+                userViewModel = userViewModel
             )
         }
 

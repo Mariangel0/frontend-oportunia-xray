@@ -79,13 +79,6 @@ sealed class NavRoutes {
         const val ROUTE = "cv_analysis"
     }
 
-    data object IAAnalysisScreen : NavRoutes() {
-        const val ROUTE = "iaAnalyses/{interviewId}"
-        const val ARG_IAA_ID = "interviewId"
-
-        fun createRoute(interviewId: Long) = "iaAnalyses/$interviewId"
-    }
-
     data object AdminMenu : NavRoutes() {
         const val ROUTE = "adminMenu"
     }
@@ -96,6 +89,13 @@ sealed class NavRoutes {
 
     data object UserScreen : NavRoutes() {
         const val ROUTE = "userScreen"
+    }
+
+    data object IAAnalysisScreen : NavRoutes() {
+        const val ROUTE = "iaAnalyses/{interviewId}"
+        const val ARG_IAA_ID = "interviewId"
+
+        fun createRoute(interviewId: Long) = "iaAnalyses/$interviewId"
     }
 
 }
