@@ -69,7 +69,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             OportunIATheme {
-                Main(companyViewModel, loginViewModel, registerViewModel, skillViewModel, adviceViewModel, profileViewModel, companyReviewViewModel, interviewViewModel, quizViewModel, curriculumViewModel, iAAnalysisViewModel, userViewModel)
+                Main(companyViewModel, loginViewModel, registerViewModel, skillViewModel, adviceViewModel, profileViewModel, companyReviewViewModel, interviewViewModel, quizViewModel, curriculumViewModel, userViewModel, iAAnalysisViewModel)
             }
         }
     }
@@ -90,9 +90,9 @@ fun Main(
     interviewViewModel: InterviewViewModel,
     quizViewModel: QuizViewModel,
     curriculumViewModel: CurriculumViewModel,
-    userViewModel: UserViewModel
+    userViewModel: UserViewModel,
+    iAAnalysisViewModel: IAAnalysisViewModel
 ) {
-fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, registerViewModel: RegisterViewModel, skillViewModel: SkillsViewModel, adviceViewModel: AdviceViewModel, profileViewModel: ProfileViewModel, companyReviewViewModel: CompanyReviewViewModel, interviewViewModel: InterviewViewModel, quizViewModel: QuizViewModel, curriculumViewModel: CurriculumViewModel, iAAnalysisViewModel: IAAnalysisViewModel) {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
@@ -127,8 +127,8 @@ fun Main(companyViewModel: CompanyViewModel, loginViewModel: LoginViewModel, reg
             interviewViewModel = interviewViewModel,
             quizViewModel = quizViewModel,
             curriculumViewModel = curriculumViewModel,
+            userViewModel = userViewModel,
             iAAnalysisViewModel = iAAnalysisViewModel
-            userViewModel = userViewModel
         )
     }
 }
