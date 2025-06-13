@@ -24,7 +24,7 @@ import java.time.format.TextStyle
 import java.util.Locale
 
 @Composable
-fun StreakCalendar() {
+fun StreakCalendar(hasCompletedToday: Boolean = false) {
     // Get the current date
     val currentDate = LocalDate.now()
 
@@ -52,10 +52,24 @@ fun StreakCalendar() {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             weekDays.forEach { weekDay ->
-                // Configurar colores, tamaños, y fondo basado en el día
-                val textColor = if (weekDay.isToday) MaterialTheme.colorScheme.onPrimary else Color.Gray
-                val numberColor = if (weekDay.isToday) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
-                val backgroundColor = if (weekDay.isToday) MaterialTheme.colorScheme.tertiaryContainer else MaterialTheme.colorScheme.background
+                // Configurar colores basado en si es hoy y si completó la actividad
+                val (textColor, numberColor, backgroundColor) = when {
+                    weekDay.isToday && hasCompletedToday -> Triple(
+                        MaterialTheme.colorScheme.onPrimary,
+                        MaterialTheme.colorScheme.onPrimary,
+                        MaterialTheme.colorScheme.primary
+                    )
+                    weekDay.isToday && !hasCompletedToday -> Triple(
+                        Color.Gray,
+                        MaterialTheme.colorScheme.onSurface,
+                        MaterialTheme.colorScheme.background
+                    )
+                    else -> Triple(
+                        Color.Gray,
+                        MaterialTheme.colorScheme.onSurface,
+                        MaterialTheme.colorScheme.background
+                    )
+                }
 
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,

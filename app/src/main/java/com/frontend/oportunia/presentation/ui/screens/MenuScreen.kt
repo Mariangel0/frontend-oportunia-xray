@@ -75,12 +75,11 @@ fun MenuScreen(
                 }
             }
         ) {
-            // Solo mostrar el DailyQuizAlert si NO se ha completado hoy
             if (!hasCompletedToday) {
                 DailyQuizAlert(navController = navController, studentId = user?.id ?: 1)
             }
 
-            StreakCalendar()
+            StreakCalendar(hasCompletedToday = hasCompletedToday)
             Learning(navController = navController, studentId = user?.id ?: -1L)
             CompaniesCarousel(companyViewModel = companyViewModel, navController = navController)
         }
