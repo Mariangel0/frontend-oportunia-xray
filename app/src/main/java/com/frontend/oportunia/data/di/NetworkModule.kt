@@ -33,7 +33,6 @@ import com.frontend.oportunia.data.remote.interceptor.AuthInterceptor
 import com.frontend.oportunia.data.remote.interceptor.ResponseInterceptor
 import com.frontend.oportunia.data.remote.serializer.AbilityDeserializer
 import com.frontend.oportunia.data.remote.serializer.CompanyReviewDeserializer
-
 import com.frontend.oportunia.data.remote.serializer.ExperienceDeserializer
 import com.frontend.oportunia.data.remote.serializer.RoleDeserializer
 import com.frontend.oportunia.data.remote.serializer.StudentDeserializer
@@ -49,7 +48,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    private const val BASE_URL = "http://10.0.2.2:8080/v1/"
+    private const val BASE_URL = "http://oportunia-dev.eba-rjnb6hpr.us-east-2.elasticbeanstalk.com/v1/"
     private const val DATE_FORMAT = "yyyy-MM-dd"
 
 
@@ -172,13 +171,14 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideStreakService(retrofit: Retrofit): StreakService =
-        retrofit.create(StreakService::class.java)
+    fun provideEducationService(retrofit: Retrofit): EducationService =
+        retrofit.create(EducationService::class.java)
 
     @Provides
     @Singleton
-    fun provideEducationService(retrofit: Retrofit): EducationService =
-        retrofit.create(EducationService::class.java)
+    fun provideStreakService(retrofit: Retrofit): StreakService =
+        retrofit.create(StreakService::class.java)
+
 
 }
 

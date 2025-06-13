@@ -19,6 +19,7 @@ class StudentMapper @Inject constructor(
             bornDate = dto.bornDate,
             location = dto.location,
             user = dto.user?.let { userMapper.mapToDomain(it)},
+            userId = dto.userId
         )
     }
 
@@ -43,6 +44,7 @@ class StudentMapper @Inject constructor(
             bornDate = domain.bornDate,
             location = domain.location,
             user = domain.user?.let { userMapper.mapToDto(it) },
+            userId = domain.userId
         )
     }
 

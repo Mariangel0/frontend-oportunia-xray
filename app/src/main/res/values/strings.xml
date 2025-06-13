@@ -97,10 +97,10 @@
     <string name="no_experience">No se han registrado experiencias</string>
 
     <!--  Admin Menu Screen  -->
-    <string name="btn_admin_companies">Gestionar Empresas</string>
+    <string name="btn_admin_companies">Agregar Empresas</string>
     <string name="btn_admin_users">Gestionar Usuarios</string>
     <string name="btn_admin">Gestionar</string>
-    <string name="description_admin_companies">Agregar, editar o eliminar empresas</string>
+    <string name="description_admin_companies">Agregar empresas</string>
     <string name="description_admin_users">Eliminar usuarios</string>
     <string name="activities">Resumen de la actividad</string>
     <string name="card_title_companies">Empresas</string>

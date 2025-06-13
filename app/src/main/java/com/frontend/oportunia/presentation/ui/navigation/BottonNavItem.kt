@@ -42,6 +42,6 @@ sealed class BottomNavItem(
         /**
          * Ítems para administradores
          */
-        fun adminItems() = listOf(AdminMenuScreen, ProfileScreen)
+        fun adminItems() = listOf(AdminMenuScreen)
     }
 }

@@ -34,6 +34,10 @@ fun InterviewMenuScreen(
     var selectedInterviewType by remember { mutableStateOf("General") }
     val companies by companyViewModel.companyList.collectAsState()
 
+    LaunchedEffect(Unit) {
+        interviewViewModel.loadProfile()
+    }
+
     Log.d("USERID", "$user")
 
     MainLayout(

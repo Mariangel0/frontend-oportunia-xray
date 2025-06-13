@@ -50,6 +50,11 @@ fun InterviewChatScreen(
 
     var hasNavigated by remember { mutableStateOf(false) }
 
+
+    LaunchedEffect(Unit) {
+        interviewViewModel.loadProfile()
+    }
+
     LaunchedEffect(messages.size) {
         if (messages.isNotEmpty() && !interviewViewModel.interviewFinished.value) {
             coroutineScope.launch {

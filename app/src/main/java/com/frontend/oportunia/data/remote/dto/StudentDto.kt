@@ -9,6 +9,7 @@ data class StudentDto(
     val bornDate: String?,
     val location: String?,
     val user: UserDto?,
+    val userId: Long? = null,
 )
 
 data class StudentRDto(

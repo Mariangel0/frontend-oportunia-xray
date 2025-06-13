@@ -9,4 +9,5 @@ data class Student(
     val bornDate: String ? = null,
     val location: String? = null,
     val user: User? = null,
+    val userId: Long? = null,
 )

@@ -41,7 +41,8 @@ data class LoginUiState(
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val studentRepository: StudentRepository
 ) : ViewModel() {
 
 
@@ -56,15 +57,43 @@ class LoginViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
+    private val _loggedStudent = MutableStateFlow<Student?>(null)
+    val loggedStudent: StateFlow<Student?> get() = _loggedStudent
 
     private val _isLoggedIn = MutableStateFlow(false)
     val isLoggedIn: StateFlow<Boolean> = _isLoggedIn.asStateFlow()
 
+    private val _currentUser = MutableStateFlow<User?>(null)
+    val currentUser: StateFlow<User?> get() = _currentUser
 
     init {
         checkAuthenticationStatus()
     }
 
+    fun loadProfile() {
+        viewModelScope.launch {
+            authRepository.getCurrentUser()
+                .onSuccess { user ->
+                    _currentUser.value = user
+
+                    val isStudent = user?.roles?.any { it.name == "USER" }
+                    if (isStudent == true) {
+                        studentRepository.findStudentByUserId(user.id!!)
+                            .onSuccess { student ->
+                                _loggedStudent.value = student
+                            }
+                            .onFailure {
+                                Log.e("ProfileViewModel", "Error fetching student info", it)
+                            }
+                    } else {
+                        _loggedStudent.value = null
+                    }
+                }
+                .onFailure {
+                    Log.e("ProfileViewModel", "Error fetching user", it)
+                }
+        }
+    }
 
     private fun checkAuthenticationStatus() {
         viewModelScope.launch {

@@ -51,7 +51,9 @@ fun MenuScreen(
 
     LaunchedEffect(Unit) {
         loginViewModel.getUser()
+        loginViewModel.loadProfile()
     }
+
 
     val user by loginViewModel.loggedUser.collectAsState()
     val username = user?.firstName ?: "Usuario"
@@ -80,7 +82,8 @@ fun MenuScreen(
             }
 
             StreakCalendar(hasCompletedToday = hasCompletedToday)
-            Learning(navController = navController, studentId = user?.id ?: -1L)
+            Learning(navController = navController, studentId = loginViewModel.loggedStudent.value?.id
+                ?: -1L)
             CompaniesCarousel(companyViewModel = companyViewModel, navController = navController)
         }
     }

@@ -13,5 +13,6 @@
         <domain includeSubdomains="true">192.168.0.106</domain>
         <domain includeSubdomains="true">192.168.0.102</domain>
         <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">oportunia-dev.eba-rjnb6hpr.us-east-2.elasticbeanstalk.com</domain>
     </domain-config>
 </network-security-config>

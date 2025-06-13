@@ -197,6 +197,8 @@ class RegisterViewModel @Inject constructor(
             try {
                 val result = userRepository.createUser(user)
                 if (result.isSuccess) {
+
+                    val userId = result.getOrNull()?.id
                     val student = Student(
                         description = "Nuevo estudiante",
                         premium = false,
@@ -205,12 +207,13 @@ class RegisterViewModel @Inject constructor(
                         bornDate = formattedDate,
                         location = "",
                         user = result.getOrNull(),
-
+                        userId = userId
                         )
                     _error.value = null
                     val result2 = studentRepository.createStudent(student)
                     if (result2.isSuccess) {
                         _error.value = null
+
 
                         println(result.getOrNull())
                         educationList.forEach { edu ->
