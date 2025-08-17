@@ -26,6 +26,5 @@ signing.properties
 google-services.json
 
 mock-api/
-**/NetworkModule.kt
 
 *.log
