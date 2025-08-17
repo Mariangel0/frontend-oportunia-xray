@@ -1,1 +1,31 @@
+.DS_Store
+Thumbs.db
+
+# IDE
+*.iml
 .idea/
+.vscode/
+
+.gradle/
+**/build/
+**/out/
+!gradle/wrapper/gradle-wrapper.jar  # aseguramos el wrapper
+
+.cxx/
+.externalNativeBuild/
+captures/
+
+local.properties
+**/local.properties
+*.env
+.env*
+*.jks
+*.keystore
+keystore.properties
+signing.properties
+google-services.json
+
+mock-api/
+**/NetworkModule.kt
+
+*.log

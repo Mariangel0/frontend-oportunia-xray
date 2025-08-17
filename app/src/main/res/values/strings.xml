@@ -1,0 +1,206 @@
+<resources>
+    <!--  MainScreen -->
+    <string name="app_name">OportunIA</string>
+    <string name="greeting">¡Prepárate para tu futuro profesional con OportunIA! \nTe damos la bienvenida a la plataforma diseñada especialmente para estudiantes de informática recién graduados. Aquí podrás mejorar tu currículum, practicar entrevistas simuladas con inteligencia artificial, y recibir recomendaciones personalizadas para destacar en el mundo laboral. \n¡Empieza hoy tu camino hacia el empleo ideal!
+    </string>
+    <string name="logo_content_description">Logo OportunIA</string>
+    <string name="button_get_started">Comencemos</string>
+    <string name="button_register">Registrarse</string>
+
+    <!--  LoginScreen -->
+    <string name="greeting_login">Bienvenido de vuelta!\nNos alegra verte de nuevo!</string>
+    <string name="login">Inicio de sesión</string>
+    <string name="user">Usuario</string>
+    <string name="password">Contraseña</string>
+    <string name="user_placeholder">Ingresa tu correo</string>
+    <string name="password_placeholder">Ingresa tu contraseña</string>
+    <string name="button_login">Inicio</string>
+    <string name="error_empty_fields">Por favor completa todos los campos.</string>
+    <string name="error_invalid_credentials">Credenciales incorrectas. Inténtalo de nuevo.</string>
+
+    <!--  RegisterScreen  -->
+    <string name="register">Crear Perfil</string>
+    <string name="name_placeholder">Ingresa tu nombre</string>
+    <string name="lastname_placeholder">Ingresa tu apellido</string>
+    <string name="lastname">Primer Apellido</string>
+    <string name="email_placeholder">Ingresa tu correo</string>
+    <string name="confirm_password_placeholder">Confirma tu contraseña</string>
+    <string name="birth_date_placeholder">DD/MM/YYYY</string>
+    <string name="birth_date">Fecha de nacimiento</string>
+    <string name="email">Correo</string>
+    <string name="confirm_password">Confirmar contraseña</string>
+    <string name="degree_placeholder">Título Educativo</string>
+    <string name="add_degree">Agregar Título Educativo</string>
+    <string name="register_button">Guardar</string>
+    <string name="company_placeholder">Ingrese el nombre de la empresa</string>
+    <string name="job_position_placeholder">Ingrese su puesto</string>
+    <string name="company">Empresa</string>
+    <string name="job_position">Puesto</string>
+    <string name="education">Educación</string>
+    <string name="name">Nombre</string>
+    <string name="have_job">¿Trabajas actualmente?</string>
+    <string name="birth_date_select">Selecciona una fecha</string>
+    <string name="personal_data">Información Personal</string>
+    <string name="laboral_data">Información Académica y Laboral</string>
+    <string name="error_password_mismatch">Las contraseñas no coinciden.</string>
+    <string name="linkedin">LinkedIn</string>
+    <string name="linkedin_placeholder">Ingresa tu URL de LinkedIn</string>
+    <string name="github">GitHub</string>
+    <string name="github_placeholder">Ingresa tu URL de GitHub</string>
+    <string name="work_experience">Experiencia Laboral</string>
+    <string name="add_experience">Agregar Experiencia Laboral</string>
+    <string name="add_education">Agregar Educación</string>
+    <string name="education_placeholder">Institución Educativa</string>
+    <string name="institution">Institución Educativa</string>
+    <string name="graduation_year_placeholder">Año de Graduación</string>
+    <string name="graduation_year">Año de Graduación</string>
+    <string name="timeline_placeholder">Ej: 2020 - 2023</string>
+    <string name="timeline">Tiempo</string>
+    <string name="role_placeholder">Puesto</string>
+    <string name="degree">Título Educativo</string>
+    <string name="role">Puesto</string>
+
+
+
+
+    <string name="button_Start">Realizar</string>
+    <string name="daily_quiz">¡Hoy no has realizado tu quiz diario!</string>
+    <string name="streak">Racha</string>
+    <string name="learning">Aprende hoy</string>
+    <string name="companies">Empresas</string>
+
+    <string name="search">Buscar</string>
+    <string name="search_placeholder">Buscar Empresa</string>
+    <string name="profile">Perfil</string>
+    <string name="student">Estudiante</string>
+    <string name="administrador">Administrador</string>
+
+    <string name="advice">Consejos</string>
+    <string name="menu">Menu</string>
+    <string name="curriculum">Curriculum</string>
+
+    <!--  CompanyDetailScreen -->
+    <string name="reviews">Reseñas</string>
+    <string name="info">Información</string>
+
+    <string name="advice_title">Prepárate antes de enviar tu solicitud</string>
+    <string name="advice_subtitle">Encuentra recomendaciones prácticas para mejorar tu perfil profesional y tener éxito en tus entrevistas.</string>
+    <string name="advice_question_1">¿Por qué es importante investigar la empresa antes de aplicar?</string>
+    <string name="advice_question_2">¿Cómo hacer que tu CV destaque entre los demás?</string>
+    <string name="no_data">No hay consejos disponibles en este momento.</string>
+
+    <string name="skills">Habilidades</string>
+    <string name="soft_skills">Habilidades blandas</string>
+    <string name="no_skills">No se han registrado habilidades.</string>
+
+    <string name="experience_title">Experiencia Laboral</string>
+    <string name="no_experience">No se han registrado experiencias</string>
+
+    <!--  Admin Menu Screen  -->
+    <string name="btn_admin_companies">Agregar Empresas</string>
+    <string name="btn_admin_users">Gestionar Usuarios</string>
+    <string name="btn_admin">Gestionar</string>
+    <string name="description_admin_companies">Agregar empresas</string>
+    <string name="description_admin_users">Eliminar usuarios</string>
+    <string name="activities">Resumen de la actividad</string>
+    <string name="card_title_companies">Empresas</string>
+    <string name="card_title_users">Usuarios activos</string>
+
+    <!--  Admin Add Company Screen  -->
+    <string name="add_company">Agregar Empresa</string>
+    <string name="name_company">Agregar nombre de la empresa</string>
+    <string name="name_company_placeholder">Ingrese el nombre de la empresa</string>
+    <string name="description_company">Descripción</string>
+    <string name="description_company_placeholder">Ingrese una descripción</string>
+    <string name="field_company">Sector</string>
+    <string name="field_company_placeholder">Seleccione un sector</string>
+    <string name="location_company">Ubicación</string>
+    <string name="location_company_placeholder">Ingrese la ubicación</string>
+    <string name="email_company">Email de contacto</string>
+    <string name="email_company_placeholder">Ingrese un email</string>
+    <string name="add_company_button">Guardar</string>
+    <string name="cancel_button">Cancelar</string>
+    <string name="upload_logo">Cargar logo</string>
+    <string name="company_logo">Logo de la empresa</string>
+
+
+    <!--  Interview Screen  -->
+    <string name="interview_menu">Iniciar Entrevista</string>
+    <string name="interview_with_oportunia">Entrevista con OportunIA</string>
+    <string name="job_position_to_apply">Puesto a aplicar</string>
+    <string name="enter_job_position">Ingrese el puesto</string>
+    <string name="company_to_apply">Empresa a aplicar</string>
+    <string name="select_company">Seleccione una empresa</string>
+    <string name="interview_type">Tipo de entrevista</string>
+    <string name="technical_interview">Técnica</string>
+    <string name="general_interview">General</string>
+    <string name="behavioral_interview">Conductual</string>
+    <string name="start_interview">Empezar</string>
+    <string name="interview_chat">Entrevista Chat</string>
+    <string name="type_your_message">Escribe tu mensaje</string>
+    <string name="send">Enviar</string>
+    <string name="interview_intro_template">¡Hola! Soy tu asistente de entrevistas, OportunIA. Estamos simulando una entrevista para el puesto de {jobPosition} en {companyName}. Este será un proceso de entrevista {interviewType}. ¿Estás listo para comenzar?</string>
+    <string name="no_model_response">Sin respuesta del modelo.</string>
+    <string name="network_error_template">Error de red: %1$s</string>
+    <string name="start_ai_interview">Inicia con la primera pregunta para el usuario de una nueva entrevista.</string>
+
+    <!--  Interview Analysis Screen  -->
+    <string name="interview_analysis_title">Análisis de entrevista</string>
+    <string name="back_button">Volver</string>
+    <string name="loading_analysis">Cargando análisis...</string>
+    <string name="candidate_info">Candidato</string>
+    <string name="analysis_completed">Análisis completado</string>
+    <string name="general_score_title">Puntuación General</string>
+    <string name="score_out_of_100">DE 100%</string>
+    <string name="general_comment_title">Comentario General</string>
+    <string name="recommendations_title">Recomendaciones</string>
+    <string name="no_comment_available">Sin comentario disponible</string>
+    <string name="analysis_loading_error">Error al cargar el análisis</string>
+    <string name="analysis_unexpected_error">Error inesperado al cargar el análisis</string>
+    <string name="analysis_network_error">Error de conexión. Verifica tu internet e intenta nuevamente.</string>
+    <string name="retry_button">Reintentar</string>
+    <string name="refresh_analysis">Actualizar análisis</string>
+    <string name="score_excellent">Excelente desempeño</string>
+    <string name="score_good">Buen desempeño</string>
+    <string name="score_needs_improvement">Necesita mejorar</string>
+    <string name="analysis_date">Fecha del análisis</string>
+    <string name="interview_duration">Duración de la entrevista</string>
+    <string name="areas_evaluated">Áreas evaluadas</string>
+    <string name="technical_skills">Habilidades técnicas</string>
+    <string name="communication_skills">Habilidades de comunicación</string>
+    <string name="problem_solving">Resolución de problemas</string>
+    <string name="leadership">Liderazgo</string>
+    <string name="teamwork">Trabajo en equipo</string>
+    <string name="adaptability">Adaptabilidad</string>
+
+    <!--  Quiz Screen  -->
+    <string name="next">Siguiente</string>
+    <string name="finish">Finalizar</string>
+    <string name="quiz_title">Quiz</string>
+    <string name="quiz_no_questions">No hay preguntas cargadas.</string>
+    <string name="quiz_correct">Correcta</string>
+    <string name="quiz_incorrect">Incorrecta</string>
+    <string name="quiz_topic_label">Tema del Quiz</string>
+    <string name="quiz_difficulty_label">Dificultad</string>
+    <string name="quiz_start">Comenzar Quiz</string>
+    <string name="answered">Respondida</string>
+    <string name="topic">Preguntas para preparse para una entrevista</string>
+    <string name="difficulty">Medium</string>
+
+
+    <string name="users">Usuarios</string>"
+
+
+    <!--  Common UI Strings  -->
+    <string name="error_generic">Ha ocurrido un error. Intenta nuevamente.</string>
+    <string name="success_generic">Operación completada exitosamente</string>
+    <string name="loading_generic">Cargando...</string>
+    <string name="empty_state_generic">No hay información disponible</string>
+    <string name="try_again">Intentar nuevamente</string>
+    <string name="close">Cerrar</string>
+    <string name="save">Guardar</string>
+    <string name="edit">Editar</string>
+    <string name="delete">Eliminar</string>
+    <string name="confirm">Confirmar</string>
+    <string name="cancel">Cancelar</string>
+</resources>

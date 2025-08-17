@@ -1,0 +1,210 @@
+package com.frontend.oportunia.presentation.viewmodel
+
+
+import android.util.Log
+import androidx.lifecycle.ViewModel
+import com.frontend.oportunia.domain.model.Student
+import androidx.lifecycle.viewModelScope
+import com.frontend.oportunia.domain.model.Ability
+import com.frontend.oportunia.domain.model.Experience
+import com.frontend.oportunia.domain.model.User
+import com.frontend.oportunia.domain.repository.AuthRepository
+import com.frontend.oportunia.domain.repository.StudentRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
+
+
+sealed class LoginState {
+
+
+    data object Initial : LoginState()
+    data object Loading : LoginState()
+    data object Success : LoginState()
+    data class Error(val message: String) : LoginState()
+}
+
+
+data class LoginUiState(
+    val isLoading: Boolean = false,
+    val isLoggedIn: Boolean = false,
+    val errorMessage: String? = null,
+    val username: String = "",
+    val password: String = ""
+)
+
+
+
+
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
+    private val studentRepository: StudentRepository
+) : ViewModel() {
+
+
+    private val _loggedUser = MutableStateFlow<User?>(null)
+    val loggedUser: StateFlow<User?> = _loggedUser
+
+
+    private val _loginState = MutableStateFlow<LoginState>(LoginState.Initial)
+    val loginState = _loginState.asStateFlow()
+
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+    private val _loggedStudent = MutableStateFlow<Student?>(null)
+    val loggedStudent: StateFlow<Student?> get() = _loggedStudent
+
+    private val _isLoggedIn = MutableStateFlow(false)
+    val isLoggedIn: StateFlow<Boolean> = _isLoggedIn.asStateFlow()
+
+    private val _currentUser = MutableStateFlow<User?>(null)
+    val currentUser: StateFlow<User?> get() = _currentUser
+
+    init {
+        checkAuthenticationStatus()
+    }
+
+    fun loadProfile() {
+        viewModelScope.launch {
+            authRepository.getCurrentUser()
+                .onSuccess { user ->
+                    _currentUser.value = user
+
+                    val isStudent = user?.roles?.any { it.name == "USER" }
+                    if (isStudent == true) {
+                        studentRepository.findStudentByUserId(user.id!!)
+                            .onSuccess { student ->
+                                _loggedStudent.value = student
+                            }
+                            .onFailure {
+                                Log.e("ProfileViewModel", "Error fetching student info", it)
+                            }
+                    } else {
+                        _loggedStudent.value = null
+                    }
+                }
+                .onFailure {
+                    Log.e("ProfileViewModel", "Error fetching user", it)
+                }
+        }
+    }
+
+    private fun checkAuthenticationStatus() {
+        viewModelScope.launch {
+            authRepository.isAuthenticated()
+                .onSuccess { authenticated ->
+                    _isLoggedIn.value = authenticated
+                    Log.d("LoginViewModel", "Authentication status checked: $authenticated")
+                }
+                .onFailure {
+                    Log.e("LoginViewModel", "Error checking authentication status: ${it.message}")
+                }
+        }
+    }
+
+
+    fun login(username: String, password: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _loginState.value = LoginState.Loading
+
+            if (!isValidEmail(username)) {
+                _loginState.value = LoginState.Error("El correo electrónico no tiene un formato válido.")
+                _isLoading.value = false
+                return@launch
+            }
+
+            if (password.length < 5) {
+                _loginState.value = LoginState.Error("La contraseña debe tener al menos 5 caracteres.")
+                _isLoading.value = false
+                return@launch
+            }
+
+            authRepository.login(username, password)
+                .onSuccess {
+                    _isLoggedIn.value = true
+                    authRepository.getCurrentUser()
+                        .onSuccess { user ->
+                            _loggedUser.value = user
+                            Log.d("LoginViewModel", "User loaded: ${user?.firstName}")
+
+                            _loginState.value = LoginState.Success
+                        }
+                        .onFailure {
+                            Log.e("LoginViewModel", "Failed to load current user after login: ${it.message}")
+                            _loginState.value = LoginState.Error("No se pudo obtener la información del usuario.")
+                        }
+
+                    Log.d("LoginViewModel", "Login successful for user: $username")
+                }
+                .onFailure { exception ->
+                    Log.e("LoginViewModel", "Login failed: ${exception.message}")
+
+                    val message = when {
+                        exception.message?.contains("Unauthorized", ignoreCase = true) == true ||
+                                exception.message?.contains("401") == true -> "Correo o contraseña incorrectos."
+                        exception.message?.contains("timeout", ignoreCase = true) == true -> "Error de conexión. Inténtalo de nuevo."
+                        else -> "No se pudo iniciar sesión. Intenta más tarde."
+                    }
+
+                    _loginState.value = LoginState.Error(message)
+                }
+
+            _isLoading.value = false
+        }
+    }
+
+    private fun isValidEmail(email: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+
+    fun logout() {
+        viewModelScope.launch {
+            _isLoading.value = true
+
+
+            authRepository.logout()
+                .onSuccess {
+                    _isLoggedIn.value = false
+                    _loginState.value = LoginState.Initial
+                    Log.d("LoginViewModel", "User logged out successfully")
+                }
+                .onFailure { exception ->
+                    Log.e("LoginViewModel", "Logout failed: ${exception.message}")
+                    _isLoggedIn.value = false
+                    _loginState.value = LoginState.Initial
+                }
+
+
+            _isLoading.value = false
+        }
+    }
+
+
+    fun resetLoginState() {
+        _loginState.value = LoginState.Initial
+    }
+
+
+
+    fun getUser() {
+        viewModelScope.launch {
+            authRepository.getCurrentUser()
+                .onSuccess { user ->
+                    _loggedUser.value = user
+                    Log.d("LoginViewModel", "User recargado: ${user?.firstName}")
+                }
+                .onFailure {
+                    Log.e("LoginViewModel", "Error al recargar el usuario: ${it.message}")
+                }
+        }
+    }
+
+}
